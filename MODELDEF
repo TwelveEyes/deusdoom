@@ -1,0 +1,35 @@
+Model DD_SpyDrone
+{
+	Path "models/"
+	Model 0 "SpyDrone_d.3d"
+	Skin 0 "SpyDrone_d.png"
+
+	Scale 0.1 0.1 0.1
+	AngleOffset 90
+
+	FrameIndex DSDR A 0 0
+}
+
+Model DD_AugmentationCanister
+{
+	Path "models/"
+	Model 0 "AugmentationCannister_d.3d"
+	Skin 0 "AugmentationCannister.png"
+
+	Scale 0.11 0.11 0.11
+	Offset 0.0 0.0 30.0
+
+	// FrameIndex AGCN A 0 0
+	// Not used
+}
+Model DD_AugmentationUpgradeCanister
+{
+	Path "models/"
+	Model 0 "AugmentationUpgradeCannister_d.3d"
+	Skin 0 "AugmentationUpgradeCannister.png"
+
+	Scale 0.11 0.11 0.11
+	Offset 0.0 0.0 28.0
+
+	FrameIndex AUCN A 0 0
+}

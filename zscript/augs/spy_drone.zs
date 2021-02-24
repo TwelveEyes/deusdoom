@@ -1,0 +1,453 @@
+class DD_Aug_SpyDrone : DD_Augmentation
+{
+	ui TextureID tex_off;
+	ui TextureID tex_on;
+
+	// Camera feed border color
+	ui TextureID camfd_bd;
+
+	// Object detection projection
+	ui DDLe_ProjScreen proj_scr;
+	DDLe_SWScreen proj_sw;
+	DDLe_GLScreen proj_gl;
+	ui DDLe_Viewport vwport;
+
+	// For marking objects
+	array<Actor> mark_objs;
+	array<int> mark_timers;
+
+	override TextureID get_ui_texture(bool state)
+	{
+		return state ? tex_on : tex_off;
+	}
+
+	override int get_base_drain_rate(){ return 120; }
+
+	protected void initProjection()
+	{
+		proj_sw = new("DDLe_SWScreen");
+		proj_gl = new("DDLe_GLScreen");
+	}
+	protected ui void prepareProjection()
+	{
+		CVar renderer_type = CVar.getCVar("vid_rendermode", players[consoleplayer]);
+
+		if(renderer_type)
+		{
+			switch(renderer_type.getInt())
+			{
+				case 0: case 1: proj_scr = proj_sw; break;
+				default:	proj_scr = proj_gl; break;
+			}
+		}
+		else
+			proj_scr = proj_gl;
+	}
+
+	override void install()
+	{
+		super.install();
+
+		id = 16;
+		disp_name = "Spy Drone";
+		disp_desc = "Advanced nanofactories can assemble a spy drone on\n"
+			    "demand which can then be remotely controlled by the\n"
+			    "agent until released, at which point a new drone\n"
+			    "drone will be assembled.\n\n"
+			    "TECH ONE: The drone is slow and reveals objects for\n"
+			    "short period of time.\n\n"
+			    "TECH TWO: The drone is faster and reveals objects for\n"
+			    "longer.\n\n"
+			    "TECH THREE: The drone is significantly faster and\n"
+			    "reveals objects for a long time.\n\n"
+			    "TECH FOUR: The drone is incredibly fast and reveals\n"
+			    "objects for a very long time.\n\n"
+			    "Energy Rate: 120 Units/Minute";
+
+		slots_cnt = 1;
+		slots[0] = Cranial;
+
+		initProjection();
+	}
+
+	override void UIInit()
+	{
+		tex_off = TexMan.checkForTexture("SPYDRON0");
+		tex_on = TexMan.checkForTexture("SPYDRON1");
+
+		camfd_bd = TexMan.checkForTexture("AUGUI36");
+
+		drone_camtex = TexMan.checkForTexture("DDRONCAM", TexMan.Type_Any);
+	}
+
+	// ------------------
+	// Internal functions
+	// ------------------
+
+	DD_SpyDrone drone_actor;
+	ui TextureID drone_camtex;
+
+	// -------------
+	// Engine events
+	// -------------
+
+	override void toggle()
+	{
+		super.toggle();
+
+		if(enabled){
+			if(!owner || !(owner is "PlayerPawn")){
+				toggle();
+				return;
+			}
+			if(drone_actor)
+				drone_actor.die(null, null);
+			if(owner.countInv("DD_BioelectricEnergy") <= 1)
+				return;
+
+			drone_actor = DD_SpyDrone(Actor.spawn("DD_SpyDrone"));
+			drone_actor.warp(owner, 0.0, 0.0, PlayerPawn(owner).viewHeight, 0.0,
+					WARPF_ABSOLUTEOFFSET | WARPF_NOCHECKPOSITION);
+			drone_actor.parent_aug = self;
+			drone_actor.master = owner;
+
+			drone_actor.mode = DD_MDroneManual;
+
+			TexMan.setCameraToTexture(drone_actor, "DDRONCAM", 90.0);
+		}
+		else{
+			if(drone_actor){
+				drone_actor.die(null, null);
+				drone_actor = null;
+			}
+		}
+	}
+
+	override void tick()
+	{
+		super.tick();
+
+		// Ticking mark timers
+		for(uint i = 0; i < mark_timers.size(); ++i)
+		{
+			if(mark_timers[i] > 0)
+				--mark_timers[i];
+			else{
+				mark_timers.delete(i);
+				mark_objs.delete(i);
+			}
+		}
+	}
+
+	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
+	{
+		// Rendering object marks
+		vwport.fromHUD();
+		prepareProjection();
+
+		proj_scr.cacheResolution();
+		proj_scr.cacheFOV();
+		proj_scr.orientForRenderOverlay(e);
+		proj_scr.beginProjection();
+
+		for(uint i = 0; i < mark_objs.size(); ++i)
+		{
+			if(!mark_objs[i])
+				continue;
+
+			let sight_tr = new("DD_Aug_SpyDrone_SightTracer");
+				sight_tr.ignore[0] = owner;
+				sight_tr.ignore[1] = drone_actor;
+			vector3 trace_dir = mark_objs[i].pos + (0, 0, mark_objs[i].height/2)
+					    - (owner.pos + (0, 0, PlayerPawn(owner).viewHeight));
+			if(trace_dir.length() == 0)
+				continue;
+			trace_dir /= trace_dir.length();
+			sight_tr.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, trace_dir, 999999.0, 0);
+			if(sight_tr.results.hitActor == mark_objs[i])
+				continue;
+
+			// Preparing projection
+			vector3 proj_pos = mark_objs[i].pos + (0, 0, mark_objs[i].height/2);
+			proj_scr.projectWorldPos(proj_pos);
+			vector2 proj_norm = proj_scr.projectToNormal();
+			vector2 mark_pos = vwport.sceneToWindow(proj_norm);
+
+			if(!vwport.isInside(proj_norm) || !proj_scr.isInScreen())
+				continue;
+
+			mark_pos.x *= double(320) / screen.getWidth();
+			mark_pos.y *= double(200) / screen.getHeight();
+
+
+			// Drawing object sprite
+			double objang = deltaAngle(owner.angleTo(mark_objs[i]), mark_objs[i].angle) + 180;
+			int byte_ang = ( int( (objang + 22.5) / 45) % 8);
+			TextureID spritetex = mark_objs[i].CurState
+						.getSpriteTexture(byte_ang * 2);
+
+			vector3 objvec = mark_objs[i].pos
+					 - (owner.pos + (0, 0, owner.player.viewHeight));
+			double objdist = objvec.length();
+			double texcoff;
+			if(objdist != 0)
+				texcoff = 1 / (objdist / 92.0);
+			else
+				texcoff = 1.0;
+			double tex_scale_w = mark_objs[i].scale.x * texcoff;
+			double tex_scale_h = mark_objs[i].scale.y * texcoff;
+
+			double texw = UI_Draw.texWidth(spritetex, -1, -1) * tex_scale_w;
+			double texh = UI_Draw.texHeight(spritetex, -1, -1) * tex_scale_h;
+
+			UI_Draw.texture(spritetex,
+					mark_pos.x - texw/2,
+					mark_pos.y - texh/2,
+					texw, texh);
+			//UI_Draw.str(hndl.aug_ui_font, "X", 10,
+			//		mark_pos.x, mark_pos.y, -1, -1);
+		}
+
+		// Rendering camera feed
+		if(!enabled || !drone_actor)
+			return;
+		string s_act = "Remote SpyDrone Active";
+		UI_Draw.str(hndl.aug_ui_font, s_act, 11,
+				320.0/3/2 + 2
+				- UI_Draw.strWidth(hndl.aug_ui_font, s_act, -0.55, -0.55)/2,
+				200.0/3 - UI_Draw.strHeight(hndl.aug_ui_font, s_act, -0.55, -0.55) - 1,
+				-0.55, -0.55);
+		UI_Draw.texture(camfd_bd,
+				0, 200.0/3, 320.0/3 + 2, 200.0/3 + 2);
+		UI_Draw.texture(drone_camtex,
+				1, 200.0/3 + 1, 320.0/3, 200.0/3);
+	}
+
+
+	override bool inputProcess(InputEvent e)
+	{
+		if(!enabled)
+			return false;
+		if(drone_actor && drone_actor.mode == DD_MDroneManual)
+		{
+			if(e.type == InputEvent.Type_KeyDown)
+			{
+				if(KeyBindUtils.checkBind(e.keyScan, "+forward")){
+					drone_actor.queueAccelerationX(1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+back")){
+					drone_actor.queueAccelerationX(-1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft")){
+					drone_actor.queueAccelerationY(1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright")){
+					drone_actor.queueAccelerationY(-1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+jump")){
+					drone_actor.queueAccelerationZ(1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+crouch")){
+					drone_actor.queueAccelerationZ(-1.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+use")){
+					drone_actor.queueUse();
+				}
+				else
+					return false;
+				return true;
+			}
+			else if(e.type == InputEvent.Type_KeyUp)
+			{
+				if(KeyBindUtils.checkBind(e.keyScan, "+forward")){
+					drone_actor.queueAccelerationX(0.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+back")){
+					drone_actor.queueAccelerationX(0.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft")){
+					drone_actor.queueAccelerationY(0.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright")){
+					drone_actor.queueAccelerationY(0.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+jump")){
+					drone_actor.queueAccelerationZ(0.0);
+				}
+				else if(KeyBindUtils.checkBind(e.keyScan, "+crouch")){
+					drone_actor.queueAccelerationZ(0.0);
+				}
+				else
+					return false;
+				return true;
+			}
+			else if(e.type == InputEvent.Type_Mouse)
+			{
+				drone_actor.queueTurnAngle(-e.MouseX / 90.0);
+				return true;
+			}
+		}
+		return false;
+	}
+}
+class DD_Aug_SpyDrone_SightTracer : LineTracer
+{
+	Actor ignore[2];
+
+	override ETraceStatus traceCallback()
+	{
+		if(results.hitActor == ignore[0]
+		|| results.hitActor == ignore[1])
+			return TRACE_Skip;
+		if(results.hitLine || results.hitActor)
+			return TRACE_Stop;
+		return TRACE_Skip;
+	}
+}
+
+enum DD_SpyDroneMode
+{
+	DD_MDroneScout,
+	DD_MDroneManual
+}
+struct DD_SpyDrone_Queue
+{
+	vector3 acc;
+	double ang;
+	bool use;
+}
+class DD_SpyDrone_Tracer : LineTracer
+{
+	override ETraceStatus traceCallback()
+	{
+		if(results.hitLine){
+			return TRACE_Stop;
+		}
+		return TRACE_Skip;
+	}
+}
+class DD_SpyDrone : Actor
+{
+	DD_Aug_SpyDrone parent_aug;
+
+	DD_SpyDroneMode mode;
+	DD_SpyDrone_Queue act_queue;
+
+	// Physical speed properties
+
+	default
+	{
+		Health 120;
+
+		Radius 7;
+		Height 4;
+
+		Mass 10;
+
+		+Shootable
+		+NoGravity
+
+		+CanPass
+		+NoBlockMonst
+
+		+NoPain
+		+NoBlood
+		+NoTrigger
+	}
+
+	clearscope double getAccMult() { return 0.17 + 0.15 * (parent_aug.getRealLevel() - 1);  }
+	vector3 getDeacc() { return (1.0, 1.0, 1.0)
+				* (0.1 + 0.05 * (parent_aug.getRealLevel() - 1)); }
+	vector3 getMaxVel() { return (1.0, 1.0, 0.4)
+				* (6.0 + 4.0 * (parent_aug.getRealLevel() - 1)); }
+	double getTurnMult() { return 1.5 + 0.22 * (parent_aug.getRealLevel() - 1); }
+
+	int getMarkTime() { return 35 * 25 + 20 * (parent_aug.getRealLevel() - 1);  }
+
+	states
+	{
+		Spawn:
+			DSDR A 1{
+				// Changing velocity according to acceleration/deceleration
+				A_ChangeVelocity(act_queue.acc.x, act_queue.acc.y, act_queue.acc.z,
+							CVF_RELATIVE);
+				vector3 maxvel = getMaxVel();
+				if(abs(vel.x) > maxvel.x)
+					A_ChangeVelocity((vel.x > 0 ? 1 : -1)*maxvel.x, vel.y, vel.z, CVF_REPLACE);
+				if(abs(vel.y) > maxvel.y)
+					A_ChangeVelocity(vel.x, (vel.y > 0 ? 1 : -1)*maxvel.y, vel.z, CVF_REPLACE);
+				if(abs(vel.z) > maxvel.z)
+					A_ChangeVelocity(vel.x, vel.y, (vel.z > 0 ? 1 : -1)*maxvel.z, CVF_REPLACE);
+
+				vector3 deacc = getDeacc();
+				if(abs(vel.x) > deacc.x)
+					A_ChangeVelocity(vel.x > 0 ? -deacc.x : deacc.x, 0, 0);
+				else
+					A_ChangeVelocity(0, vel.y, vel.z, CVF_REPLACE);
+				if(abs(vel.y) > deacc.y)
+					A_ChangeVelocity(0, vel.y > 0 ? -deacc.y : deacc.y, 0);
+				else
+					A_ChangeVelocity(vel.x, 0, vel.z, CVF_REPLACE);
+				if(abs(vel.z) > deacc.z)
+					A_ChangeVelocity(0, 0, vel.z > 0 ? -deacc.z : deacc.z);
+				else
+					A_ChangeVelocity(vel.x, vel.y, 0, CVF_REPLACE);
+
+				A_SetAngle(angle + act_queue.ang * getTurnMult());
+				act_queue.ang = 0;
+
+				// Trying to use a line if queued
+				if(act_queue.use)
+				{
+					act_queue.use = false;
+					let usetracer = new("DD_SpyDrone_Tracer");
+					vector3 dir = (AngleToVector(angle, cos(pitch)), -sin(pitch));
+					usetracer.trace(pos, curSector, dir, 64.0, 0);
+					if(usetracer.results.hitLine
+					&& usetracer.results.hitLine.special != 243
+					&& usetracer.results.hitLine.special != 244)
+					// Preventing drone from activating exit lines
+						usetracer.results.hitLine
+							.activate(self.master, usetracer.results.side, 
+							SPAC_PlayerActivate);
+				}
+
+
+				// Looking for objects in LOS to mark
+				Actor obj;
+				ThinkerIterator it = ThinkerIterator.create();
+
+				Actor prev_targ = self.target;
+				while(obj = Actor(it.next()))
+				{
+					if(obj == self)
+						continue;
+					self.target = obj;
+					if(self.checkIfTargetInLOS(90.0))
+					{
+						uint oi = parent_aug.mark_objs.find(obj);
+						if(oi == parent_aug.mark_objs.size())
+						{
+							parent_aug.mark_objs.push(obj);
+							parent_aug.mark_timers.push(getMarkTime());
+						}
+						else
+							parent_aug.mark_timers[oi] = getMarkTime();
+					}
+				}
+				self.target = prev_targ;
+			}
+			Loop;
+		Death:
+			DSDR A 1;
+			Stop;
+	}
+
+	ui void queueAccelerationX(double ax){ act_queue.acc.x = ax * getAccMult(); }
+	ui void queueAccelerationY(double ay){ act_queue.acc.y = ay * getAccMult(); }
+	ui void queueAccelerationZ(double az){ act_queue.acc.z = az * getAccMult(); }
+
+	ui void queueTurnAngle(double ang) { act_queue.ang = ang; }
+
+	ui void queueUse() { act_queue.use = true; }
+}

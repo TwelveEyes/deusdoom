@@ -1,0 +1,22 @@
+HardwareShader postprocess scene
+{
+	Name "DD_NightVision"
+	Shader "shaders/nightvis.fp" 330
+}
+HardwareShader postprocess screen
+{
+	Name "DD_NightVision2"
+	Shader "shaders/nightvis.fp" 330
+}
+
+
+Pointlight DD_VisionEnhancementLight
+{
+	color 1.0 1.0 1.0
+	size 148
+	dontlightself 1
+}
+Object DD_VisionEnhancement_LightDummy
+{
+	frame TNT0 { light DD_VisionEnhancementLight }
+}
