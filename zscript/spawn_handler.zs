@@ -136,13 +136,13 @@ class DD_SpawnHandler : StaticEventHandler
 
 	// Set amount of points needed to gain an item
 	double points_global_mult;
-	const points_for_cell = 375;
+	const points_for_cell = 425;
 	double points_for_cell_mult;
-	const points_for_upgrade = 1750;
+	const points_for_upgrade = 2500;
 	double points_for_upgrade_mult;
-	const points_for_aug = 4250;
+	const points_for_aug = 5000;
 	double points_for_aug_mult;
-	const points_for_aug_first_ml = 0.1;
+	const points_for_aug_first_ml = 0.05;
 
 	// ---------------
 	// Other variables

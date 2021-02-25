@@ -8,7 +8,7 @@ class DD_Aug_CombatStrength : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 40; }
+	override int get_base_drain_rate(){ return 50; }
 
 	override void install()
 	{
@@ -27,7 +27,7 @@ class DD_Aug_CombatStrength : DD_Augmentation
 			     "TECH THREE: The effectiveness of melee weapons is\n"
 			     "increased significantly.\n\n"
 			     "TECH FOUR: Melee weapons are almost instantly lethal.\n\n"
-			     "Energy Rate: 40 Units/Minute";
+			     "Energy Rate: 50 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Arms;
@@ -43,7 +43,7 @@ class DD_Aug_CombatStrength : DD_Augmentation
 	// Internal functions
 	// ------------------
 
-	protected double getDamageFactor() { return 1 + 0.3 * getRealLevel(); }
+	protected double getDamageFactor() { return 1 + 0.75 * getRealLevel(); }
 
 	// ------
 	// Events

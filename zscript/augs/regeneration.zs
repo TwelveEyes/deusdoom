@@ -8,7 +8,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 175 + 25 * (getRealLevel() - 1); }
+	override int get_base_drain_rate(){ return 150 + 20 * (getRealLevel() - 1); }
 
 	override void install()
 	{
