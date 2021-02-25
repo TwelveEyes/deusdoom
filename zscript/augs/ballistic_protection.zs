@@ -8,7 +8,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 80; }
+	override int get_base_drain_rate(){ return 70; }
 
 	override void install()
 	{
@@ -27,7 +27,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 			    "weapons is reduced significantly.\n\n"
 			    "TECH FOUR: An agent is nearly invulnurable to damage\n"
 			    "from projectiles and melee attacks.\n\n"
-			    "Energy Rate: 80 Units/Minute";
+			    "Energy Rate: 70 Units/Minute";
 
 		slots_cnt = 2;
 		slots[0] = Subdermal1;

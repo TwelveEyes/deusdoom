@@ -33,7 +33,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 30; }
+	override int get_base_drain_rate(){ return 20; }
 
 	override void install()
 	{
@@ -50,7 +50,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 			    "pick up heavier objects like barrels and corpses.\n\n"
 			    "TECH THREE: Strength is increased significantly.\n\n"
 			    "TECH FOUR: An agent is inhumanly strong.\n\n"
-			    "Energy Rate: 30 Units/Minute";
+			    "Energy Rate: 20 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Arms;

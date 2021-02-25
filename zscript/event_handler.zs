@@ -161,6 +161,16 @@ class DD_EventHandler : StaticEventHandler
 
 			// Closing windows is done in window classes themselves.
 		}
+		else if(e.Name == "dd_use_cell")
+		{
+			if(aughld){
+	                        if(DD_BioelectricCell.queueConsume(plr.mo,
+	                                DD_BioelectricCell(plr.mo.findInventory("DD_BioelectricCell"))))
+	                        {
+	                                SoundUtils.uiStartSound("ui/aug/cell_use");
+	                        }
+			}
+		}
 	}
 }
 

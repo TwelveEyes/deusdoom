@@ -14,7 +14,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 80; }
+	override int get_base_drain_rate(){ return 60; }
 
 	protected void initProjection()
 	{
@@ -56,7 +56,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 			    "increased moderately and it recharges even faster.\n\n"
 			    "TECH FOUR: Projectiles are detonated very afar and\n"
 			    "very often.\n\n"
-			    "Energy Rate: 80 Units/Minute";
+			    "Energy Rate: 60 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Cranial;

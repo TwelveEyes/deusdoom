@@ -8,7 +8,7 @@ class DD_Aug_SyntheticHeart : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 150; }
+	override int get_base_drain_rate(){ return 120; }
 
 	override void install()
 	{
@@ -27,7 +27,7 @@ class DD_Aug_SyntheticHeart : DD_Augmentation
 			    "this WILL enhance any augmentation past its maximum\n"
 			    "upgrade level, but not as effectively.\n"
 			    "-- Jaime Reyes <END NOTE>\n\n"
-			    "Energy Rate: 150 Units/Minute";
+			    "Energy Rate: 120 Units/Minute";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;

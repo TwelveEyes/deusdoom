@@ -8,7 +8,7 @@ class DD_Aug_GravitationalField : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 120; }
+	override int get_base_drain_rate(){ return 100; }
 
 	override void install()
 	{
@@ -24,7 +24,7 @@ class DD_Aug_GravitationalField : DD_Augmentation
 			    "faster and further.\n\n"
 			    "TECH FOUR: All but the fastest and furthest objects are\n"
 			    "violently pushed away.\n\n"
-			    "Enrgy Rate: 120 Units/Minute";
+			    "Enrgy Rate: 100 Units/Minute";
 
 		slots_cnt = 2;
 		slots[0] = Subdermal1;

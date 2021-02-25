@@ -21,7 +21,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 120; }
+	override int get_base_drain_rate(){ return 100; }
 
 	protected void initProjection()
 	{
@@ -62,7 +62,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			    "reveals objects for a long time.\n\n"
 			    "TECH FOUR: The drone is incredibly fast and reveals\n"
 			    "objects for a very long time.\n\n"
-			    "Energy Rate: 120 Units/Minute";
+			    "Energy Rate: 100 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Cranial;

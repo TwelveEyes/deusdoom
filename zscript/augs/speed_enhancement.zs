@@ -8,7 +8,7 @@ class DD_Aug_SpeedEnhancement : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 100; }
+	override int get_base_drain_rate(){ return 70; }
 
 	override void install()
 	{
@@ -25,7 +25,7 @@ class DD_Aug_SpeedEnhancement : DD_Augmentation
 			    "significantly.\n\n"
 			    "TECH FOUR: An agent can run like the wind and leap\n"
 			    "meters high.\n\n"
-			    "Energy Rate: 100 Units/Minute";
+			    "Energy Rate: 70 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Legs;

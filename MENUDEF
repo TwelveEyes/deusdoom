@@ -17,6 +17,7 @@ OptionMenu "DD_Options"
 	{
 		StaticText "Interface", Purple
 		Control "Open/close augmentations interface",			dd_togg_ui_augs
+		Control "Use a bioelectric cell",				dd_use_cell
 		StaticText "Augmentations", Purple
 		Control "Activate/deactive augmentation in subdermal slot 1",	dd_togg_aug_1
 		Control "Activate/deactive augmentation in subdermal slot 2",	dd_togg_aug_2

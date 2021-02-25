@@ -3,6 +3,9 @@ addkeysection "DeusDoom controls" DD_ControlsKF
 	addmenukey "Open/close augmentations interface"				dd_togg_ui_augs
 		alias dd_togg_ui_augs	"event dd_toggle_ui_augs"
 		defaultbind P dd_togg_ui_augs
+	addmenukey "Consume a bioelectric cell"					dd_use_cell
+		alias dd_use_cell	"event dd_use_cell"
+		defaultbind O dd_use_cell
 
 	addmenukey "Activate/deactive augmentation in subdermal slot 1"		dd_togg_aug_1
 		alias	dd_togg_aug_1	"event dd_togg_aug 1"

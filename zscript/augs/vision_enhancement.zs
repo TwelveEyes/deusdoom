@@ -17,7 +17,7 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 80; }
+	override int get_base_drain_rate(){ return 60; }
 
 	protected void initProjection()
 	{
@@ -56,7 +56,7 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 			    "TECH TWO: Night vision.\n\n"
 			    "TECH THREE: Close range sonar imaging.\n\n"
 			    "TECH FOUR: Long range sonar imaging.\n\n"
-			    "Energy Rate: 80 Units/Minute\n";
+			    "Energy Rate: 60 Units/Minute\n";
 
 
 		tex_off = TexMan.CheckForTexture("VISENCH0");

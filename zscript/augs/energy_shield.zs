@@ -8,7 +8,7 @@ class DD_Aug_EnergyShield : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 80; }
+	override int get_base_drain_rate(){ return 70; }
 
 	override void install()
 	{
@@ -27,7 +27,7 @@ class DD_Aug_EnergyShield : DD_Augmentation
 			    "significantly.\n\n"
 			    "TECH FOUR: An agent is nearly invulnerable to damage\n"
 			    "from energy attacks.\n\n"
-			    "Energy Rate: 80 Units/Minute";
+			    "Energy Rate: 70 Units/Minute";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;

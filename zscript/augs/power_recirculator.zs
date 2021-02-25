@@ -8,7 +8,7 @@ class DD_Aug_PowerRecirculator : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 20; }
+	override int get_base_drain_rate(){ return 10; }
 
 	override void install()
 	{
@@ -28,7 +28,7 @@ class DD_Aug_PowerRecirculator : DD_Augmentation
 			    "for a good amount.\n\n"
 			    "TECH FOUR: Power drain of augmentations is reduced\n"
 			    "significantly.\n\n"
-			    "Energy Rate: 20 Units/Minute";
+			    "Energy Rate: 10 Units/Minute";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;

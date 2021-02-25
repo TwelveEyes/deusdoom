@@ -31,7 +31,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		return state ? tex_on : tex_off;
 	}
 
-	override int get_base_drain_rate(){ return 100; }
+	override int get_base_drain_rate(){ return 55; }
 
 	override void install()
 	{
@@ -52,7 +52,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			    "agent can perform stunningly long dashes.\n\n"
 			    "TECH FOUR: Agent decelerates almost instantly and\n"
 			    "can cross entire rooms in one leap.\n\n"
-			    "Energy Rate: 100 Units/Minute";
+			    "Energy Rate: 55 Units/Minute";
 
 		slots_cnt = 1;
 		slots[0] = Legs;
