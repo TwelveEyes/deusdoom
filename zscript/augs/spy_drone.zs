@@ -53,7 +53,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 		disp_desc = "Advanced nanofactories can assemble a spy drone on\n"
 			    "demand which can then be remotely controlled by the\n"
 			    "agent until released, at which point a new drone\n"
-			    "drone will be assembled.\n\n"
+			    "will be assembled.\n\n"
 			    "TECH ONE: The drone is slow and reveals objects for\n"
 			    "short period of time.\n\n"
 			    "TECH TWO: The drone is faster and reveals objects for\n"
