@@ -303,11 +303,19 @@ class RecognitionUtils
 	{
 		protfact_ml = 1.0;
 
-		// Source
 		if(source)
 		{
 			if(findActorClass(source, getInstance().damageIsBallistic_Source_bl))
 				return false;
+		}
+		if(inflictor)
+		{
+			if(findActorClass(inflictor, getInstance().damageIsBallistic_Inflictor_bl))
+				return false;
+		}
+
+		if(source)
+		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsBallistic_Source_wl);
 			if(in_wl){
@@ -315,12 +323,8 @@ class RecognitionUtils
 				return true;
 			}
 		}
-
-		// Inflictor
 		if(inflictor)
 		{
-			if(findActorClass(inflictor, getInstance().damageIsBallistic_Inflictor_bl))
-				return false;
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsBallistic_Inflictor_wl);
 			if(in_wl){
@@ -405,11 +409,19 @@ class RecognitionUtils
 		protfact_ml = 1.0;
 
 
-		// Source
 		if(source)
 		{
 			if(findActorClass(source, getInstance().damageIsEnergy_Source_bl))
 				return false;
+		}
+		if(inflictor)
+		{
+			if(findActorClass(inflictor, getInstance().damageIsEnergy_Inflictor_bl))
+				return false;
+		}
+
+		if(source)
+		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnergy_Source_wl);
 			if(in_wl){
@@ -417,11 +429,8 @@ class RecognitionUtils
 				return true;
 			}
 		}
-		// Inflictor
 		if(inflictor)
 		{
-			if(findActorClass(inflictor, getInstance().damageIsEnergy_Inflictor_bl))
-				return false;
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsEnergy_Inflictor_wl);
 			if(in_wl){
@@ -447,11 +456,19 @@ class RecognitionUtils
 	{
 		protfact_ml = 1.0;
 
-		// Source
 		if(source)
 		{
 			if(findActorClass(source, getInstance().damageIsEnvironmental_Source_bl))
 				return false;
+		}
+		if(inflictor)
+		{
+			if(findActorClass(inflictor, getInstance().damageIsEnvironmental_Inflictor_bl))
+				return false;
+		}
+
+		if(source)
+		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnvironmental_Source_wl);
 			if(in_wl){
@@ -459,11 +476,8 @@ class RecognitionUtils
 				return true;
 			}
 		}
-		// Inflictor
 		if(inflictor)
 		{
-			if(findActorClass(inflictor, getInstance().damageIsEnvironmental_Inflictor_bl))
-				return false;
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsEnvironmental_Inflictor_wl);
 			if(in_wl){
