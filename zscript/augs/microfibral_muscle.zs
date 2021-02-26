@@ -335,8 +335,12 @@ class DD_MicrofibralMuscle_Tracer : LineTracer
 			return TRACE_Skip;
 
 		if(results.hitActor){
-			hit_obj = results.hitActor;
-			return TRACE_Stop;
+			int bh = RecognitionUtils.canBePickedUp(results.hitActor);
+			if(bh == 1 || bh == 0){
+				hit_obj = results.hitActor;
+				return TRACE_Stop;
+			}
+			return TRACE_Skip;
 		}
 
 		if(results.hitLine){
