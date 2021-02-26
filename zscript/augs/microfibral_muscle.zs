@@ -131,9 +131,11 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 			if(queue.soldify_timers[i] > 0)
 				queue.soldify_timers[i]--;
 			else{
-				queue.soldify_objs[i].A_ChangeLinkFlags(0, 0);
-				if(!queue.soldify_wasthruactors[i])
-					queue.soldify_objs[i].bThruActors = false;
+				if(queue.soldify_objs[i]){
+					queue.soldify_objs[i].A_ChangeLinkFlags(0, 0);
+					if(!queue.soldify_wasthruactors[i])
+						queue.soldify_objs[i].bThruActors = false;
+				}
 
 				queue.soldify_objs.delete(i);
 				queue.soldify_timers.delete(i);
