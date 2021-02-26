@@ -110,6 +110,12 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	double getThrowForceMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
 	protected int cantPickupObj(Actor ac)
 	{
+		int bh = RecognitionUtils.canBePickedUp(ac);
+		if(bh == -1)
+			return 1;
+		else if(bh == 1)
+			return 0;
+
 		if(ac.bIsMonster && ac.health > 0)
 			return 1;
 		if(ac.mass > getMaxMassPickup()

@@ -36,6 +36,9 @@ class RecognitionUtils
 	array<double> damageIsEnvironmental_Source_protfact_ml;
 	array<double> damageIsEnvironmental_Inflictor_protfact_ml;
 
+	array<class<Actor> > canBePickedUp_wl;
+	array<class<Actor> > canBePickedUp_bl;
+
 	// Description:
 	// Should be called from an event handler's event onRegister().
 	// Loads special lumps with information about black- and whitelisted
@@ -184,6 +187,8 @@ class RecognitionUtils
 								damageIsEnvironmental_Source_bl.push(actor_cls);
 							else if(attr == "damageIsEnvironmental_Inflictor")
 								damageIsEnvironmental_Inflictor_bl.push(actor_cls);
+							else if(attr == "canBePickedUp")
+								canBePickedUp_bl.push(actor_cls);
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -226,6 +231,8 @@ class RecognitionUtils
 								damageIsEnvironmental_Inflictor_wl.push(actor_cls);
 								damageIsEnvironmental_Inflictor_protfact_ml.push(1.0);
 							}
+							else if(attr == "canBePickedUp")
+								canBePickedUp_wl.push(actor_cls);
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -491,4 +498,21 @@ class RecognitionUtils
 			return true;
 		return false;
 	}
+
+	// Description:
+	// Function for Microfibral muscle augmentation that can prohibit or allow certain actors to be picked up.
+	// See cantPickupMobj() method of DD_Aug_MicrofibralMuscle class.
+	// Return values:
+	// -1 - prohibited to be picked up
+	//  1 - allowed to be picked up
+	//  0 - default behaviour
+	static int canBePickedUp(Actor obj)
+	{
+		if(findActorClass(obj, getInstance().canBePickedUp_bl))
+			return -1;
+		if(findActorClass(obj, getInstance().canBePickedUp_wl))
+			return 1;
+		return 0;	
+	}
+
 }
