@@ -60,7 +60,7 @@ class RecognitionUtils
 		string actor_cls_name;
 		class<Actor> actor_cls;
 		array<string> lst_attribs;
-		
+
 		for(int i = 0; i < data.length(); ++i)
 		{
 			int c = data.byteAt(i);
@@ -71,7 +71,7 @@ class RecognitionUtils
 					if(c == ch("#")){
 						pstate = 1;
 					}
-					else if(c != ch(" ") && c != ch("\n") && c != ch("\t")){
+					else if(c != ch(" ") && c != ch("\n") && c != ch("\t") && c != ch("\r")){
 						pstate = 2;
 						actor_cls_name.appendCharacter(c);
 					}
@@ -84,7 +84,7 @@ class RecognitionUtils
 				} break;
 				case 2:
 				{ // reading actor class name
-					if(c == ch(" ") || c == ch("\n") || c == ch("\t")){
+					if(c == ch(" ") || c == ch("\n") || c == ch("\t") || c== ch("\r")){
 						pstate = 3;
 						actor_cls = actor_cls_name;
 						if(!actor_cls){
@@ -98,7 +98,7 @@ class RecognitionUtils
 				} break;
 				case 3:
 				{ // 3 - looking for a list attribute
-					if(c != ch(" ") && c != ch("\n") && c != ch("\t")){
+					if(c != ch(" ") && c != ch("\n") && c != ch("\t") && c != ch("\r")){
 						pstate = 4;
 						lst_attribs.push("");
 						lst_attribs[lst_attribs.size()-1].appendCharacter(c);
@@ -111,7 +111,7 @@ class RecognitionUtils
 				} break;
 				case 4:
 				{
-					if(c == ch(" ") || c == ch("\n") || c == ch("\t") || c == ch(";")){
+					if(c == ch(" ") || c == ch("\n") || c == ch("\t") || c == ch(";") || c == ch("\r")){
 						if(c == ch(";"))
 							pstate = 0;
 						else
