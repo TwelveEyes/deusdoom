@@ -130,7 +130,7 @@ class DD_AugsHolder : Inventory
 			}
 		}
 		else
-			A_StopSound(3512);
+			owner.A_StopSound(3512);
 	}
 
 	// Inventory events
