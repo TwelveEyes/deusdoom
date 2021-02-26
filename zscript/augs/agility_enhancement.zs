@@ -65,14 +65,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 
 
-	override double getSpeedFactor()
-	{
-		// This is kinda junk, so numbers are limited
-		if(enabled && owner && owner.vel.z != 0)
-			return 1 / CVar.findCVar("sv_aircontrol").getFloat()
-				* (0.2 + 0.15 * (getRealLevel() - 1));
-		return 1.0;
-	}
 	protected clearscope double getDeaccFactor()
 	{
 		return 0.2 + 0.35 * (getRealLevel() - 1);
@@ -130,23 +122,26 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		if(!enabled)
 			return;
 
-		if(abs(owner.vel.x) > queue.deacc){
-			if(owner.warp(owner, owner.vel.x, owner.vel.y, owner.vel.z, 0, WARPF_TESTONLY)){
-				owner.A_ChangeVelocity((owner.vel.x > 0 ? -1 : 1)*queue.deacc, 0, 0);
-				owner.warp(owner, -owner.vel.x, -owner.vel.y, -owner.vel.z, 0, WARPF_TESTONLY);
-			}
-		}
-		else
-			owner.A_ChangeVelocity(0, owner.vel.y, owner.vel.z, CVF_REPLACE);
 
-		if(abs(owner.vel.y) > queue.deacc){
-			if(owner.warp(owner, owner.vel.x, owner.vel.y, owner.vel.z, 0, WARPF_TESTONLY)){
-				owner.A_ChangeVelocity(0, (owner.vel.y > 0 ? -1 : 1)*queue.deacc, 0);
-				owner.warp(owner, -owner.vel.x, -owner.vel.y, -owner.vel.z, 0, WARPF_TESTONLY);
+		if(abs(queue.deacc) > 0)
+		{
+			if(abs(owner.vel.x) > queue.deacc){
+				if(owner.warp(owner, owner.vel.x, owner.vel.y, owner.vel.z, 0, WARPF_TESTONLY)){
+					owner.A_ChangeVelocity((owner.vel.x > 0 ? -1 : 1)*queue.deacc, 0, 0);
+					owner.warp(owner, -owner.vel.x, -owner.vel.y, -owner.vel.z, 0, WARPF_TESTONLY);
+				}
 			}
+			else
+				owner.A_ChangeVelocity(0, owner.vel.y, owner.vel.z, CVF_REPLACE);
+			if(abs(owner.vel.y) > queue.deacc){
+				if(owner.warp(owner, owner.vel.x, owner.vel.y, owner.vel.z, 0, WARPF_TESTONLY)){
+					owner.A_ChangeVelocity(0, (owner.vel.y > 0 ? -1 : 1)*queue.deacc, 0);
+					owner.warp(owner, -owner.vel.x, -owner.vel.y, -owner.vel.z, 0, WARPF_TESTONLY);
+				}
+			}
+			else
+				owner.A_ChangeVelocity(owner.vel.x, 0, owner.vel.z, CVF_REPLACE);
 		}
-		else
-			owner.A_ChangeVelocity(owner.vel.x, 0, owner.vel.z, CVF_REPLACE);
 
 		if(dash_cd > 0)
 			--dash_cd;
