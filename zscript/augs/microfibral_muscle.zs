@@ -106,19 +106,18 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		return dname;
 	}
 
-	protected int getMaxMassPickup() { return 80 + 100 * (getRealLevel() - 1); }
+	protected int getMaxMassPickup() { return 80 + 310 * (getRealLevel() - 1); }
 	double getThrowForceMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
 	protected int cantPickupObj(Actor ac)
 	{
-		int bh = RecognitionUtils.canBePickedUp(ac);
+		double th_ml = 1.0;
+		int bh = RecognitionUtils.canBePickedUp(ac, th_ml);
 		if(bh == -1)
 			return 1;
-		else if(bh == 1)
-			return 0;
 
 		if(ac.bIsMonster && ac.health > 0)
 			return 1;
-		if(ac.mass > getMaxMassPickup()
+		if(ac.mass * th_ml > getMaxMassPickup()
 		&& !(ac is "Inventory"))
 			return 2;
 		return 0;
@@ -335,7 +334,8 @@ class DD_MicrofibralMuscle_Tracer : LineTracer
 			return TRACE_Skip;
 
 		if(results.hitActor){
-			int bh = RecognitionUtils.canBePickedUp(results.hitActor);
+			double ts_ml;
+			int bh = RecognitionUtils.canBePickedUp(results.hitActor, ts_ml);
 			if(bh == 1 || bh == 0){
 				hit_obj = results.hitActor;
 				return TRACE_Stop;

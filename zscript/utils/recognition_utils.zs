@@ -38,6 +38,7 @@ class RecognitionUtils
 
 	array<class<Actor> > canBePickedUp_wl;
 	array<class<Actor> > canBePickedUp_bl;
+	array<double> canBePickedUp_threshold_ml;
 
 	// Description:
 	// Should be called from an event handler's event onRegister().
@@ -161,6 +162,8 @@ class RecognitionUtils
 								damageIsEnvironmental_Source_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsEnvironmental_Inflictor")
 								damageIsEnvironmental_Inflictor_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+							else if(prev_attr == "canBePickedUp")
+								canBePickedUp_threshold_ml[prev_attr_i] = (attr.mid(1).toDouble());
 						}
 						else if(attr.byteAt(0) == ch("!"))
 						{ // blacklist
@@ -231,8 +234,10 @@ class RecognitionUtils
 								damageIsEnvironmental_Inflictor_wl.push(actor_cls);
 								damageIsEnvironmental_Inflictor_protfact_ml.push(1.0);
 							}
-							else if(attr == "canBePickedUp")
+							else if(attr == "canBePickedUp"){
 								canBePickedUp_wl.push(actor_cls);
+								canBePickedUp_threshold_ml.push(1.0);
+							}
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -506,12 +511,18 @@ class RecognitionUtils
 	// -1 - prohibited to be picked up
 	//  1 - allowed to be picked up
 	//  0 - default behaviour
-	static int canBePickedUp(Actor obj)
+	//  multiplier for mass thershold through thershold_ml
+	static int canBePickedUp(Actor obj, out double threshold_ml)
 	{
 		if(findActorClass(obj, getInstance().canBePickedUp_bl))
 			return -1;
-		if(findActorClass(obj, getInstance().canBePickedUp_wl))
+
+		bool in_wl; uint wl_i;
+		[in_wl, wl_i] = findActorClass(obj, getInstance().canBePickedUp_wl);
+		if(in_wl){
+			threshold_ml = getInstance().canBePickedUp_threshold_ml[wl_i];
 			return 1;
+		}
 		return 0;	
 	}
 
