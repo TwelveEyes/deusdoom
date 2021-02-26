@@ -159,6 +159,10 @@ class DD_SpawnHandler : StaticEventHandler
 
 	override void onRegister()
 	{
+		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
+		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
+		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
+		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
 		setOrder(1001);
 	}
 

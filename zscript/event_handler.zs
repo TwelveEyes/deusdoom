@@ -37,6 +37,8 @@ class DD_EventHandler : StaticEventHandler
 		queue.ui_init = false;
 		if(plr.countInv("DD_AugsHolder") == 0)
 			plr.addInventory(aughld);
+		else
+			aughld.destroy();
 
 
 			//aughld.installAug(DD_Aug_PowerRecirculator(Inventory.Spawn("DD_Aug_PowerRecirculator")));
