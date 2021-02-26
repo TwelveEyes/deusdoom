@@ -12,9 +12,9 @@ class DD_ProgressionTracker : Inventory
 		let hndl = DD_SpawnHandler(StaticEventHandler.find("DD_SpawnHandler"));
 
 		givePoints(hndl.pointsamt_exit_lvl);
-		double items_ratio = double(hndl.prev_lvl_found_items) / hndl.prev_lvl_total_items;
+		double items_ratio = (hndl.prev_lvl_total_items == 0 ? 0 : double(hndl.prev_lvl_found_items) / hndl.prev_lvl_total_items);
 		givePoints(items_ratio * DD_SpawnHandler.pointsamt_all_items);
-		double secrets_ratio = double(hndl.prev_lvl_found_secrets) / hndl.prev_lvl_total_secrets;
+		double secrets_ratio = (hndl.prev_lvl_total_secrets == 0 ? 0 : double(hndl.prev_lvl_found_secrets) / hndl.prev_lvl_total_secrets);
 		givePoints(secrets_ratio * DD_SpawnHandler.pointsamt_all_secrets);
 	}
 

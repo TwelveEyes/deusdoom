@@ -86,4 +86,5 @@ OptionMenu "DD_Options"
 		StaticText "Ryuhi - suggesting ideas", White
 		StaticText "silentw - playtesting", White
 		StaticText "Doomguy914 - finding a typo", White
+		StaticText "Kneight - reporting a bug", White
 	}
