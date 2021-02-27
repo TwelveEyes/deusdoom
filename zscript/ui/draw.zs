@@ -1,5 +1,10 @@
 // Collection of functions for drawing objects over UI.
 
+enum UI_DrawFlags
+{
+	UI_Draw_FlipX = 1,
+	UI_Draw_FlipY = 2
+}
 class UI_Draw
 {
 
@@ -16,7 +21,7 @@ class UI_Draw
 	//	       <0 - to have their original value multiplied by absolute value of passed value.
 	// Return value:
 	//	double - value of dimension that was fit to aspect ratio, or 0.0 if none.
-	static ui double texture(TextureID id, double x, double y, double w, double h)
+	static ui double texture(TextureID id, double x, double y, double w, double h, UI_DrawFlags flags = 0)
 	{
 		int tex_w, tex_h;
 		[tex_w, tex_h] = TexMan.GetSize(id);
@@ -47,7 +52,9 @@ class UI_Draw
 					DTA_LEFTOFFSETF, 0.0,
 					DTA_TOPOFFSETF, 0.0,
 					DTA_DESTWIDTHF, w,
-					DTA_DESTHEIGHTF, h);
+					DTA_DESTHEIGHTF, h,
+					DTA_FLIPX, flags & UI_Draw_FlipX,
+					DTA_FLIPY, flags & UI_Draw_FlipY);
 
 		return ret_val;
 	}
@@ -67,7 +74,7 @@ class UI_Draw
 	// Return value:
 	//	double - value of dimension that was fit to aspect ratio, or 0.0 if none.
 	static ui double textureStencil(TextureID id, double x, double y, double w, double h,
-					int clr)
+					int clr, UI_DrawFlags flags = 0)
 	{
 		int tex_w, tex_h;
 		[tex_w, tex_h] = TexMan.GetSize(id);
@@ -98,7 +105,9 @@ class UI_Draw
 					DTA_TOPOFFSETF, 0.0,
 					DTA_DESTWIDTHF, w,
 					DTA_DESTHEIGHTF, h,
-					DTA_FILLCOLOR, clr);
+					DTA_FILLCOLOR, clr,
+					DTA_FLIPX, flags & UI_Draw_FlipX,
+					DTA_FLIPY, flags & UI_Draw_FlipY);
 
 		return ret_val;
 	}

@@ -8,6 +8,11 @@ class DD_Aug_Targeting : DD_Augmentation
 	ui TextureID tex_off;
 	ui TextureID tex_on;
 
+	// Texture wildcard buffer
+	ui TextureID wbuft;
+	ui bool wbufb;
+	
+
 	ui TextureID reticle; // reticle for aiming
 	ui TextureID targ_frame; // frame background for rendering target's image
 	ui TextureID scope; // scope displayed while zooming in
@@ -202,13 +207,13 @@ class DD_Aug_Targeting : DD_Augmentation
 
 			// level 4: target image
 			if(getRealLevel() >= 4){
-				double objang = deltaAngle(owner.angleTo(target_obj), target_obj.angle) + 180;
-				int byte_ang = ( int( (objang + 22.5) / 45) % 8);
-				TextureID sprtex = target_obj.curState.getSpriteTexture(byte_ang * 2);
+				TextureID sprtex; bool flip;
+				[sprtex, flip] = TextureUtils.getActorRenderSpriteTex(target_obj, owner, wbuft, wbufb);
 				UI_Draw.texture(targ_frame,
 							4 + off.x, 27 + off.y,
 							UI_Draw.texWidth(sprtex, 0, 30) + 2,
-							UI_Draw.texHeight(sprtex, 0, 30) + 2);
+							UI_Draw.texHeight(sprtex, 0, 30) + 2,
+							flip ? UI_Draw_FlipX : 0);
 				UI_Draw.texture(sprtex,
 							5 + off.x, 28 + off.y, 0, 30);
 			}

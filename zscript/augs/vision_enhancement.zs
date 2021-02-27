@@ -3,6 +3,10 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 	TextureID tex_off;
 	TextureID tex_on;
 
+	// Texture wildcard buffer
+	ui TextureID wbuft;
+	ui bool wbufb;
+
 	DD_VisionEnhancement_LightDummy dlight;
 
 	// For imitation of sonar imaging
@@ -178,9 +182,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 				sonar_pos.y *= double(200) / screen.getHeight();
 	
 				// Drawing object sprite
-				double objang = deltaAngle(owner.angleTo(obj), obj.angle) + 180.0;
-				int byte_ang = ( int( (objang + 22.5) / 45) % 8);
-				TextureID spritetex = obj.CurState.getSpriteTexture(byte_ang * 2);
+				TextureID spritetex; bool flip;
+				[spritetex, flip] = TextureUtils.getActorRenderSpriteTex(obj, owner, wbuft, wbufb);
 	
 				vector3 objvec = obj.pos - owner.pos;
 				double objdist = objvec.length();
@@ -198,7 +201,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 						sonar_pos.x - texw/2,
 						sonar_pos.y - texh,
 						texw, texh,
-						color(255, 255, 255));
+						color(255, 255, 255),
+						flip ? UI_Draw_FlipX : 0);
 			}
 		}
 	}
