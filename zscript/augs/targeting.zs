@@ -122,6 +122,8 @@ class DD_Aug_Targeting : DD_Augmentation
 		{
 			vector2 off = CVar_Utils.getOffset("dd_targeting_info_off");
 
+			UI_Draw.str(hndl.aug_ui_font, "Monster", 11,
+					4 + off.x, 12 + off.y, -0.5, -0.5);
 			// level 1: target range
 			UI_Draw.str(hndl.aug_ui_font, "Range 100 ft (1000 map units)",
 							11, 4 + off.x, 17 + off.y, -0.5, -0.5);
@@ -163,7 +165,7 @@ class DD_Aug_Targeting : DD_Augmentation
 		if(!hud_dbg && target_obj && shouldDisplayObj(target_obj))
 		{
 			UI_Draw.str(hndl.aug_ui_font, getActorDisplayName(target_obj), 11,
-					4, 2, -0.5, -0.5);
+					4 + off.x, 12 + off.y, -0.5, -0.5);
 			double target_dist = ((target_obj.pos - owner.pos).length()
 						- target_obj.radius - owner.radius);
 			double target_ft_dist = target_dist
@@ -174,14 +176,14 @@ class DD_Aug_Targeting : DD_Augmentation
 
 			UI_Draw.str(hndl.aug_ui_font, String.format("Range %.0f ft (%.0f map units)",
 							round(target_ft_dist), round(target_dist)),
-							11, 4 + off.x, 7 + off.y, -0.5, -0.5);
+							11, 4 + off.x, 17 + off.y, -0.5, -0.5);
 
 			// level 2: target max health
 			if(getRealLevel() >= 2){
 				int target_maxhp = target_obj.getSpawnHealth();
 				UI_Draw.str(hndl.aug_ui_font, String.Format("Health %d\\%d",
 								target_hp, target_maxhp),
-								11, 4 + off.x, 17 + off.y, -0.5, -0.5);
+								11, 4 + off.x, 22 + off.y, -0.5, -0.5);
 			}
 			// level 1: target range and health
 			else if(getRealLevel() >= 1){
@@ -197,7 +199,7 @@ class DD_Aug_Targeting : DD_Augmentation
 				if(target_obj.master)
 				UI_Draw.str(hndl.aug_ui_font, "Master: "
 								.. (target_obj.master ? target_obj.master.getTag("") : ""),
-								11, 4 + off.x, 22 + off.y, -0.5, -0.5);
+								11, 4 + off.x, 32 + off.y, -0.5, -0.5);
 			}
 
 			// level 4: target image
@@ -205,12 +207,12 @@ class DD_Aug_Targeting : DD_Augmentation
 				TextureID sprtex; bool flip;
 				[sprtex, flip] = TextureUtils.getActorRenderSpriteTex(target_obj, owner);
 				UI_Draw.texture(targ_frame,
-							4 + off.x, 27 + off.y,
+							4 + off.x, 37 + off.y,
 							UI_Draw.texWidth(sprtex, 0, 30) + 2,
 							UI_Draw.texHeight(sprtex, 0, 30) + 2,
 							flip ? UI_Draw_FlipX : 0);
 				UI_Draw.texture(sprtex,
-							5 + off.x, 28 + off.y, 0, 30);
+							5 + off.x, 38 + off.y, 0, 30);
 			}
 		}
 	}
