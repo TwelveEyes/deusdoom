@@ -55,6 +55,33 @@ OptionMenu "DD_Options"
 		StaticText "CVAR: dd_bioelbar_offy", Red
 		Slider "Bioelectric energy bar Y offset", "dd_bioelbar_offy", -200.0, 200.0, 0.25, 2
 		StaticText ""
+		StaticText "You can enable HUD debug mode to adjust offsets of any element", Green
+		StaticText "that can be shown on screen. However, you still need appropriate", Green
+		StaticText "augmentations installed in order for their graphical elements", Green
+		StaticText "to be displayed.", Green
+		Option "Enable HUD debug mode", "dd_hud_debug", "OnOff"
+		StaticText ""
+		Option "Display damage indicators", "dd_dmgind_show", "OnOff"
+		StaticText "CVAR: dd_dmgind_offx", Red
+		Slider "Damage indicators X offset", "dd_dmgind_offx", -320.0, 320.0, 0.5, 2
+		StaticText "CVAR: dd_dmgind_offy", Red
+		Slider "Damage indicators Y offset", "dd_dmgind_offy", -200.0, 200.0, 0.25, 2
+		StaticText ""
+		StaticText "CVAR: dd_agdefsys_cd_offx", Red
+		Slider "Aggressive defense system cooldown X offset", "dd_agdefsys_cd_offx", -320.0, 320.0, 0.5, 2
+		StaticText "CVAR: dd_agdefsys_cd_offy", Red
+		Slider "Aggressive defense system cooldown Y offset", "dd_agdefsys_cd_offy", -200.0, 200.0, 0.25, 2
+		StaticText ""
+		StaticText "CVAR: dd_targeting_info_offx", Red
+		Slider "Targeting information X offset", "dd_targeting_info_offx", -320.0, 320.0, 0.5, 2
+		StaticText "CVAR: dd_targeting_info_offy", Red
+		Slider "Targeting information Y offset", "dd_targeting_info_offy", -200.0, 200.0, 0.25, 2
+		StaticText ""
+		StaticText "CVAR: dd_spy_drone_cam_offx", Red
+		Slider "Spy drone camera feed X offset", "dd_spy_drone_cam_offx", -320.0, 320.0, 0.5, 2
+		StaticText "CVAR: dd_spy_drone_cam_offy", Red
+		Slider "Spy drone camera feed Y offset", "dd_spy_drone_cam_offy", -200.0, 200.0, 0.25, 2
+		StaticText ""
 
 		StaticText "Visual", Purple
 		Option "Show reticle when using Targeting augmentation", "dd_show_reticle", "OnOff"

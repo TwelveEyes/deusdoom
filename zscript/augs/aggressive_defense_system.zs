@@ -146,13 +146,24 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 
 	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
 	{
+		bool hud_dbg = false;
+		if(CVar_Utils.isHUDDebugEnabled()){
+			vector2 off = CVar_Utils.getOffset("dd_agdefsys_cd_off");
+			UI_Draw.str(hndl.aug_ui_font,
+					String.Format("Aggr.Def.Sys. CD 0.00s", double(destr_cd) / 35),
+					10, 4 + off.x, 8 + off.y, -0.7, -0.7);
+			hud_dbg = true;
+		}
+
 		if(!enabled)
 			return;
 
-		if(destr_cd > 0)
+		if(destr_cd > 0 && !hud_dbg){
+			vector2 off = CVar_Utils.getOffset("dd_agdefsys_cd_off");
 			UI_Draw.str(hndl.aug_ui_font,
 					String.Format("Aggr.Def.Sys. CD %.2fs", double(destr_cd) / 35),
-					10, 8, 8, -0.7, -0.7);
+					10, 4 + off.x, 8 + off.y, -0.7, -0.7);
+		}
 
 		// Projecting any incoming projectiles' coordinates and then rendering a string
 		vwport.fromHUD();

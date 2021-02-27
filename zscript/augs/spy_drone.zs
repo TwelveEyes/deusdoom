@@ -208,19 +208,46 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			//		mark_pos.x, mark_pos.y, -1, -1);
 		}
 
+		bool hud_dbg = false;
+		if(CVar_Utils.isHUDDebugEnabled())
+		{
+			vector2 off = CVar_Utils.getOffset("dd_spy_drone_cam_off");
+			string s_act = "Remote SpyDrone Active";
+			UI_Draw.str(hndl.aug_ui_font, s_act, 11,
+					320.0/3/2 + 2
+					- UI_Draw.strWidth(hndl.aug_ui_font, s_act, -0.55, -0.55)/2
+					+ off.x,
+					200.0/3 - UI_Draw.strHeight(hndl.aug_ui_font, s_act, -0.55, -0.55) - 1
+					+ off.y + 15,
+					-0.55, -0.55);
+			UI_Draw.texture(camfd_bd,
+					off.x,
+					200.0/3 + off.y + 15,
+					320.0/3 + 2, 200.0/3 + 2);
+		}
+
 		// Rendering camera feed
-		if(!enabled || !drone_actor)
+		if(!enabled || !drone_actor || hud_dbg)
 			return;
+
+		vector2 off = CVar_Utils.getOffset("dd_spy_drone_cam_off");
+
 		string s_act = "Remote SpyDrone Active";
 		UI_Draw.str(hndl.aug_ui_font, s_act, 11,
 				320.0/3/2 + 2
-				- UI_Draw.strWidth(hndl.aug_ui_font, s_act, -0.55, -0.55)/2,
-				200.0/3 - UI_Draw.strHeight(hndl.aug_ui_font, s_act, -0.55, -0.55) - 1,
+				- UI_Draw.strWidth(hndl.aug_ui_font, s_act, -0.55, -0.55)/2
+				+ off.x,
+				200.0/3 - UI_Draw.strHeight(hndl.aug_ui_font, s_act, -0.55, -0.55) - 1
+				+ off.y + 15,
 				-0.55, -0.55);
 		UI_Draw.texture(camfd_bd,
-				0, 200.0/3, 320.0/3 + 2, 200.0/3 + 2);
+				off.x,
+				200.0/3 + off.y + 15,
+				320.0/3 + 2, 200.0/3 + 2);
 		UI_Draw.texture(drone_camtex,
-				1, 200.0/3 + 1, 320.0/3, 200.0/3);
+				1 + off.x,
+				200.0/3 + 1 + off.y + 15,
+				320.0/3, 200.0/3);
 	}
 
 

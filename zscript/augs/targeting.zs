@@ -117,12 +117,39 @@ class DD_Aug_Targeting : DD_Augmentation
 
 	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
 	{
+		bool hud_dbg = false;
+		if(CVar_UTils.isHUDDebugEnabled())
+		{
+			vector2 off = CVar_Utils.getOffset("dd_targeting_info_off");
+
+			// level 1: target range
+			UI_Draw.str(hndl.aug_ui_font, "Range 100 ft (1000 map units)",
+							11, 4 + off.x, 17 + off.y, -0.5, -0.5);
+			// level 2: target max health
+			UI_Draw.str(hndl.aug_ui_font, "Health 10000\\10000",
+							11, 4 + off.x, 22 + off.y, -0.5, -0.5);
+
+			// level 3: target state, it's target and master
+			UI_Draw.str(hndl.aug_ui_font, "Chasing DoomPlayer",
+							11, 4 + off.x, 27 + off.y, -0.5, -0.5);
+
+			// level 4: target image
+			UI_Draw.texture(targ_frame,
+						4 + off.x, 37 + off.y,
+						50 + 2,
+						30 + 2);
+
+			hud_dbg = true;
+		}
+
 		if(!enabled)
 			return;
 		if(queue.zoomed_in){
 			UI_Draw.texture(scope,
 					320/2-200/2, 0, 200, 200);
 		}
+
+		vector2 off = CVar_Utils.getOffset("dd_targeting_info_off");
 
 		// level 2: reticle
 		if( (getRealLevel() >= 2) && disp_reticle && !queue.zoomed_in){
@@ -133,7 +160,7 @@ class DD_Aug_Targeting : DD_Augmentation
 						200/2 - UI_Draw.texWidth(reticle, ret_w, ret_h)/2 - 5.5,
 						ret_w, ret_h);
 		}
-		if(target_obj && shouldDisplayObj(target_obj))
+		if(!hud_dbg && target_obj && shouldDisplayObj(target_obj))
 		{
 			UI_Draw.str(hndl.aug_ui_font, getActorDisplayName(target_obj), 11,
 					4, 2, -0.5, -0.5);
@@ -147,30 +174,30 @@ class DD_Aug_Targeting : DD_Augmentation
 
 			UI_Draw.str(hndl.aug_ui_font, String.format("Range %.0f ft (%.0f map units)",
 							round(target_ft_dist), round(target_dist)),
-							11, 4, 7, -0.5, -0.5);
+							11, 4 + off.x, 7 + off.y, -0.5, -0.5);
 
 			// level 2: target max health
 			if(getRealLevel() >= 2){
 				int target_maxhp = target_obj.getSpawnHealth();
 				UI_Draw.str(hndl.aug_ui_font, String.Format("Health %d\\%d",
 								target_hp, target_maxhp),
-								11, 4, 12, -0.5, -0.5);
+								11, 4 + off.x, 17 + off.y, -0.5, -0.5);
 			}
 			// level 1: target range and health
 			else if(getRealLevel() >= 1){
 				UI_Draw.str(hndl.aug_ui_font, String.Format("Health %d",
 								target_hp),
-								11, 4, 12, -0.5, -0.5);
+								11, 4 + off.x, 22 + off.y, -0.5, -0.5);
 			}
 
 			// level 3: target state, it's target and master
 			if(getRealLevel() >= 3){
 				UI_Draw.str(hndl.aug_ui_font, StateUtils.getTranslation(target_obj),
-								11, 4, 17, -0.5, -0.5);
+								11, 4 + off.x, 27 + off.y, -0.5, -0.5);
 				if(target_obj.master)
 				UI_Draw.str(hndl.aug_ui_font, "Master: "
 								.. (target_obj.master ? target_obj.master.getTag("") : ""),
-								11, 4, 22, -0.5, -0.5);
+								11, 4 + off.x, 22 + off.y, -0.5, -0.5);
 			}
 
 			// level 4: target image
@@ -179,11 +206,11 @@ class DD_Aug_Targeting : DD_Augmentation
 				int byte_ang = ( int( (objang + 22.5) / 45) % 8);
 				TextureID sprtex = target_obj.curState.getSpriteTexture(byte_ang * 2);
 				UI_Draw.texture(targ_frame,
-							4, 27,
+							4 + off.x, 27 + off.y,
 							UI_Draw.texWidth(sprtex, 0, 30) + 2,
 							UI_Draw.texHeight(sprtex, 0, 30) + 2);
 				UI_Draw.texture(sprtex,
-							5, 28, 0, 30);
+							5 + off.x, 28 + off.y, 0, 30);
 			}
 		}
 	}

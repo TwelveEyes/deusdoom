@@ -68,7 +68,7 @@ class DD_AugsHolder : Inventory
 		aug_frame_top = TexMan.checkForTexture("AUGUI21");
 		aug_frame_mid = TexMan.checkForTexture("AUGUI22");
 		aug_frame_bottom = TexMan.checkForTexture("AUGUI23");
-		aug_frame_bg = TexMan.checkForTexture("AUGUI36");
+		aug_frame_bg = TexMan.checkForTexture("AUGUI25");
 
 		bioel_bg = TexMan.checkForTexture("AUGUI16");
 		bioel_bg2 = TexMan.checkForTexture("AUGUI39");
@@ -347,15 +347,8 @@ class DD_AugsHolder : Inventory
 					energy_perc >= 0.25 ? bioel_med_tex  :
 							bioel_low_tex;
 
-		CVar offvar = CVar.getCVar("dd_bioelbar_offx", players[consoleplayer]);
-		vector2 bioel_off = (-4.5, 3.25);
+		vector2 bioel_off = (-4.5, 3.25) + CVar_Utils.getOffset("dd_bioelbar_off");
 		double bioel_max_h = 20.0;
-
-		if(offvar)
-			bioel_off.x += offvar.getFloat();
-		offvar = CVar.getCVar("dd_bioelbar_offy", players[consoleplayer]);
-		if(offvar)
-			bioel_off.y += offvar.getFloat();
 
 		UI_Draw.texture(bioel_bg, x + bioel_off.x, y + bioel_off.y,
 					2 + 0.4, bioel_max_h + 0.4);
@@ -380,42 +373,69 @@ class DD_AugsHolder : Inventory
 		double absmsg_w = UI_Draw.strWidth(hndl.aug_ui_font, absorbtion_msg, -0.5, -0.5);
 		double absmsg_h = UI_Draw.strHeight(hndl.aug_ui_font, absorbtion_msg, -0.5, -0.5);
 
-		if(dmg_dir_timers[0] > 0)
+		CVar disp_dmgind = CVar.getCVar("dd_dmgind_show", players[consoleplayer]);
+		if(CVar_Utils.isHUDDebugEnabled())
+		{
+			vector2 off = CVar_Utils.getOffset("dd_dmgind_off");
 			UI_Draw.texture(dmg_dir_texs[0],
-						14, 110,
+						14 + off.x, 152 + off.y,
 						-0.45, -0.45);
-		if(dmg_dir_timers[1] > 0)
 			UI_Draw.texture(dmg_dir_texs[1],
-						30, 120,
+						30 + off.x, 162 + off.y,
 						-0.45, -0.45);
-		if(dmg_dir_timers[2] > 0)
 			UI_Draw.texture(dmg_dir_texs[2],
-						14, 136,
+						14 + off.x, 178 + off.y,
 						-0.45, -0.45);
-		if(dmg_dir_timers[3] > 0)
 			UI_Draw.texture(dmg_dir_texs[3],
-						4, 120,
+						4 + off.x, 162 + off.y,
 						-0.45, -0.45);
-		if(dmg_dir_timers[4] > 0)
 			UI_Draw.texture(dmg_dir_texs[4],
-						14.9, 120.9,
+						14.9 + off.x, 162.9 + off.y,
 						-0.53, -0.53);
 
-		if(absorbtion_msg_timer > 0)
-			UI_Draw.str(hndl.aug_ui_font, absorbtion_msg,
+			UI_Draw.str(hndl.aug_ui_font, "ABSORB 100%",
 					Font.CR_UNTRANSLATED,
-					35- UI_Draw.strWidth(hndl.aug_ui_font, absorbtion_msg, -0.5, -0.5),
-					125,
+					35- UI_Draw.strWidth(hndl.aug_ui_font, "ABSORB 100%", -0.5, -0.5) + off.x,
+					168 + off.y,
 					-0.5, -0.5);
+		}
+		else if(!disp_dmgind || (disp_dmgind && disp_dmgind.getBool()) )
+		{
+			vector2 off = CVar_Utils.getOffset("dd_dmgind_off");
+			if(dmg_dir_timers[0] > 0)
+				UI_Draw.texture(dmg_dir_texs[0],
+							14 + off.x, 152 + off.y,
+							-0.45, -0.45);
+			if(dmg_dir_timers[1] > 0)
+				UI_Draw.texture(dmg_dir_texs[1],
+							30 + off.x, 162 + off.y,
+							-0.45, -0.45);
+			if(dmg_dir_timers[2] > 0)
+				UI_Draw.texture(dmg_dir_texs[2],
+							14 + off.x, 178 + off.y,
+							-0.45, -0.45);
+			if(dmg_dir_timers[3] > 0)
+				UI_Draw.texture(dmg_dir_texs[3],
+							4 + off.x, 162 + off.y,
+							-0.45, -0.45);
+			if(dmg_dir_timers[4] > 0)
+				UI_Draw.texture(dmg_dir_texs[4],
+							14.9 + off.x, 162.9 + off.y,
+							-0.53, -0.53);
+
+			if(absorbtion_msg_timer > 0)
+				UI_Draw.str(hndl.aug_ui_font, absorbtion_msg,
+						Font.CR_UNTRANSLATED,
+						35- UI_Draw.strWidth(hndl.aug_ui_font, absorbtion_msg, -0.5, -0.5) + off.x,
+						170 + off.y,
+						-0.5, -0.5);
+		}
 		
 
 		// Rendering augmentations frame
-		offvar = CVar.getCVar("dd_augdisp_offx", players[consoleplayer]);
-		if(offvar)
-			x += offvar.getFloat();
-		offvar = CVar.getCVar("dd_augdisp_offy", players[consoleplayer]);
-		if(offvar)
-			y += offvar.getFloat();
+		vector2 aug_frame_off = CVar_Utils.getOffset("dd_augdisp_off");
+		x += aug_frame_off.x;
+		y += aug_frame_off.y;
 
 		double draw_x = x;
 		double draw_y = y;
