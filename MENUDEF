@@ -55,8 +55,8 @@ OptionMenu "DD_Options"
 		StaticText "CVAR: dd_bioelbar_offy", Red
 		Slider "Bioelectric energy bar Y offset", "dd_bioelbar_offy", -200.0, 200.0, 0.25, 2
 		StaticText ""
-		StaticText "You can enable HUD debug mode to adjust offsets of any element", Green
-		StaticText "that can be shown on screen. However, you still need appropriate", Green
+		StaticText "You can enable HUD debug mode to see how certain graphical elements", Green
+		StaticText "are displayed on screen. However, you still need appropriate", Green
 		StaticText "augmentations installed in order for their graphical elements", Green
 		StaticText "to be displayed.", Green
 		Option "Enable HUD debug mode", "dd_hud_debug", "OnOff"
