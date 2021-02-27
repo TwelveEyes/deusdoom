@@ -6,10 +6,6 @@ class DD_Aug_SpyDrone : DD_Augmentation
 	// Camera feed border color
 	ui TextureID camfd_bd;
 
-	// Texture wildcard buffer
-	ui TextureID wbuft;
-	ui bool wbufb;
-
 	// Object detection projection
 	ui DDLe_ProjScreen proj_scr;
 	DDLe_SWScreen proj_sw;
@@ -187,7 +183,8 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			// Drawing object sprite
 			bool spriteflip = false;
 			TextureID spritetex;
-			[spritetex, spriteflip] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner, wbuft, wbufb);
+			spritetex.setInvalid();
+			[spritetex, spriteflip] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner, spritetex, spriteflip);
 
 			vector3 objvec = mark_objs[i].pos
 					 - (owner.pos + (0, 0, owner.player.viewHeight));

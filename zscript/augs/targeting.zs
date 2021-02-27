@@ -11,7 +11,7 @@ class DD_Aug_Targeting : DD_Augmentation
 	// Texture wildcard buffer
 	ui TextureID wbuft;
 	ui bool wbufb;
-	
+	bool clear_wbuf; // flag to clear wildcard buffer, called from play context
 
 	ui TextureID reticle; // reticle for aiming
 	ui TextureID targ_frame; // frame background for rendering target's image
@@ -115,6 +115,8 @@ class DD_Aug_Targeting : DD_Augmentation
 		vector3 dir = (AngleToVector(owner.angle, cos(owner.pitch)), -sin(owner.pitch));
 		look_tracer.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, dir, 999999.0, 0);
 
+		if(look_tracer.hit_obj != target_obj)
+			clear_wbuf = true;
 		target_obj = look_tracer.hit_obj;
 		string ss = "look";
 	}
@@ -122,6 +124,9 @@ class DD_Aug_Targeting : DD_Augmentation
 
 	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
 	{
+		if(clear_wbuf)
+			TextureUtils.clearWildcardBuffer(wbuft, wbufb);
+
 		bool hud_dbg = false;
 		if(CVar_UTils.isHUDDebugEnabled())
 		{

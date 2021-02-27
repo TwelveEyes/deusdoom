@@ -37,4 +37,12 @@ class TextureUtils : Actor
 		[tex, flip] = getActorSpriteTex(ac, byteang * 2, sbuft, sbufb);
 		return tex, flip;
 	}
+
+	// Description:
+	// Clears a wildcard buffer (sets texture to null and flip flag to false)
+	static clearscope void clearWildcardBuffer(in TextureID sbuft, in bool sbufb)
+	{
+		sbuft.setNull();
+		sbufb = false;
+	}
 }

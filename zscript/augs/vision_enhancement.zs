@@ -3,9 +3,6 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 	TextureID tex_off;
 	TextureID tex_on;
 
-	// Texture wildcard buffer
-	ui TextureID wbuft;
-	ui bool wbufb;
 
 	DD_VisionEnhancement_LightDummy dlight;
 
@@ -183,7 +180,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 	
 				// Drawing object sprite
 				TextureID spritetex; bool flip;
-				[spritetex, flip] = TextureUtils.getActorRenderSpriteTex(obj, owner, wbuft, wbufb);
+				spritetex.setInvalid();
+				[spritetex, flip] = TextureUtils.getActorRenderSpriteTex(obj, owner, spritetex, flip);
 	
 				vector3 objvec = obj.pos - owner.pos;
 				double objdist = objvec.length();
