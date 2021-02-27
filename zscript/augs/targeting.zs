@@ -8,11 +8,6 @@ class DD_Aug_Targeting : DD_Augmentation
 	ui TextureID tex_off;
 	ui TextureID tex_on;
 
-	// Texture wildcard buffer
-	ui TextureID wbuft;
-	ui bool wbufb;
-	bool clear_wbuf; // flag to clear wildcard buffer, called from play context
-
 	ui TextureID reticle; // reticle for aiming
 	ui TextureID targ_frame; // frame background for rendering target's image
 	ui TextureID scope; // scope displayed while zooming in
@@ -115,8 +110,6 @@ class DD_Aug_Targeting : DD_Augmentation
 		vector3 dir = (AngleToVector(owner.angle, cos(owner.pitch)), -sin(owner.pitch));
 		look_tracer.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, dir, 999999.0, 0);
 
-		if(look_tracer.hit_obj != target_obj)
-			clear_wbuf = true;
 		target_obj = look_tracer.hit_obj;
 		string ss = "look";
 	}
@@ -124,9 +117,6 @@ class DD_Aug_Targeting : DD_Augmentation
 
 	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
 	{
-		if(clear_wbuf)
-			TextureUtils.clearWildcardBuffer(wbuft, wbufb);
-
 		bool hud_dbg = false;
 		if(CVar_UTils.isHUDDebugEnabled())
 		{
@@ -213,7 +203,7 @@ class DD_Aug_Targeting : DD_Augmentation
 			// level 4: target image
 			if(getRealLevel() >= 4){
 				TextureID sprtex; bool flip;
-				[sprtex, flip] = TextureUtils.getActorRenderSpriteTex(target_obj, owner, wbuft, wbufb);
+				[sprtex, flip] = TextureUtils.getActorRenderSpriteTex(target_obj, owner);
 				UI_Draw.texture(targ_frame,
 							4 + off.x, 27 + off.y,
 							UI_Draw.texWidth(sprtex, 0, 30) + 2,

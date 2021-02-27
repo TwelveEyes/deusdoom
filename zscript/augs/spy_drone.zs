@@ -183,8 +183,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			// Drawing object sprite
 			bool spriteflip = false;
 			TextureID spritetex;
-			spritetex.setInvalid();
-			[spritetex, spriteflip] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner, spritetex, spriteflip);
+			[spritetex, spriteflip] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner);
 
 			vector3 objvec = mark_objs[i].pos
 					 - (owner.pos + (0, 0, owner.player.viewHeight));
