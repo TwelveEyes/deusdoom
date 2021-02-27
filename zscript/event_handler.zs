@@ -101,7 +101,8 @@ class DD_EventHandler : StaticEventHandler
 	override bool UiProcess(UiEvent e)
 	{
 		if(wndmgr)
-			return wndmgr.uiProcess(e);
+			if(wndmgr.uiProcess(e))
+				return true;
 		return false;
 	}
 

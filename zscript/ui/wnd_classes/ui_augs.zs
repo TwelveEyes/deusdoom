@@ -323,7 +323,8 @@ class UI_Augs : UI_Window
 
 		if(e.type == UiEvent.Type_KeyDown)
 		{
-			if(KeyBindUtils.checkBind(KeyBindUtils.keyCharToScan(e.KeyChar), "dd_togg_ui_augs"))
+			if(KeyBindUtils.checkBind(KeyBindUtils.keyCharToScan(e.KeyChar), "dd_togg_ui_augs")
+			|| e.KeyChar == UiEvent.Key_Escape)
 			{
 				container.closeWindow(ev_handler, sidepanel);
 				container.closeWindow(ev_handler, self);
