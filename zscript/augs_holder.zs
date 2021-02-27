@@ -27,6 +27,13 @@ class DD_AugsHolder : Inventory
 	ui TextureID aug_frame_bottom;
 	ui TextureID aug_frame_bg;
 
+	ui TextureId bioel_bg;
+	ui TextureId bioel_bg2;
+	ui TextureId bioel_full_tex;
+	ui TextureId bioel_high_tex;
+	ui TextureId bioel_med_tex;
+	ui TextureId bioel_low_tex;
+
 	// For drawing damage directions and absorption amount
 	ui TextureID dmg_dir_texs[5];
 	int absorbtion_msg_timer;
@@ -61,7 +68,14 @@ class DD_AugsHolder : Inventory
 		aug_frame_top = TexMan.checkForTexture("AUGUI21");
 		aug_frame_mid = TexMan.checkForTexture("AUGUI22");
 		aug_frame_bottom = TexMan.checkForTexture("AUGUI23");
-		aug_frame_bg = TexMan.checkForTexture("AUGUI25");
+		aug_frame_bg = TexMan.checkForTexture("AUGUI36");
+
+		bioel_bg = TexMan.checkForTexture("AUGUI16");
+		bioel_bg2 = TexMan.checkForTexture("AUGUI39");
+		bioel_low_tex = TexMan.checkForTexture("AUGUI12");
+		bioel_med_tex = TexMan.checkForTexture("AUGUI13");
+		bioel_high_tex = TexMan.checkForTexture("AUGUI14");
+		bioel_full_tex = TexMan.checkForTexture("AUGUI15");
 
 		dmg_dir_texs[0] = TexMan.checkForTexture("AUGUI26");
 		dmg_dir_texs[1] = TexMan.checkForTexture("AUGUI27");
@@ -325,12 +339,34 @@ class DD_AugsHolder : Inventory
 
 	ui void draw(RenderEvent ev, DD_EventHandler hndl, double x, double y)
 	{
-		CVar offvar = CVar.getCVar("dd_augdisp_offx", players[consoleplayer]);
+		// Rendering bioelectric energy display
+		int energy = owner.countInv("DD_BioelectricEnergy");
+		double energy_perc = double(energy) / DD_BioelectricEnergy.max_energy;
+		TextureID bioel_tex =	energy_perc >= 0.75 ? bioel_full_tex :
+					energy_perc >= 0.50 ? bioel_high_tex :
+					energy_perc >= 0.25 ? bioel_med_tex  :
+							bioel_low_tex;
+
+		CVar offvar = CVar.getCVar("dd_bioelbar_offx", players[consoleplayer]);
+		vector2 bioel_off = (-4.5, 3.25);
+		double bioel_max_h = 20.0;
+
 		if(offvar)
-			x += offvar.getFloat();
-		offvar = CVar.getCVar("dd_augdisp_offy", players[consoleplayer]);
+			bioel_off.x += offvar.getFloat();
+		offvar = CVar.getCVar("dd_bioelbar_offy", players[consoleplayer]);
 		if(offvar)
-			y += offvar.getFloat();
+			bioel_off.y += offvar.getFloat();
+
+		UI_Draw.texture(bioel_bg, x + bioel_off.x, y + bioel_off.y,
+					2 + 0.4, bioel_max_h + 0.4);
+		UI_Draw.texture(bioel_bg2, x + bioel_off.x + 0.2, y + bioel_off.y + 0.2,
+					2, bioel_max_h);
+		if(energy_perc > 0.0){
+			UI_Draw.texture(bioel_tex, x + bioel_off.x + 0.2,
+						   y + bioel_off.y + 0.2 + bioel_max_h * (1.0 - energy_perc),
+							2, bioel_max_h * energy_perc);
+		}
+
 
 		// Invoking rendering of augmentations
 		for(uint i = 0; i < augs.size(); ++i)
@@ -374,6 +410,13 @@ class DD_AugsHolder : Inventory
 		
 
 		// Rendering augmentations frame
+		offvar = CVar.getCVar("dd_augdisp_offx", players[consoleplayer]);
+		if(offvar)
+			x += offvar.getFloat();
+		offvar = CVar.getCVar("dd_augdisp_offy", players[consoleplayer]);
+		if(offvar)
+			y += offvar.getFloat();
+
 		double draw_x = x;
 		double draw_y = y;
 		double aug_sz_x = 16;

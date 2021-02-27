@@ -50,6 +50,11 @@ OptionMenu "DD_Options"
 		StaticText "CVAR: dd_augdisp_offy", Red
 		Slider "Augmentations display Y offset", "dd_augdisp_offy", -200.0, 200.0, 0.25, 2
 		StaticText ""
+		StaticText "CVAR: dd_bioelbar_offx", Red
+		Slider "Bioelectric energy bar X offset", "dd_bioelbar_offx", -320.0, 320.0, 0.5, 2
+		StaticText "CVAR: dd_bioelbar_offy", Red
+		Slider "Bioelectric energy bar Y offset", "dd_bioelbar_offy", -200.0, 200.0, 0.25, 2
+		StaticText ""
 
 		StaticText "Visual", Purple
 		Option "Show reticle when using Targeting augmentation", "dd_show_reticle", "OnOff"

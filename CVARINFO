@@ -10,3 +10,5 @@ server float dd_ptmult_aug = 1.0;
 
 user float dd_augdisp_offx = 0.0;
 user float dd_augdisp_offy = 0.0;
+user float dd_bioelbar_offx = 0.0;
+user float dd_bioelbar_offy = 0.0;

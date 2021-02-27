@@ -15,10 +15,10 @@ class UI_DDBioelectricEnergyBar : UI_Widget
 
 	override void UIInit()
 	{
-		low_tex = TexMan.CheckForTexture("AUGUI12");
-		med_tex = TexMan.CheckForTexture("AUGUI13");
-		high_tex = TexMan.CheckForTexture("AUGUI14");
-		full_tex = TexMan.CheckForTexture("AUGUI15");
+		low_tex = TexMan.checkForTexture("AUGUI12");
+		med_tex = TexMan.checkForTexture("AUGUI13");
+		high_tex = TexMan.checkForTexture("AUGUI14");
+		full_tex = TexMan.checkForTexture("AUGUI15");
 
 		bg = TexMan.CheckForTexture("AUGUI16");
 	}
