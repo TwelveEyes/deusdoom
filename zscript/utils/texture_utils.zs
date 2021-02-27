@@ -7,7 +7,12 @@ class TextureUtils : Actor
 		TextureID tex; bool flip;
 		State st = ac.curState;
 
-		[tex, flip] = st.getSpriteTexture(byteang);
+		if(!st.validateSpriteFrame()){
+			[tex, flip] = ac.spawnState.getSpriteTexture(byteang);
+		}
+		else{
+			[tex, flip] = st.getSpriteTexture(byteang);
+		}
 		return tex, !flip;
 	}
 	// Description:

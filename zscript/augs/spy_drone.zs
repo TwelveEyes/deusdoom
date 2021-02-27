@@ -193,17 +193,20 @@ class DD_Aug_SpyDrone : DD_Augmentation
 				texcoff = 1 / (objdist / 92.0);
 			else
 				texcoff = 1.0;
-			double tex_scale_w = mark_objs[i].scale.x * texcoff;
-			double tex_scale_h = mark_objs[i].scale.y * texcoff;
+			double tex_scale_w = abs(mark_objs[i].scale.x) * texcoff;
+			double tex_scale_h = abs(mark_objs[i].scale.y) * texcoff;
 
 			double texw = UI_Draw.texWidth(spritetex, -1, -1) * tex_scale_w;
 			double texh = UI_Draw.texHeight(spritetex, -1, -1) * tex_scale_h;
+			if(mark_objs[i].scale.x < 0)
+				spriteflip = !spriteflip;
 
 			UI_Draw.texture(spritetex,
 					mark_pos.x - texw/2,
 					mark_pos.y - texh/2,
 					texw, texh,
-					spriteflip ? UI_Draw_FlipX : 0);
+					(spriteflip ? UI_Draw_FlipX : 0)
+					| (mark_objs[i].scale.y < 0 ? UI_Draw_FlipY : 0));
 			//UI_Draw.str(hndl.aug_ui_font, "X", 10,
 			//		mark_pos.x, mark_pos.y, -1, -1);
 		}

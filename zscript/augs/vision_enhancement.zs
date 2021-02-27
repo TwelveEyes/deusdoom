@@ -189,17 +189,20 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 					texcoff = 1 / (objdist / 164.0);
 				else
 					texcoff = 1.0;
-				double tex_scale_w = obj.scale.x * texcoff;
-				double tex_scale_h = obj.scale.y * texcoff;
+				double tex_scale_w = abs(obj.scale.x) * texcoff;
+				double tex_scale_h = abs(obj.scale.y) * texcoff;
 				double texw = UI_Draw.texWidth(spritetex, -1, -1) * tex_scale_w;
 				double texh = UI_Draw.texHeight(spritetex, -1, -1) * tex_scale_h;
+				if(obj.scale.x < 0)
+					flip = !flip;
 
 				UI_Draw.textureStencil(spritetex,
 						sonar_pos.x - texw/2,
 						sonar_pos.y - texh,
 						texw, texh,
 						color(255, 255, 255),
-						flip ? UI_Draw_FlipX : 0);
+						(flip ? UI_Draw_FlipX : 0)
+						| (obj.scale.y < 0 ? UI_Draw_FlipY : 0));
 			}
 		}
 	}

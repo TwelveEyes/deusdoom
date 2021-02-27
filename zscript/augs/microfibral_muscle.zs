@@ -203,13 +203,16 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 					double radcoff = objwep.held_obj.radius / 320 * 150;
 					double texw = UI_Draw.texWidth(sprtex, -1, -1)
 							* radcoff
-							* objwep.held_obj.scale.x;
+							* abs(objwep.held_obj.scale.x);
 					double texh = UI_Draw.texHeight(sprtex, -1, -1)
 							* radcoff
-							* objwep.held_obj.scale.y;
+							* abs(objwep.held_obj.scale.y)
+;
 					UI_Draw.texture(sprtex,
 								160 - texw/2, 180 - texh/2,
-								texw, texh);
+								texw, texh,
+								(objwep.held_obj.scale.x < 0 ? UI_Draw_FlipX : 0)
+								| (objwep.held_obj.scale.y < 0 ? UI_Draw_FlipY : 0));
 				}
 			}
 		}
