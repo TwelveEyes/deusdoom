@@ -40,8 +40,9 @@ class DD_AugsHolder : Inventory
 	string absorbtion_msg;
 
 
-	// For draining energy on certain attacks
+	// For draining/gaining energy on certain attacks
 	double energy_drainq;
+	double energy_gainq;
 
 	default
 	{
@@ -62,6 +63,7 @@ class DD_AugsHolder : Inventory
 		energy_drain_ml = 1.0;
 
 		energy_drainq = 0.0;
+		energy_gainq = 0.0;
 	}
 
 
@@ -160,10 +162,21 @@ class DD_AugsHolder : Inventory
 		// Detecting damage directions
 		if(passive){
 			// Draining energy
-			energy_drainq += RecognitionUtils.drainsEnergy(source, inflictor);
-			double energy_drainamt = floor(energy_drainq);
-			energy_drainq -= energy_drainamt;
-			owner.takeInventory("DD_BioelectricEnergy", energy_drainamt);
+			double eamt = RecognitionUtils.drainsEnergy(source, inflictor);
+			if(eamt > 0)
+			{
+				energy_drainq += eamt;
+				double energy_drainamt = floor(energy_drainq);
+				energy_drainq -= energy_drainamt;
+				owner.takeInventory("DD_BioelectricEnergy", energy_drainamt);
+			}
+			else if(eamt < 0)
+			{
+				energy_gainq += -eamt;
+				double energy_gainamt = floor(energy_gainq);
+				energy_gainq -= energy_gainamt;
+				owner.giveInventory("DD_BioelectricEnergy", energy_gainamt);
+			}
 			
 			// Setting damage direction timers
 			if(source && owner)

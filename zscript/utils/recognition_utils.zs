@@ -163,25 +163,25 @@ class RecognitionUtils
 							}
 
 							if(prev_attr == "projCanBeDestroyed")
-								projCanBeDestroyed_cd_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								projCanBeDestroyed_cd_ml[projCanBeDestroyed_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsBallistic_Source")
-								damageIsBallistic_Source_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsBallistic_Source_protfact_ml[damageIsBallistic_Source_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsBallistic_Inflictor")
-								damageIsBallistic_Inflictor_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsBallistic_Inflictor_protfact_ml[damageIsBallistic_Inflictor_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsEnergy_Source")
-								damageIsEnergy_Source_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsEnergy_Source_protfact_ml[damageIsEnergy_Source_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsEnergy_Inflictor")
-								damageIsEnergy_Inflictor_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsEnergy_Inflictor_protfact_ml[damageIsEnergy_Inflictor_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsEnvironmental_Source")
-								damageIsEnvironmental_Source_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsEnvironmental_Source_protfact_ml[damageIsEnvironmental_Source_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "damageIsEnvironmental_Inflictor")
-								damageIsEnvironmental_Inflictor_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								damageIsEnvironmental_Inflictor_protfact_ml[damageIsEnvironmental_Inflictor_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "canBePickedUp")
-								canBePickedUp_threshold_ml[prev_attr_i] = (attr.mid(1).toDouble());
+								canBePickedUp_threshold_ml[canBePickedUp_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "drainsEnergy_Source")
-								drainsEnergy_Source_amt[prev_attr_i] = (attr.mid(1).toDouble());
+								drainsEnergy_Source_amt[drainsEnergy_Source_wl.size()-1] = (attr.mid(1).toDouble());
 							else if(prev_attr == "drainsEnergy_Inflictor")
-								drainsEnergy_Inflictor_amt[prev_attr_i] = (attr.mid(1).toDouble());
+								drainsEnergy_Inflictor_amt[drainsEnergy_Inflictor_wl.size()-1] = (attr.mid(1).toDouble());
 						}
 						else if(attr.byteAt(0) == ch("!"))
 						{ // blacklist
