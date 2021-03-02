@@ -9,8 +9,21 @@
 # Templar
 	Templar !damageIsBallistic_Source damageIsEnergy_Source;
 
+# Sentinel
+	Sentinel !isFooledByCloak isFooledByRadarTransparency;
+
+# Crusader
+	Crusader !isFooledByCloak isFooledByRadarTransparency;
+
+# Stalker
+	Stalker !isFooledByCloak isFooledByRadarTransparency;
+
+# Reaver
+	Reaver !isFooledByCloak isFooledByRadarTransparency;
+
 # Inquisitor
 	InquisitorShot projCanBeDestroyed $2.5;
+	Inquisitor !isFooledByCloak isFooledByRadarTransparency;
 
 
 # Bosses:
