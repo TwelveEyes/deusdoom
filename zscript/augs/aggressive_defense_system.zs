@@ -79,9 +79,9 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 	clearscope double getRange()
 	{
 		if(getRealLevel() <= max_level)
-			return 140 + 16 * (getRealLevel() - 1);
+			return 140 + 20 * (getRealLevel() - 1);
 		else
-			return 140 + 16 * (max_level - 1) + 10 * (getRealLevel() - max_level);
+			return 140 + 20 * (max_level - 1) + 10 * (getRealLevel() - max_level);
 	}
 	int getBaseCD()
 	{
