@@ -40,6 +40,13 @@ class RecognitionUtils
 	array<class<Actor> > canBePickedUp_bl;
 	array<double> canBePickedUp_threshold_ml;
 
+	array<class<Actor> > drainsEnergy_Source_wl;
+	array<class<Actor> > drainsEnergy_Source_bl;
+	array<class<Actor> > drainsEnergy_Inflictor_wl;
+	array<class<Actor> > drainsEnergy_Inflictor_bl;
+	array<double > drainsEnergy_Source_amt;
+	array<double > drainsEnergy_Inflictor_amt;
+
 	// Description:
 	// Should be called from an event handler's event onRegister().
 	// Loads special lumps with information about black- and whitelisted
@@ -61,7 +68,11 @@ class RecognitionUtils
 				// 2 - reading actor class name
 				// 3 - looking for a list attribute
 				// 4 - reading a list attribute
+				// 5 - reading a directive
 		string actor_cls_name;
+		string directive_str;
+		DD_RecognitionFlags flags = 0;
+
 		class<Actor> actor_cls;
 		array<string> lst_attribs;
 
@@ -74,6 +85,9 @@ class RecognitionUtils
 				{ // looking for an actor class name
 					if(c == ch("#")){
 						pstate = 1;
+					}
+					else if(c == ch("%")){
+						pstate = 5;
 					}
 					else if(c != ch(" ") && c != ch("\n") && c != ch("\t") && c != ch("\r")){
 						pstate = 2;
@@ -91,7 +105,7 @@ class RecognitionUtils
 					if(c == ch(" ") || c == ch("\n") || c == ch("\t") || c== ch("\r")){
 						pstate = 3;
 						actor_cls = actor_cls_name;
-						if(!actor_cls){
+						if(!actor_cls && !(flags & DD_RecognitionFlag_SupressWarn_ClassNotExists)){
 							console.printf("[DeusDoom]ERROR: actor class \"%s\" does not exist",
 									actor_cls_name);
 						}
@@ -164,6 +178,10 @@ class RecognitionUtils
 								damageIsEnvironmental_Inflictor_protfact_ml[prev_attr_i] = (attr.mid(1).toDouble());
 							else if(prev_attr == "canBePickedUp")
 								canBePickedUp_threshold_ml[prev_attr_i] = (attr.mid(1).toDouble());
+							else if(prev_attr == "drainsEnergy_Source")
+								drainsEnergy_Source_amt[prev_attr_i] = (attr.mid(1).toDouble());
+							else if(prev_attr == "drainsEnergy_Inflictor")
+								drainsEnergy_Inflictor_amt[prev_attr_i] = (attr.mid(1).toDouble());
 						}
 						else if(attr.byteAt(0) == ch("!"))
 						{ // blacklist
@@ -192,6 +210,10 @@ class RecognitionUtils
 								damageIsEnvironmental_Inflictor_bl.push(actor_cls);
 							else if(attr == "canBePickedUp")
 								canBePickedUp_bl.push(actor_cls);
+							else if(attr == "drainsEnergy_Source")
+								drainsEnergy_Source_bl.push(actor_cls);
+							else if(attr == "drainsEnergy_Inflictor")
+								drainsEnergy_Inflictor_bl.push(actor_cls);
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -238,6 +260,14 @@ class RecognitionUtils
 								canBePickedUp_wl.push(actor_cls);
 								canBePickedUp_threshold_ml.push(1.0);
 							}
+							else if(attr == "drainsEnergy_Source"){
+								drainsEnergy_Source_wl.push(actor_cls);
+								drainsEnergy_Source_amt.push(1.0);
+							}
+							else if(attr == "drainsEnergy_Inflictor"){
+								drainsEnergy_Inflictor_wl.push(actor_cls);
+								drainsEnergy_Inflictor_amt.push(1.0);
+							}
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -250,7 +280,23 @@ class RecognitionUtils
 					else{
 						lst_attribs[lst_attribs.size()-1].appendCharacter(c);
 					}
-				}
+				} break;
+				case 5:
+				{ // reading a directive
+					if(c != ch(" ") && c != ch("\r") && c != ch("\t") && c != ch("\n")){
+						directive_str.appendCharacter(c);
+					}
+					if(c == ch("\n")){
+						if(directive_str == "supress_warn_class_not_exists")
+							flags |= DD_RecognitionFlag_SupressWarn_ClassNotExists;
+						else{
+							console.printf("[DeusDoom]ERROR: directive \"%s\" does not exist",
+									directive_str);
+						}
+						directive_str = "";
+						pstate = 0;
+					}
+				} break;
 			}
 		}
 	}
@@ -326,21 +372,21 @@ class RecognitionUtils
 				return false;
 		}
 
-		if(source)
-		{
-			bool in_wl; uint wl_i;
-			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsBallistic_Source_wl);
-			if(in_wl){
-				protfact_ml = getInstance().damageIsBallistic_Source_protfact_ml[wl_i];
-				return true;
-			}
-		}
 		if(inflictor)
 		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsBallistic_Inflictor_wl);
 			if(in_wl){
 				protfact_ml = getInstance().damageIsBallistic_Inflictor_protfact_ml[wl_i];
+				return true;
+			}
+		}
+		if(source)
+		{
+			bool in_wl; uint wl_i;
+			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsBallistic_Source_wl);
+			if(in_wl){
+				protfact_ml = getInstance().damageIsBallistic_Source_protfact_ml[wl_i];
 				return true;
 			}
 		}
@@ -432,21 +478,21 @@ class RecognitionUtils
 				return false;
 		}
 
-		if(source)
-		{
-			bool in_wl; uint wl_i;
-			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnergy_Source_wl);
-			if(in_wl){
-				protfact_ml = getInstance().damageIsEnergy_Source_protfact_ml[wl_i];
-				return true;
-			}
-		}
 		if(inflictor)
 		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsEnergy_Inflictor_wl);
 			if(in_wl){
 				protfact_ml = getInstance().damageIsEnergy_Inflictor_protfact_ml[wl_i];
+				return true;
+			}
+		}
+		if(source)
+		{
+			bool in_wl; uint wl_i;
+			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnergy_Source_wl);
+			if(in_wl){
+				protfact_ml = getInstance().damageIsEnergy_Source_protfact_ml[wl_i];
 				return true;
 			}
 		}
@@ -479,21 +525,21 @@ class RecognitionUtils
 				return false;
 		}
 
-		if(source)
-		{
-			bool in_wl; uint wl_i;
-			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnvironmental_Source_wl);
-			if(in_wl){
-				protfact_ml = getInstance().damageIsEnvironmental_Source_protfact_ml[wl_i];
-				return true;
-			}
-		}
 		if(inflictor)
 		{
 			bool in_wl; uint wl_i;
 			[in_wl, wl_i] = findActorClass(inflictor, getInstance().damageIsEnvironmental_Inflictor_wl);
 			if(in_wl){
 				protfact_ml = getInstance().damageIsEnvironmental_Inflictor_protfact_ml[wl_i];
+				return true;
+			}
+		}
+		if(source)
+		{
+			bool in_wl; uint wl_i;
+			[in_wl, wl_i] = findActorClass(source, getInstance().damageIsEnvironmental_Source_wl);
+			if(in_wl){
+				protfact_ml = getInstance().damageIsEnvironmental_Source_protfact_ml[wl_i];
 				return true;
 			}
 		}
@@ -526,4 +572,37 @@ class RecognitionUtils
 		return 0;	
 	}
 
+	// Description:
+	// Function for AugHolder to drain certain amount of player's energy upon recieving
+	// damage from certain inflictor/source.
+	static double drainsEnergy(Actor source, Actor inflictor)
+	{
+		if(findActorClass(inflictor, getInstance().drainsEnergy_Inflictor_bl))
+			return 0.0;
+		if(findActorClass(source, getInstance().drainsEnergy_Source_bl))
+			return 0.0;
+
+		bool in_wl; uint wl_i;
+		if(inflictor)
+		{
+			[in_wl, wl_i] = findActorClass(inflictor, getInstance().drainsEnergy_Inflictor_wl);
+			if(in_wl){
+				return getInstance().drainsEnergy_Inflictor_amt[wl_i];
+			}
+		}
+		if(source)
+		{
+			[in_wl, wl_i] = findActorClass(source, getInstance().drainsEnergy_Source_wl);
+			if(in_wl){
+				return getInstance().drainsEnergy_Source_amt[wl_i];
+			}
+		}
+
+		return 0.0;
+	}
+}
+
+enum DD_RecognitionFlags
+{
+	DD_RecognitionFlag_SupressWarn_ClassNotExists = 1
 }

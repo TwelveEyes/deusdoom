@@ -39,6 +39,10 @@ class DD_AugsHolder : Inventory
 	int absorbtion_msg_timer;
 	string absorbtion_msg;
 
+
+	// For draining energy on certain attacks
+	double energy_drainq;
+
 	default
 	{
 		Inventory.Amount 1;
@@ -56,6 +60,8 @@ class DD_AugsHolder : Inventory
 
 		aug_loop_snd_timer = 0;
 		energy_drain_ml = 1.0;
+
+		energy_drainq = 0.0;
 	}
 
 
@@ -153,6 +159,13 @@ class DD_AugsHolder : Inventory
 	{
 		// Detecting damage directions
 		if(passive){
+			// Draining energy
+			energy_drainq += RecognitionUtils.drainsEnergy(source, inflictor);
+			double energy_drainamt = floor(energy_drainq);
+			energy_drainq -= energy_drainamt;
+			owner.takeInventory("DD_BioelectricEnergy", energy_drainamt);
+			
+			// Setting damage direction timers
 			if(source && owner)
 			{
 				double dmg_ang = deltaAngle(owner.angleTo(source), owner.angle);
