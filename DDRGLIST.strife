@@ -40,6 +40,7 @@
 	Macil1 damageIsBallistic_Source $0.65;
 	# After spectre possession
 	Macil2 damageIsBallistic_Source $0.65;
+	Macil2 !isFooledByCloak !isFooledByRadarTransparency;
 
 # Loremaster
 	Loremaster !isFooledByCloak !isFooledByRadarTransparency;
