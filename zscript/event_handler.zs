@@ -9,6 +9,8 @@ class DD_EventHandler : StaticEventHandler
 {
 	SoundUtils snd_utils;
 	RecognitionUtils recg_utils;
+	DD_ModChecker mod_checker;
+	DD_PatchChecker patch_checker;
 
 	ui UI_WindowManager wndmgr;
 		ui UI_Augs wnd_augs;
@@ -26,6 +28,10 @@ class DD_EventHandler : StaticEventHandler
 		snd_utils = new("SoundUtils");
 		recg_utils = new("RecognitionUtils");
 		recg_utils.loadLists();
+		mod_checker = new("DD_ModChecker");
+		mod_checker.init();
+		patch_checker = new("DD_PatchChecker");
+		patch_checker.init();
 
 		queue.qstate = false;
 	}

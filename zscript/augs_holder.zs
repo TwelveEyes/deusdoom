@@ -209,6 +209,19 @@ class DD_AugsHolder : Inventory
 					augs[i].ownerDamageDealt(damage, damageType, newDamage,
 									inflictor, source, flags);
 		}
+
+		// # HD Compat #
+		if(DD_ModChecker.isLoaded_HDest() && passive && inflictor){
+			string infname = inflictor.getClassName();
+			if(infname.left(3) == "HDB") // should probably fix this later on
+			{
+				// Reducing impact from bullets: wound size, impact bashing damage
+				double dmg_ml = double(newDamage) / damage;
+				inflictor.stamina *= dmg_ml;
+				inflictor.woundhealth *= dmg_ml;
+				inflictor.speed *= dmg_ml;
+			}
+		}
 	}
 	override double getSpeedFactor()
 	{
