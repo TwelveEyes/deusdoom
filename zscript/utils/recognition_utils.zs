@@ -430,6 +430,11 @@ class RecognitionUtils
 					Actor inflictor, Actor victim,
 					Name damageType, int damageMobjFlags)
 	{
+		// # HDest compatiblity #
+		if(source && source.player && source.player.readyWeapon
+		&& source.player.readyWeapon.getClassName() == "HDFist")
+			return true;
+
 		if(inflictor)
 		{
 			if(findActorClass(inflictor, getInstance().isHandToHandDamage_Inflictor_bl))
