@@ -49,6 +49,8 @@ OptionMenu "DD_Options"
 		Slider "Augmentations display X offset", "dd_augdisp_offx", -320.0, 320.0, 0.25, 2
 		StaticText "CVAR: dd_augdisp_offy", Red
 		Slider "Augmentations display Y offset", "dd_augdisp_offy", -200.0, 200.0, 0.25, 2
+		StaticText "CVar: dd_augdisp_scale", Red
+		Slider "Augmentations display scale", "dd_augdisp_scale", 0.0, 10.0, 0.1, 1
 		StaticText ""
 		StaticText "CVAR: dd_bioelbar_offx", Red
 		Slider "Bioelectric energy bar X offset", "dd_bioelbar_offx", -320.0, 320.0, 0.5, 2
@@ -115,6 +117,9 @@ OptionMenu "DD_Options"
 
 		StaticText "SPECIAL THANKS TO:", Purple
 		StaticText "Yholl - extensive playtesting, finding bugs, suggesting ideas", White
+		StaticText "KarolineDianne - suggesting ideas", White
+		StaticText "ZikShadow - extensive playtesting", White
+		StaticText "Sledge - suggesting ideas", White
 		StaticText "Ryuhi - suggesting ideas", White
 		StaticText "silentw - playtesting", White
 		StaticText "Doomguy914 - finding a typo", White

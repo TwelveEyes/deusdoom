@@ -473,14 +473,15 @@ class DD_AugsHolder : Inventory
 
 		// Rendering augmentations frame
 		vector2 aug_frame_off = CVar_Utils.getOffset("dd_augdisp_off");
+		double aug_frame_scale = CVar_Utils.getScale("dd_augdisp_scale");
 		x += aug_frame_off.x;
 		y += aug_frame_off.y;
 
 		double draw_x = x;
 		double draw_y = y;
-		double aug_sz_x = 16;
-		double aug_sz_y = 16;
-		double draw_dy = 2;
+		double aug_sz_x = 16 * aug_frame_scale;
+		double aug_sz_y = 16 * aug_frame_scale;
+		double draw_dy = 2 * aug_frame_scale;
 
 		uint aug_cnt = 0;
 		for(uint i = 0; i < augs.size(); ++i)

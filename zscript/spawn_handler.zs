@@ -74,7 +74,7 @@ class DD_ProgressionTracker : Inventory
 			spawnItemActor(ac, "DD_BioelectricCell", amnt);
 			points_cells -= amnt * pts_cell;
 		}
-		if(points_upgrades >= DD_SpawnHandler.points_for_upgrade)
+		if(points_upgrades >= pts_upgrade)
 		{
 			int amnt = points_upgrades / pts_upgrade;
 			spawnItemActor(ac, "DD_AugmentationUpgradeCanister", amnt);

@@ -8,18 +8,25 @@ server float dd_ptmult_cell = 1.0;
 server float dd_ptmult_upgrade = 1.0;
 server float dd_ptmult_aug = 1.0;
 
+
 user bool dd_hud_debug = false;
+
 user float dd_augdisp_offx = 0.0;
 user float dd_augdisp_offy = 0.0;
+user float dd_augdisp_scale = 1.0;
+
 user float dd_bioelbar_offx = 0.0;
 user float dd_bioelbar_offy = 0.0;
+
 user bool dd_dmgind_show = true;
 user float dd_dmgind_offx = 0.0;
 user float dd_dmgind_offy = 0.0;
 
 user float dd_agdefsys_cd_offx = 0.0;
 user float dd_agdefsys_cd_offy = 0.0;
+
 user float dd_targeting_info_offx = 0.0;
 user float dd_targeting_info_offy = 0.0;
+
 user float dd_spy_drone_cam_offx = 0.0;
 user float dd_spy_drone_cam_offy = 0.0;
