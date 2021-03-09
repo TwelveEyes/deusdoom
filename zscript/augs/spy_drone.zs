@@ -181,9 +181,12 @@ class DD_Aug_SpyDrone : DD_Augmentation
 
 
 			// Drawing object sprite
-			bool spriteflip = false;
+			bool spriteflip;
+			bool wildcarded;
 			TextureID spritetex;
-			[spritetex, spriteflip] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner);
+			[spritetex, spriteflip, wildcarded] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner);
+			if(wildcarded && mark_objs[i].health <= 0)
+				continue;
 
 			vector3 objvec = mark_objs[i].pos
 					 - (owner.pos + (0, 0, owner.player.viewHeight));
@@ -207,8 +210,6 @@ class DD_Aug_SpyDrone : DD_Augmentation
 					texw, texh,
 					(spriteflip ? UI_Draw_FlipX : 0)
 					| (mark_objs[i].scale.y < 0 ? UI_Draw_FlipY : 0));
-			//UI_Draw.str(hndl.aug_ui_font, "X", 10,
-			//		mark_pos.x, mark_pos.y, -1, -1);
 		}
 
 		bool hud_dbg = false;
