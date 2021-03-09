@@ -175,9 +175,11 @@ class DD_AugmentationCanister : Inventory
 		}
 		if(aug_i == 2){
 			if(dup_amount == 2){
-				aughld.takeInventory(aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].getClass(), 1);
+				aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].detachFromOwner();
+				aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].destroy();
 				aughld.augs_toinstall1.delete(aughld.augs_toinstall1.size()-1);
-				aughld.takeInventory(aughld.augs_toinstall2[aughld.augs_toinstall2.size()-1].getClass(), 1);
+				aughld.augs_toinstall2[aughld.augs_toinstall2.size()-1].detachFromOwner();
+				aughld.augs_toinstall2[aughld.augs_toinstall2.size()-1].destroy();
 				aughld.augs_toinstall2.delete(aughld.augs_toinstall2.size()-1);
 				return 3;
 			}
@@ -185,7 +187,8 @@ class DD_AugmentationCanister : Inventory
 		}
 		else{
 			if(aug_i == 1){
-				aughld.takeInventory(aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].getClass(), 1);
+				aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].detachFromOwner();
+				aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].destroy();
 				aughld.augs_toinstall1.delete(aughld.augs_toinstall1.size()-1);
 			}
 			return 3;
