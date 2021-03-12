@@ -9,9 +9,6 @@ HDBulletActor !damageIsEnergy_Inflictor damageIsBallistic_Inflictor;
 # General fireball damage (i.e. imps/caco fireballs)
 HDFireball !damageIsBallistic_Inflictor damageIsEnergy_Inflictor;
 
-# I don't know what is this, but it appears with hit damage
-HDP_L5 damageIsEnergy_Inflictor damageIsEnvironmental_Inflictor;
-
 # General fire damage (i.e. ignition from imps fireballs)
 Heat !damageIsBallistic_Inflictor damageIsEnergy_Inflictor $1.2 damageIsEnvironmental_Inflictor $0.75;
 

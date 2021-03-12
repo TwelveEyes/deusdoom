@@ -190,7 +190,7 @@ class DD_AugsHolder : Inventory
 				double dmg_ang = deltaAngle(owner.angleTo(inflictor), owner.angle);
 				dmg_dir_timers[int((dmg_ang + 45) % 360 / 90)] = 70;
 			}
-			else if(!source && !inflictor)
+			else if( (!source && !inflictor) || (inflictor == owner) )
 			{
 				dmg_dir_timers[4] = 35;
 			}
@@ -223,6 +223,7 @@ class DD_AugsHolder : Inventory
 			}
 		}
 	}
+
 	override double getSpeedFactor()
 	{
 		double speed_ml = 1.0;

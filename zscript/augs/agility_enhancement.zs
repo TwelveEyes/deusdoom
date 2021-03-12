@@ -11,6 +11,8 @@ struct DD_Aug_AgilityEnhancement_Queue
 	int vwheight_timer;
 	double vwheight_prev;
 	double vwheight_delta;
+
+	int hdest_telehack_timer; // timer for keeping bTeleport flag of owner true
 }
 class DD_Aug_AgilityEnhancement : DD_Augmentation
 {
@@ -77,6 +79,8 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	{
 		return 45 - 8 * (getRealLevel() - 1);
 	}
+	protected double getImpactNegationFactor() { return 0.15 + getRealLevel() * 0.1; }
+	protected double getImpactThreshold() { return 50 + getRealLevel() * 25; }
 
 	override void toggle()
 	{
@@ -102,6 +106,10 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			dash_tap_time = CVar.getCVar("dd_dash_doubletap_timer", owner.player).getInt();
 		}
 	}
+
+	// ------
+	// Events
+	// ------
 
 	override void tick()
 	{
@@ -150,6 +158,14 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			if(use_doubletap_scheme && queue.mov_keys_timer[i] <= dash_tap_time)
 				++queue.mov_keys_timer[i];
 			if(dash_cd == 0 && queue.dashvel[i].length() > 0){
+
+				if(DD_ModChecker.isLoaded_HDest()){
+					// very ugly hack based on HDest calculation of velocity that player has in order to inflict falling damage.
+					// basically, if a player has bTeleport flag, impact damage is not dealt at all.
+					owner.bTeleport = true;
+					queue.hdest_telehack_timer = getDashVel() * 2.5;
+				}
+
 				owner.A_ChangeVelocity(queue.dashvel[i].x, queue.dashvel[i].y, queue.dashvel[i].z, CVF_RELATIVE);
 				dash_cd = getDashCD();
 				if(queue.dashvel[i].z == 0 && queue.vwheight_timer == 0){
@@ -159,6 +175,29 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 				}
 			}
 			queue.dashvel[i] = (0, 0, 0);
+		}
+	}
+
+	override void ownerDamageTaken(int damage, Name damageType, out int newDamage,
+					Actor inflictor, Actor source, int flags)
+	{
+		// Hdest compat for preventing player from taking "falling" damage when dashing
+		if(damageType == "falling"){
+			if(damage <= getImpactThreshold())
+				newDamage = 0;
+			else
+				newDamage = damage * (1 - getImpactNegationFactor());
+
+			if(DD_ModChecker.isLoaded_HDest() && DD_PatchChecker.isLoaded_HDest())
+			{
+				Class<Actor> st_cls = ClassFinder.findActorClass("DD_HDStunTaker");
+				Actor stuntaker;
+				if(st_cls)
+					stuntaker = Actor.spawn(st_cls);
+
+				stuntaker.target = owner;
+				stuntaker.args[0] = (damage - newDamage) * 30 * 2; // maximum amount of stun from `damage*random(20,30)` and `tostun+=damage`
+			}
 		}
 	}
 
