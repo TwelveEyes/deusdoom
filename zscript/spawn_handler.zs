@@ -224,6 +224,9 @@ class DD_SpawnHandler : StaticEventHandler
 	}
 	override void WorldUnloaded(WorldEvent e)
 	{
+		if(e.isSaveGame)
+			return;
+
 		prev_lvl_found_items = level.found_items;
 		prev_lvl_total_items = level.total_items;
 		prev_lvl_found_secrets = level.found_secrets;
