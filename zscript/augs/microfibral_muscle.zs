@@ -5,6 +5,7 @@ struct DD_Aug_MicrofibralMuscle_Queue
 	array<Actor> soldify_objs;
 	array<int> soldify_timers;
 	array<bool> soldify_wasthruactors;
+	array<bool> soldify_stunned;
 }
 
 class DD_Aug_MicrofibralMuscle : DD_Augmentation
@@ -107,7 +108,10 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	}
 
 	protected int getMaxMassPickup() { return 80 + 310 * (getRealLevel() - 1); }
-	double getThrowForceMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
+	double getThrowForceMult() { return 1.0 + 1.0 * (getRealLevel() - 1); }
+	protected double getStunDurMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
+	protected int getStunDurMin() { return 15 + 7 * (getRealLevel() - 1); }
+	protected int getStunDurMax() { return 70 + 35 * (getRealLevel() - 1); }
 	protected int cantPickupObj(Actor ac)
 	{
 		double th_ml = 1.0;
@@ -133,8 +137,36 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	{
 		for(uint i = 0; i < queue.soldify_objs.size(); ++i)
 		{
-			if(queue.soldify_timers[i] > 0)
+			if(queue.soldify_timers[i] > 0){
 				queue.soldify_timers[i]--;
+
+				// Checking for collision for stunning enemies
+				if(!queue.soldify_stunned[i])
+				{
+					Actor thrown_obj = queue.soldify_objs[i];
+					Actor tobj;
+					ThinkerIterator it = ThinkerIterator.create();
+					while(tobj = Actor(it.next()))
+					{
+						if(tobj.bIsMonster
+						&& tobj.health > 0
+						&& tobj.radius + thrown_obj.radius >= thrown_obj.distance2D(tobj)
+						&& tobj.countInv("DD_MicrofibralMuscle_StunPowerup") == 0)
+						{
+							let pstun = DD_MicrofibralMuscle_StunPowerup(Inventory.Spawn("DD_MicrofibralMuscle_StunPowerup"));
+							pstun.dur_timer = double(thrown_obj is "Inventory" ? thrown_obj.mass / 3 : thrown_obj.mass)
+									/ tobj.health * 200 * getStunDurMult();
+	
+							if(pstun.dur_timer > getStunDurMax())
+								pstun.dur_timer = getStunDurMax();
+							if(pstun.dur_timer < getStunDurMin())
+								pstun.dur_timer = getStunDurMin();
+							tobj.addInventory(pstun);
+							queue.soldify_stunned[i] = true;
+						}
+					}
+				}
+			}
 			else{
 				if(queue.soldify_objs[i]){
 					queue.soldify_objs[i].A_ChangeLinkFlags(0, 0);
@@ -145,6 +177,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				queue.soldify_objs.delete(i);
 				queue.soldify_timers.delete(i);
 				queue.soldify_wasthruactors.delete(i);
+				queue.soldify_stunned.delete(i);
 			}
 		}
 
@@ -400,6 +433,7 @@ class DD_MicrofibralMuscle_ObjectWeapon : Weapon
 
 		parent_aug.queue.soldify_objs.push(held_obj);
 		parent_aug.queue.soldify_timers.push(17);
+		parent_aug.queue.soldify_stunned.push(false);
 
 		held_obj.warp(self.owner, 0.0, 0.0, self.owner.player.viewHeight, 0.0,
 				WARPF_ABSOLUTEOFFSET | WARPF_NOCHECKPOSITION);
@@ -415,7 +449,30 @@ class DD_MicrofibralMuscle_ObjectWeapon : Weapon
 			return;
 		owner_look /= owner_look.length();
 		owner_look *= force_scale;
-		owner_look /= held_obj.mass;
+		if(held_obj is "Inventory")
+			owner_look /= (held_obj.mass / 7);
+		else
+			owner_look /= held_obj.mass;
 		held_obj.A_ChangeVelocity(owner_look.x, owner_look.y, owner_look.z);
+	}
+}
+
+class DD_MicrofibralMuscle_StunPowerup : Powerup
+{
+	int dur_timer;
+
+	override void postBeginPlay()
+	{
+		if(owner && owner.bIsMonster)
+			owner.A_Pain();
+	}
+	override void tick()
+	{
+		if(owner && owner.bIsMonster)
+			owner.triggerPainChance("None", true);
+
+		--dur_timer;
+		if(dur_timer <= 0)
+			destroy();
 	}
 }

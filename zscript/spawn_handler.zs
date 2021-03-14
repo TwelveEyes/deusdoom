@@ -153,6 +153,8 @@ class DD_SpawnHandler : StaticEventHandler
 	int prev_lvl_found_secrets;
 	int prev_lvl_total_secrets;
 
+	// Transfering items
+	// Canisters:
 	array<Inventory> transfer_items;
 
 	const item_maxvel = 5.0;
@@ -224,6 +226,11 @@ class DD_SpawnHandler : StaticEventHandler
 	}
 	override void WorldUnloaded(WorldEvent e)
 	{
+		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
+		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
+		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
+		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
+
 		if(e.isSaveGame)
 			return;
 
@@ -245,4 +252,5 @@ class DD_SpawnHandler : StaticEventHandler
 		}
 	}
 }
+
 
