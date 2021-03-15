@@ -421,6 +421,12 @@ class DD_MicrofibralMuscle_ObjectWeapon : Weapon
 			Stop;
 	}
 
+	override void tick()
+	{
+		// to keep things like dynamic lights originated at player
+		if(held_obj && owner)
+			held_obj.warp(owner, 0, 0, 0, 0, WARPF_NOCHECKPOSITION);
+	}
 	void respawnHeldObject()
 	{
 		if(!held_obj || !parent_aug)
