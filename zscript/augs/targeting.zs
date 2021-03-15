@@ -61,13 +61,13 @@ class DD_Aug_Targeting : DD_Augmentation
 	// Internal functions
 	// ------------------
 
-	protected clearscope bool shouldDisplayObj(Actor ac)
+	clearscope static bool shouldDisplayObj(Actor ac)
 	{
 		if(!ac.bShootable || ac.health <= 0)
 			return false;
 		return true;
 	}
-	protected clearscope string getActorDisplayName(Actor ac)
+	clearscope string getActorDisplayName(Actor ac)
 	{
 		string dname = ac.getTag("");
 		if(ac.bFriendly)
@@ -253,6 +253,8 @@ class DD_Targeting_Tracer : LineTracer
 		if(results.hitActor)
 		{
 			if(results.hitActor == source)
+				return TRACE_Skip;
+			if(!DD_Aug_Targeting.shouldDisplayObj(results.hitActor))
 				return TRACE_Skip;
 			hit_obj = results.hitActor;
 			return TRACE_Stop;
