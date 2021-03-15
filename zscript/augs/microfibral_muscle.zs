@@ -155,7 +155,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 						{
 							let pstun = DD_MicrofibralMuscle_StunPowerup(Inventory.Spawn("DD_MicrofibralMuscle_StunPowerup"));
 							pstun.dur_timer = double(thrown_obj is "Inventory" ? thrown_obj.mass / 3 : thrown_obj.mass)
-									/ tobj.health * 200 * getStunDurMult();
+									/ (tobj.health*2.0) * 200 * getStunDurMult();
 	
 							if(pstun.dur_timer > getStunDurMax())
 								pstun.dur_timer = getStunDurMax();
@@ -460,11 +460,16 @@ class DD_MicrofibralMuscle_ObjectWeapon : Weapon
 class DD_MicrofibralMuscle_StunPowerup : Powerup
 {
 	int dur_timer;
+	sound prev_pain_snd;
 
 	override void postBeginPlay()
 	{
 		if(owner && owner.bIsMonster)
+		{
+			prev_pain_snd = owner.painSound;
 			owner.A_Pain();
+			owner.painSound = "";
+		}
 	}
 	override void tick()
 	{
@@ -472,7 +477,11 @@ class DD_MicrofibralMuscle_StunPowerup : Powerup
 			owner.triggerPainChance("None", true);
 
 		--dur_timer;
-		if(dur_timer <= 0)
+		if(dur_timer <= 0){
+			if(owner)
+				owner.painSound = prev_pain_snd;
+			detachFromOwner();
 			destroy();
+		}
 	}
 }

@@ -42,8 +42,10 @@ class DD_Aug_GravitationalField : DD_Augmentation
 	// ------------------
 
 	protected double getMaxVel() { return 10 + 5 * (getRealLevel() - 1); }
-	protected double getPushVel() { return 80 + 120 * (getRealLevel() - 1); }
+	protected double getPushForce() { return 80 + 120 * (getRealLevel() - 1); }
 	protected double getRange() { return 160 + 32 * (getRealLevel() - 1); }
+	const extra_push_angle = 90.0;
+	const extra_push_mult = 2.0;
 
 	// -------------
 	// Engine events
@@ -73,8 +75,12 @@ class DD_Aug_GravitationalField : DD_Augmentation
 			double push_vec_ln = push_vec.length();
 			if(push_vec_ln == 0)
 				continue;
+
 			push_vec /= push_vec_ln;
-			push_vec *= getPushVel();
+			push_vec *= getPushForce();
+			double objang = deltaAngle(owner.angleTo(obj), owner.angle);
+			if(abs(objang) <= extra_push_angle / 2)
+				push_vec *= extra_push_mult;
 			push_vec /= obj.mass;
 
 			obj.A_ChangeVelocity(push_vec.x, push_vec.y, push_vec.z);
