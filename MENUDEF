@@ -37,12 +37,31 @@ OptionMenu "DD_Options"
 
 	OptionMenu "DD_Settings"
 	{
-		StaticText "Control scheme", Purple
+		StaticText "DeusDoom settings", Purple
+		Submenu		"Control scheme",		"DD_Settings_ControlScheme"
+		Submenu		"Interface",			"DD_Settings_Interface"
+		Submenu		"Visual settings",		"DD_Settings_Visual"
+		Submenu		"Gameplay",			"DD_Settings_Gameplay"
+	}
+
+	OptionMenu "DD_Settings_ControlScheme"
+	{
+		StaticText "DeusDoom control scheme settings", Purple
+		StaticText ""
 		Option "Use double-tapping of movement keys for dashing", "dd_dash_on_doubletap", "OnOff"
 		Slider "Time between taps when double-tapping (in ticks)", "dd_dash_doubletap_timer", 1, 35, 1, 0, "dd_dash_on_doubletap"
 		StaticText ""
-
-		StaticText "Interface", Purple
+	}
+	OptionMenu "DD_Settings_Interface"
+	{
+		StaticText "DeusDoom interface settings", Purple
+		StaticText ""
+		StaticText "You can enable HUD debug mode to see how certain graphical elements", Green
+		StaticText "are displayed on screen. However, you still need appropriate", Green
+		StaticText "augmentations installed in order for their graphical elements", Green
+		StaticText "to be displayed.", Green
+		Option "Enable HUD debug mode", "dd_hud_debug", "OnOff"
+		StaticText ""
 		StaticText "Everything is virtually rendered in 320x200 resolution,", Green
 		StaticText "so adjust offsets accordingly.", Green
 		StaticText "CVAR: dd_augdisp_offx", Red
@@ -56,12 +75,6 @@ OptionMenu "DD_Options"
 		Slider "Bioelectric energy bar X offset", "dd_bioelbar_offx", -320.0, 320.0, 0.5, 2
 		StaticText "CVAR: dd_bioelbar_offy", Red
 		Slider "Bioelectric energy bar Y offset", "dd_bioelbar_offy", -200.0, 200.0, 0.25, 2
-		StaticText ""
-		StaticText "You can enable HUD debug mode to see how certain graphical elements", Green
-		StaticText "are displayed on screen. However, you still need appropriate", Green
-		StaticText "augmentations installed in order for their graphical elements", Green
-		StaticText "to be displayed.", Green
-		Option "Enable HUD debug mode", "dd_hud_debug", "OnOff"
 		StaticText ""
 		Option "Display damage indicators", "dd_dmgind_show", "OnOff"
 		StaticText "CVAR: dd_dmgind_offx", Red
@@ -84,14 +97,18 @@ OptionMenu "DD_Options"
 		StaticText "CVAR: dd_spy_drone_cam_offy", Red
 		Slider "Spy drone camera feed Y offset", "dd_spy_drone_cam_offy", -200.0, 200.0, 0.25, 2
 		StaticText ""
-
-		StaticText "Visual", Purple
+	}
+	OptionMenu "DD_Settings_Visual"
+	{
+		StaticText "DeusDoom visual settings", Purple
+		StaticText ""
 		Option "Show reticle when using Targeting augmentation", "dd_show_reticle", "OnOff"
 		StaticText ""
-
-
-		StaticText "Gameplay", Purple
-
+	}
+	OptionMenu "DD_Settings_Gameplay"
+	{
+		StaticText "DeusDoom gameplay settings", Purple
+		StaticText ""
 		StaticText "Item rarity", Purple
 		StaticText "Describes how much items you gain throughout the game.", Green
 		StaticText "Higher values correspond to lower amount of items", Green
@@ -106,15 +123,23 @@ OptionMenu "DD_Options"
 		Slider "Augmentation upgrade canister rarity", "dd_ptmult_upgrade", 0.05, 10.0, 0.05, 2
 		StaticText "CVAR: dd_ptmult_aug", Red
 		Slider "Augmentation canister rarity", "dd_ptmult_aug", 0.05, 10.0, 0.05, 2
-		
+		StaticText ""
+		StaticText "Item transfer", Purple
+		StaticText "In order to combat map makers placing a lot of monsters in", Green
+		StaticText "unreachable spots, important items like augmentation canisters", Green
+		StaticText "are transferred to next level if not picked up. However, you can", Green
+		StaticText "tweak these settings.", Green
+		Option "Transfer augmentation canisters", "dd_transfer_augcanisters", "OnOff"
+		Option "Transfer augmentation upgrade canisters", "dd_transfer_upgradecanisters", "OnOff"
 	}
 
 	OptionMenu "DD_Credits"
 	{
+		StaticText "Credits", Purple
+		StaticText ""
 		StaticText "IMAGE/AUDIO ASSETS, MOD IDEA:", Purple
 		StaticText "Deus Ex", White
 		StaticText ""
-
 		StaticText "SPECIAL THANKS TO:", Purple
 		StaticText "Yholl - extensive playtesting, finding bugs, suggesting ideas", White
 		StaticText "KarolineDianne - suggesting ideas", White

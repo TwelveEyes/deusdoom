@@ -240,11 +240,21 @@ class DD_SpawnHandler : StaticEventHandler
 		prev_lvl_total_secrets = level.total_secrets;
 
 		// Carrying all unpickuped augmentation canisters to the next level
+		bool transfer_augcans = CVar.getCVar("dd_transfer_augcanisters").getFloat();
+		bool transfer_upgrcans = CVar.getCVar("dd_transfer_upgradecanisters").getFloat();
+
 		Actor obj;
 		ThinkerIterator it = ThinkerIterator.create();
 		while(obj = Actor(it.next()))
 		{
-			if(obj is "DD_AugmentationCanister")
+			if(transfer_augcans
+			&& obj is "DD_AugmentationCanister")
+			{
+				obj.changeStatNum(Thinker.STAT_TRAVELLING);
+				transfer_items.push(Inventory(obj));
+			}
+			else if(transfer_upgrcans
+			&& obj is "DD_AugmentationUpgradeCanister")
 			{
 				obj.changeStatNum(Thinker.STAT_TRAVELLING);
 				transfer_items.push(Inventory(obj));
