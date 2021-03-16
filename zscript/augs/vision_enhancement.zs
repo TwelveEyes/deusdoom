@@ -157,7 +157,7 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 				let sight_tr = new("DD_VisionEnhancement_SightTracer");
 					sight_tr.ignore = owner;
 					sight_tr.seek = obj;
-				vector3 trace_dir = obj.pos + (0, 0, obj.height/2)
+				vector3 trace_dir = obj.pos
 						  - (owner.pos + (0, 0, PlayerPawn(owner).viewHeight));
 				if(trace_dir.length() == 0)
 					continue;
@@ -235,10 +235,14 @@ class DD_VisionEnhancement_SightTracer : LineTracer
 
 	override ETraceStatus traceCallback()
 	{
-		if(results.hitActor == ignore)
+		if(results.hitType == TRACE_HitActor && results.hitActor == ignore)
 			return TRACE_Skip;
-		if(results.hitLine || results.hitActor == seek)
+		if(results.hitType == TRACE_HitWall || results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling
+		   || results.hitActor == seek){
+			if(results.hitType != TRACE_HitActor)
+				results.hitActor = null;
 			return TRACE_Stop;
+		}
 		return TRACE_Skip;
 	}
 }

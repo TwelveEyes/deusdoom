@@ -140,6 +140,8 @@ class DD_EventHandler : StaticEventHandler
 	override void consoleProcess(ConsoleEvent e)
 	{
 		PlayerInfo plr = players[consoleplayer];
+		if(!plr || !plr.mo)
+			return;
 		DD_AugsHolder aughld = DD_AugsHolder(plr.mo.findInventory("DD_AugsHolder"));
 
 		if(e.Name == "dd_togg_aug")

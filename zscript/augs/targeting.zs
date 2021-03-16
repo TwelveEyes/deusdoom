@@ -250,7 +250,7 @@ class DD_Targeting_Tracer : LineTracer
 
 	override ETraceStatus traceCallback()
 	{
-		if(results.hitActor)
+		if(results.hitType == TRACE_HitActor)
 		{
 			if(results.hitActor == source)
 				return TRACE_Skip;
@@ -259,7 +259,7 @@ class DD_Targeting_Tracer : LineTracer
 			hit_obj = results.hitActor;
 			return TRACE_Stop;
 		}
-		if(results.hitLine){
+		if(results.hitType == TRACE_HitWall || results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling){
 			return TRACE_Stop;
 		}
 		return TRACE_Skip;

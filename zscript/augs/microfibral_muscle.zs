@@ -204,6 +204,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				return;
 			if(!target_obj)
 				return;
+
 			int res = cantPickupObj(target_obj);
 			if(res == 2)
 				console.printf("It's too heavy to lift");
@@ -366,20 +367,24 @@ class DD_MicrofibralMuscle_Tracer : LineTracer
 
 	override ETraceStatus traceCallback()
 	{
-		if(results.hitActor && results.hitActor == source)
-			return TRACE_Skip;
-
-		if(results.hitActor){
-			double ts_ml;
-			int bh = RecognitionUtils.canBePickedUp(results.hitActor, ts_ml);
-			if(bh == 1 || bh == 0){
-				hit_obj = results.hitActor;
-				return TRACE_Stop;
+		if(results.hitType == TRACE_HitActor)
+		{
+			if(results.hitActor && results.hitActor == source)
+				return TRACE_Skip;
+	
+			if(results.hitActor){
+				double ts_ml;
+				int bh = RecognitionUtils.canBePickedUp(results.hitActor, ts_ml);
+				if(bh == 1 || bh == 0){
+					hit_obj = results.hitActor;
+					return TRACE_Stop;
+				}
+				return TRACE_Skip;
 			}
-			return TRACE_Skip;
 		}
-
-		if(results.hitLine){
+		else if(results.hitType == TRACE_HitWall
+		|| results.hitType == TRACE_HitFloor
+		|| results.hitType == TRACE_HitCeiling){
 			return TRACE_Stop;
 		}
 
