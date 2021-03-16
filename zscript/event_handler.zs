@@ -137,9 +137,9 @@ class DD_EventHandler : StaticEventHandler
 			wndmgr.uiTick();
 	}
 
-	override void consoleProcess(ConsoleEvent e)
+	override void networkProcess(ConsoleEvent e)
 	{
-		PlayerInfo plr = players[consoleplayer];
+		PlayerInfo plr = players[e.Player];
 		if(!plr || !plr.mo)
 			return;
 		DD_AugsHolder aughld = DD_AugsHolder(plr.mo.findInventory("DD_AugsHolder"));
@@ -162,7 +162,20 @@ class DD_EventHandler : StaticEventHandler
 
 			aughld.queueToggleAug(e.args[0]);
 		}
-		else if(e.Name == "dd_toggle_ui_augs")
+		else if(e.Name == "dd_use_cell")
+		{
+			if(aughld){
+	                        if(DD_BioelectricCell.queueConsume(plr.mo,
+	                                DD_BioelectricCell(plr.mo.findInventory("DD_BioelectricCell"))))
+	                        {
+	                                SoundUtils.playStartSound("ui/aug/cell_use");
+	                        }
+			}
+		}
+	}
+	override void consoleProcess(ConsoleEvent e)
+	{
+		if(e.Name == "dd_toggle_ui_augs")
 		{
 			// Open/close augmentations UI
 			// Arguments: none
@@ -171,16 +184,6 @@ class DD_EventHandler : StaticEventHandler
 			wndmgr.addWindow(self, wnd_augs_sidepanel, 150, 5);
 
 			// Closing windows is done in window classes themselves.
-		}
-		else if(e.Name == "dd_use_cell")
-		{
-			if(aughld){
-	                        if(DD_BioelectricCell.queueConsume(plr.mo,
-	                                DD_BioelectricCell(plr.mo.findInventory("DD_BioelectricCell"))))
-	                        {
-	                                SoundUtils.uiStartSound("ui/aug/cell_use");
-	                        }
-			}
 		}
 	}
 }

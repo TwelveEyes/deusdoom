@@ -64,7 +64,7 @@ class DD_BioelectricCell : Ammo
 	// Return value:
 	//	false - no cells left or bioelectrical energy is full or cell instance is NULL.
 	//	true - successfull queueing;
-	static ui bool queueConsume(PlayerPawn plr, DD_BioelectricCell cell_instance)
+	static clearscope bool queueConsume(PlayerPawn plr, DD_BioelectricCell cell_instance)
 	{
 		if(plr.countInv("DD_BioelectricEnergy") >= DD_BioelectricEnergy.max_energy)
 			return false;

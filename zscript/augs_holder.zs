@@ -364,7 +364,7 @@ class DD_AugsHolder : Inventory
 	// Description:
 	// Queues toggling an augmentation in certain slot.
 	// Trusts validity of the slot.
-	ui void queueToggleAug(int slot)
+	clearscope void queueToggleAug(int slot)
 	{
 		ui_queue.aug_toggle_queue[slot] = true;
 	}
