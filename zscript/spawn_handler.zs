@@ -204,6 +204,11 @@ class DD_SpawnHandler : StaticEventHandler
 
 			PlayerPawn plr = players[i].mo;
 			let tr = DD_ProgressionTracker(plr.findInventory("DD_ProgressionTracker"));
+			if(!tr){
+				tr = DD_ProgressionTracker(Inventory.Spawn("DD_ProgressionTracker"));
+				plr.addInventory(tr);
+			}
+				
 			if(tr)
 			{
 				// Giving points for a monster dying
