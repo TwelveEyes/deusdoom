@@ -19,6 +19,11 @@ class DD_AugmentationCanister : Inventory
 			Stop;
 	}
 
+
+	class<DD_Augmentation> rolled_aug;
+	class<DD_Augmentation> rolled_aug2;
+	PlayerPawn rolled_player;
+
 	// -------------
 	// Engine events
 	// -------------
@@ -27,7 +32,7 @@ class DD_AugmentationCanister : Inventory
 	// 1 - out of augmentation slots, cease
 	// 2 - other error (being picked up by a non-player), ignore event
 	// 3 - reroll
-	int roll_augs(Actor other, array<class<DD_Augmentation> > aug_pool)
+	int roll_augs(DD_AugmentationCanister realself, Actor other, array<class<DD_Augmentation> > aug_pool)
 	{
 		if(!(other is "PlayerPawn"))
 			return 2;
@@ -122,8 +127,10 @@ class DD_AugmentationCanister : Inventory
 					break;
 				}
 			}
-			if(!aug_obj_in_slot)
+			if(!aug_obj_in_slot){
+				aug_obj.destroy();
 				continue;
+			}
 
 			// Checking for dupes in installed augmentations
 			bool found_dup = false;
@@ -183,6 +190,12 @@ class DD_AugmentationCanister : Inventory
 				aughld.augs_toinstall2.delete(aughld.augs_toinstall2.size()-1);
 				return 3;
 			}
+			realself.rolled_aug = aughld.augs_toinstall1[aughld.augs_toinstall1.size()-1].getClass();
+			realself.rolled_aug2 = aughld.augs_toinstall2[aughld.augs_toinstall2.size()-1].getClass();
+			realself.rolled_player = PlayerPawn(other);
+			aughld.augs_canisters_rolledaugs.push(realself.rolled_aug);
+			aughld.augs_canisters_rolledaugs2.push(realself.rolled_aug2);
+			aughld.augs_canisters_rolledplayers.push(realself.rolled_player);
 			return 0;
 		}
 		else{
@@ -197,10 +210,30 @@ class DD_AugmentationCanister : Inventory
 
 	override void AttachToOwner(Actor other)
 	{
+		if(rolled_player){
+			PlayerPawn plr = PlayerPawn(other);
+			if(!plr)
+				return;
+			DD_AugsHolder aughld = DD_AugsHolder(plr.findInventory("DD_AugsHolder"));
+			DD_Augmentation aug_obj = DD_Augmentation(Inventory.Spawn(rolled_aug));
+			DD_Augmentation aug_obj2 = DD_Augmentation(Inventory.Spawn(rolled_aug2));
+			aug_obj.install(); aug_obj2.install();
+			aughld.augs_toinstall1.push(aug_obj);
+			aughld.augs_toinstall2.push(aug_obj2);
+			aughld.augs_canisters_rolledaugs.push(aug_obj.getClass());
+			aughld.augs_canisters_rolledaugs2.push(aug_obj2.getClass());
+			aughld.augs_canisters_rolledplayers.push(plr);
+			plr.addInventory(aug_obj);
+			plr.addInventory(aug_obj2);
+
+			super.AttachToOwner(other);
+			return;
+		}
+
 		array<class<DD_Augmentation> > aug_pool;
 		DD_Augmentation.initAugPool(aug_pool);
 		while(1){
-			int res = roll_augs(other, aug_pool);
+			int res = roll_augs(self, other, aug_pool);
 			if(res == 0)
 				break;
 			else if(res == 1){
@@ -215,14 +248,34 @@ class DD_AugmentationCanister : Inventory
 	}
 	override bool HandlePickup(Inventory item)
 	{
-		//console.printf("%s", item.GetClassName());
 		if(!(item is "DD_AugmentationCanister"))
 			return false;
+
+		let nitem = DD_AugmentationCanister(item);
+		if(nitem.rolled_player){
+			PlayerPawn plr = PlayerPawn(self.owner);
+			if(!plr)
+				return false;
+			DD_AugsHolder aughld = DD_AugsHolder(plr.findInventory("DD_AugsHolder"));
+			DD_Augmentation aug_obj = DD_Augmentation(Inventory.Spawn(nitem.rolled_aug));
+			DD_Augmentation aug_obj2 = DD_Augmentation(Inventory.Spawn(nitem.rolled_aug2));
+			aug_obj.install();
+			aug_obj2.install();
+			aughld.augs_toinstall1.push(aug_obj);
+			aughld.augs_toinstall2.push(aug_obj2);
+			aughld.augs_canisters_rolledaugs.push(aug_obj.getClass());
+			aughld.augs_canisters_rolledaugs2.push(aug_obj2.getClass());
+			aughld.augs_canisters_rolledplayers.push(plr);
+			plr.addInventory(aug_obj);
+			plr.addInventory(aug_obj2);
+
+			return super.handlePickup(item);
+		}	
 
 		array<class<DD_Augmentation> > aug_pool;
 		DD_Augmentation.initAugPool(aug_pool);
 		while(1){
-			int res = roll_augs(self.owner, aug_pool);
+			int res = roll_augs(nitem, self.owner, aug_pool);
 			if(res == 0)
 				break;
 			else if(res == 1){
@@ -233,7 +286,8 @@ class DD_AugmentationCanister : Inventory
 			else if(res == 2){
 				return false;
 			}
-		}	
+		}
+
 		return super.HandlePickup(item);
 	}
 

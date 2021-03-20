@@ -9,7 +9,7 @@ class UI_DDCanisterAugButton : UI_Widget
 	ui TextureID bg;
 	ui TextureID augcan_tex;
 	ui TextureID selection_tex;
-	ui TextureID delete_tex;
+	ui TextureID drop_tex;
 
 	// Augmentation icons dimensions
 	ui double tex_w;
@@ -21,7 +21,7 @@ class UI_DDCanisterAugButton : UI_Widget
 		bg = TexMan.CheckForTexture("AUGUI17");
 		augcan_tex = TexMan.CheckForTexture("AUGUI18");
 		selection_tex = TexMan.CheckForTexture("AUGUI19");
-		delete_tex = TexMan.CheckForTexture("AUGUI24");
+		drop_tex = TexMan.CheckForTexture("AUGUI24");
 	}
 
 	override void drawOverlay(RenderEvent e)
@@ -73,8 +73,8 @@ class UI_DDCanisterAugButton : UI_Widget
 			}
 		}
 
-		UI_Draw.texture(delete_tex, x + 106.5, y + UI_Draw.texHeight(delete_tex, 5, 0) - 3,
-				5, 0);
+		UI_Draw.texture(drop_tex, x + 106.5, y + 2,
+				5, 10);
 	}
 
 
@@ -120,7 +120,7 @@ class UI_DDCanisterAugButton : UI_Widget
 				sidepanel.label_aug_name.text = " ";
 				sidepanel.label_aug_desc.text = " ";
 				if(install_slot < aughld.augs_toinstall1.size())
-					aughld.queueTrashAug(install_slot);
+					aughld.queueDropAug(install_slot);
 			}
 			else{
 				sidepanel.aug_install_sel_slot = -1;

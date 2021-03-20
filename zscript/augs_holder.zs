@@ -4,7 +4,7 @@
 struct DD_UIQueue{
 	bool aug_toggle_queue[DD_AugsHolder.augs_slots];
 	array<DD_Augmentation> aug_install_queue;
-	array<int> aug_trash_queue;
+	array<int> aug_drop_queue;
 };
 
 // Description:
@@ -15,11 +15,16 @@ class DD_AugsHolder : Inventory
 	const augs_slots = 10;
 	DD_Augmentation augs[augs_slots];
 
+	const dropped_items_svel = 3.5;
+
 	DD_UIQueue ui_queue;
 	int aug_loop_snd_timer; // delay timer not to start the sound without waiting for activation sound
 
 	array<DD_Augmentation> augs_toinstall1;
 	array<DD_Augmentation> augs_toinstall2;
+	array<class<DD_Augmentation> > augs_canisters_rolledaugs;
+	array<class<DD_Augmentation> > augs_canisters_rolledaugs2;
+	array<PlayerPawn> augs_canisters_rolledplayers;
 
 	// For drawing augmentations
 	ui TextureID aug_frame_top;
@@ -125,19 +130,35 @@ class DD_AugsHolder : Inventory
 			installAug(ui_queue.aug_install_queue[0]);
 			ui_queue.aug_install_queue.delete(0);
 		}
-		// Trashing queue
-		while(ui_queue.aug_trash_queue.size() > 0)
+		// Dropping queue
+		while(ui_queue.aug_drop_queue.size() > 0)
 		{
-			augs_toinstall1[ui_queue.aug_trash_queue[0]].detachFromOwner();
-			augs_toinstall1[ui_queue.aug_trash_queue[0]].destroy();
-			augs_toinstall1.delete(ui_queue.aug_trash_queue[0]);
+			DD_AugmentationCanister todrop = DD_AugmentationCanister(Inventory.Spawn("DD_AugmentationCanister"));
+			todrop.rolled_aug = augs_canisters_rolledaugs[ui_queue.aug_drop_queue[0]];
+			todrop.rolled_aug2 = augs_canisters_rolledaugs2[ui_queue.aug_drop_queue[0]];
+			todrop.rolled_player = augs_canisters_rolledplayers[ui_queue.aug_drop_queue[0]];
 
-			augs_toinstall2[ui_queue.aug_trash_queue[0]].detachFromOwner();
-			augs_toinstall2[ui_queue.aug_trash_queue[0]].destroy();
-			augs_toinstall2.delete(ui_queue.aug_trash_queue[0]);
+			todrop.warp(owner, 0.0, 0.0, owner.player.viewHeight, 0.0, WARPF_NOCHECKPOSITION);
+			vector3 owner_look = (AngleToVector(owner.angle, cos(owner.pitch)), -sin(owner.pitch));
+			owner_look *= dropped_items_svel;
+			todrop.A_ChangeVelocity(owner_look.x, owner_look.y, owner_look.z);
 
+
+			augs_toinstall1[ui_queue.aug_drop_queue[0]].detachFromOwner();
+			augs_toinstall1[ui_queue.aug_drop_queue[0]].destroy();
+			augs_toinstall1.delete(ui_queue.aug_drop_queue[0]);
+
+			augs_toinstall2[ui_queue.aug_drop_queue[0]].detachFromOwner();
+			augs_toinstall2[ui_queue.aug_drop_queue[0]].destroy();
+			augs_toinstall2.delete(ui_queue.aug_drop_queue[0]);
+			// there gonna be issues with that if more than one index is deleted at the same time
+
+			augs_canisters_rolledaugs.delete(ui_queue.aug_drop_queue[0]);
+			augs_canisters_rolledaugs2.delete(ui_queue.aug_drop_queue[0]);
+			augs_canisters_rolledplayers.delete(ui_queue.aug_drop_queue[0]);
 			owner.takeInventory("DD_AugmentationCanister", 1);
-			ui_queue.aug_trash_queue.delete(0);
+			
+			ui_queue.aug_drop_queue.delete(0);
 		}
 
 		// 3512 is just this mod's own slot for this sound
@@ -283,12 +304,18 @@ class DD_AugsHolder : Inventory
 		if(aui != augs_toinstall1.size()){
 			augs_toinstall1.delete(aui);
 			augs_toinstall2.delete(aui);
+			augs_canisters_rolledaugs.delete(aui);
+			augs_canisters_rolledaugs2.delete(aui);
+			augs_canisters_rolledplayers.delete(aui);
 		}
 		else{
 			aui = augs_toinstall2.find(aug_obj);
 			if(aui != augs_toinstall2.size()){
 				augs_toinstall1.delete(aui);
 				augs_toinstall2.delete(aui);
+				augs_canisters_rolledaugs.delete(aui);
+				augs_canisters_rolledaugs2.delete(aui);
+				augs_canisters_rolledplayers.delete(aui);
 			}
 		}
 		owner.takeInventory("DD_AugmentationCanister", 1);
@@ -356,9 +383,9 @@ class DD_AugsHolder : Inventory
 
 	// Description:
 	// Queues removing an augmentation from available augmentations (lost forever)
-	ui void queueTrashAug(int install_index)
+	ui void queueDropAug(int install_index)
 	{
-		ui_queue.aug_trash_queue.push(install_index);
+		ui_queue.aug_drop_queue.push(install_index);
 	}
 
 	// Description:

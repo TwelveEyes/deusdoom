@@ -3,11 +3,11 @@ user bool dd_show_reticle = true;
 user bool dd_dash_on_doubletap = false;
 user int dd_dash_doubletap_timer = 6;
 
+
 server float dd_ptmult_global = 1.0;
 server float dd_ptmult_cell = 1.0;
 server float dd_ptmult_upgrade = 1.0;
 server float dd_ptmult_aug = 1.0;
-
 
 server bool dd_transfer_augcanisters = true;
 server bool dd_transfer_upgradecanisters = false;
