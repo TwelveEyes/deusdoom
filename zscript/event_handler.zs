@@ -153,12 +153,14 @@ class DD_EventHandler : StaticEventHandler
 			// (see DD_AugSlots enum)
 
 			if(e.args[0] < 0 || e.args[0] >= aughld.augs_slots){
-				console.printf("ERROR: Augmentation slot %d doesn't exist.",
-						e.args[0]);
+				if(consoleplayer == e.player)
+					console.printf("ERROR: Augmentation slot %d doesn't exist.",
+							e.args[0]);
 				return;
 			}
 			if(!aughld.augs[e.args[0]]){
-				console.printf("ERROR: No augmentation in this slot.");
+				if(consoleplayer == e.player)
+					console.printf("ERROR: No augmentation in this slot.");
 				return;
 			}
 
