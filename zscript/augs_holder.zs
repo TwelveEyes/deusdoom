@@ -329,7 +329,7 @@ class DD_AugsHolder : Inventory
 	//	false - augmentation can't be installed.
 	//		(there is already an augmentation in this slot or of this type)
 	//	true  - augmentation can be installed.
-	ui bool canInstallAug(DD_Augmentation aug_obj)
+	clearscope bool canInstallAug(DD_Augmentation aug_obj)
 	{
 		// Trying to find a vacant slot
 		bool has_slot = false;
@@ -373,17 +373,17 @@ class DD_AugsHolder : Inventory
 
 	// Description:
 	// Queues installing an augemntation.
-	ui void queueInstallAug(DD_Augmentation aug_obj)
+	clearscope void queueInstallAug(DD_Augmentation aug_obj)
 	{
-		if(!aug_obj.ui_init)
-			aug_obj.UIInit();
-		aug_obj.ui_init = true;
+		//if(!aug_obj.ui_init)
+		//	aug_obj.UIInit();
+		//aug_obj.ui_init = true;
 		ui_queue.aug_install_queue.push(aug_obj);
 	}
 
 	// Description:
 	// Queues removing an augmentation from available augmentations (lost forever)
-	ui void queueDropAug(int install_index)
+	clearscope void queueDropAug(int install_index)
 	{
 		ui_queue.aug_drop_queue.push(install_index);
 	}
@@ -399,6 +399,13 @@ class DD_AugsHolder : Inventory
 	// ------------
 	// UI functions
 	// ------------
+
+	ui void UITick()
+	{
+		for(uint i = 0; i < augs_slots; ++i)
+			if(augs[i])
+				augs[i].UITick();
+	}
 
 	// Drawing damage absorbtion/directions interface
 	int absorbmsg_timer;	// how long "XX% ABSORB" message stays on screen

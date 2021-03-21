@@ -8,12 +8,7 @@ class UI_DDSmallButton_UseCell : UI_DDSmallButton
 
 		if(e.type == UiEvent.Type_LButtonUp)
 		{
-			PlayerInfo plr = players[consoleplayer];
-			if(DD_BioelectricCell.queueConsume(plr.mo,
-				DD_BioelectricCell(plr.mo.findInventory("DD_BioelectricCell"))))
-			{
-				SoundUtils.uiStartSound("ui/aug/cell_use");
-			}
+			EventHandler.sendNetworkEvent("dd_use_cell");
 		}
 	}
 

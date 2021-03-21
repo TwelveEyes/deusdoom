@@ -103,6 +103,7 @@ class DD_Augmentation : Inventory
 
 	ui bool ui_init;
 	virtual ui void UIInit(){}
+	virtual ui void UITick(){}
 	virtual ui void drawOverlay(RenderEvent e, DD_EventHandler hndl){}
 	virtual ui void drawUnderlay(RenderEvent e, DD_EventHandler hndl){}
 	virtual ui bool inputProcess(InputEvent e){ return false; }
@@ -134,9 +135,9 @@ class DD_Augmentation : Inventory
 	{
 		enabled = !enabled;
 		if(enabled)
-			SoundUtils.playStartSound("ui/aug/activate");
+			SoundUtils.playStartSound("ui/aug/activate", owner);
 		else
-			SoundUtils.playStartSound("ui/aug/deactivate");
+			SoundUtils.playStartSound("ui/aug/deactivate", owner);
 	}
 
 	// ---------------------

@@ -9,9 +9,11 @@ class UI_DDSmallButton_Upgrade : UI_DDSmallButton
 		if(e.type == UiEvent.Type_LButtonUp)
 		{
 			PlayerInfo plr = players[consoleplayer];
-			DD_AugmentationUpgradeCanister.queueConsume(plr.mo,
+			
+			EventHandler.sendNetworkEvent("dd_upgrade_aug", parent_wnd.selected_aug_slot);
+			/*DD_AugmentationUpgradeCanister.queueConsume(plr.mo,
 				DD_AugmentationUpgradeCanister(plr.mo.findInventory("DD_AugmentationUpgradeCanister")),
-				parent_wnd.selected_aug_slot);			
+				parent_wnd.selected_aug_slot);			*/
 		}
 
 		

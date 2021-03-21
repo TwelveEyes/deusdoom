@@ -44,7 +44,7 @@ class UI_DDSmallButton : UI_Widget
 
 		if(e.type == UiEvent.Type_LButtonDown){
 			pressed = true;
-			SoundUtils.uiStartSound("ui/menu/press");
+			SoundUtils.uiStartSound("ui/menu/press", players[consoleplayer].mo);
 		}
 		else if(e.type == UiEvent.Type_LButtonUp){
 			pressed = false;

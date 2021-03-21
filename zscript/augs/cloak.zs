@@ -107,9 +107,9 @@ class DD_Aug_Cloak : DD_Augmentation
 	{
 		super.toggle();
 		if(enabled)
-			SoundUtils.playStartSound("ui/aug/cloak_up");
+			SoundUtils.playStartSound("ui/aug/cloak_up", owner);
 		else
-			SoundUtils.playStartSound("ui/aug/cloak_down");
+			SoundUtils.playStartSound("ui/aug/cloak_down", owner);
 
 		if(!enabled){
 			owner.A_SetRenderStyle(1.0, Style_Normal);

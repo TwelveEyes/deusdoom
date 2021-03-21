@@ -1,6 +1,7 @@
 struct SoundUtils_Queue
 {
 	array<string> ui_snd;
+	array<Actor> ui_snd_plr;
 }
 
 class SoundUtils
@@ -11,10 +12,10 @@ class SoundUtils
 
 	play void worldTick()
 	{
-		PlayerPawn plr = players[consoleplayer].mo;
 		while(queue.ui_snd.size() > 0)
 		{
-			plr.giveInventoryType("UISound");
+			if(queue.ui_snd_plr[0])
+				queue.ui_snd_plr[0].giveInventoryType("UISound");
 			queue.ui_snd.delete(0);
 		}
 	}
@@ -22,15 +23,21 @@ class SoundUtils
 
 	// Functions
 
-	static ui void uiStartSound(string snd_name)
+	static ui void uiStartSound(string snd_name, Actor plr)
 	{
-		SoundUtils snd_utils = DD_EventHandler(StaticEventHandler.Find("DD_EventHandler")).snd_utils;
-		snd_utils.queue.ui_snd.push(snd_name);
+		int pnum = 0;
+		for(int i = 0; i < MAXPLAYERS; ++i)
+		{
+			if(playeringame[i] && players[i].mo == plr)
+			{ pnum = i; break; }
+		}
+		EventHandler.sendNetworkEvent("dd_ui_sound:" .. snd_name, pnum);
 	}
-	static play void playStartSound(string snd_name)
+	static play void playStartSound(string snd_name, Actor plr)
 	{
 		SoundUtils snd_utils = DD_EventHandler(StaticEventHandler.Find("DD_EventHandler")).snd_utils;
 		snd_utils.queue.ui_snd.push(snd_name);
+		snd_utils.queue.ui_snd_plr.push(plr);
 	}
 }
 
@@ -52,5 +59,20 @@ class UISound : Inventory
 		if(snd_utils.queue.ui_snd.size() > 0)
 			pickupSound = snd_utils.queue.ui_snd[0];
 		PlayPickupSound(other);
+	}
+}
+
+
+class DD_SoundHandler : StaticEventHandler
+{
+	override void networkProcess(ConsoleEvent e)
+	{
+		if(e.name.indexOf("dd_ui_sound:") == 0)
+		{
+			let snd_utils = DD_EventHandler(StaticEventHandler.Find("DD_EventHandler")).snd_utils;
+			string snd_name = e.name.mid("dd_ui_sound:".length());
+			snd_utils.queue.ui_snd.push(snd_name);
+			snd_utils.queue.ui_snd_plr.push(players[e.args[0]].mo);
+		}
 	}
 }

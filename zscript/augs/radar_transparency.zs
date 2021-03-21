@@ -108,9 +108,9 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 	{
 		super.toggle();
 		if(enabled)
-			SoundUtils.playStartSound("ui/aug/cloak_up");
+			SoundUtils.playStartSound("ui/aug/cloak_up", owner);
 		else
-			SoundUtils.playStartSound("ui/aug/cloak_down");
+			SoundUtils.playStartSound("ui/aug/cloak_down", owner);
 
 		if(!enabled){
 			Actor mnst;

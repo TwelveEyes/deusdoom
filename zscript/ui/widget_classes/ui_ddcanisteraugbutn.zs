@@ -92,7 +92,7 @@ class UI_DDCanisterAugButton : UI_Widget
 			{
 				if(sidepanel.aug_install_sel_slot != install_slot
 				|| sidepanel.aug_install_sel != 1){
-					SoundUtils.uiStartSound("ui/menu/focus");
+					SoundUtils.uiStartSound("ui/menu/focus", plr.mo);
 				}
 				sidepanel.aug_install_sel_slot = install_slot;
 				sidepanel.aug_install_sel = 1;
@@ -105,7 +105,7 @@ class UI_DDCanisterAugButton : UI_Widget
 			{
 				if(sidepanel.aug_install_sel_slot != install_slot
 				|| sidepanel.aug_install_sel != 2){
-					SoundUtils.uiStartSound("ui/menu/focus");
+					SoundUtils.uiStartSound("ui/menu/focus", plr.mo);
 				}
 				sidepanel.aug_install_sel_slot = install_slot;
 				sidepanel.aug_install_sel = 2;
@@ -114,13 +114,13 @@ class UI_DDCanisterAugButton : UI_Widget
 			}
 			else if(mousex > x + 107.5)
 			{
-				SoundUtils.uiStartSound("ui/menu/press");
+				SoundUtils.uiStartSound("ui/menu/press", plr.mo);
 				sidepanel.aug_install_sel_slot = -1;
 				sidepanel.aug_install_sel = -1;
 				sidepanel.label_aug_name.text = " ";
 				sidepanel.label_aug_desc.text = " ";
 				if(install_slot < aughld.augs_toinstall1.size())
-					aughld.queueDropAug(install_slot);
+					EventHandler.sendNetworkEvent("dd_drop_aug", install_slot);
 			}
 			else{
 				sidepanel.aug_install_sel_slot = -1;

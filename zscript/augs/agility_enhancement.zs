@@ -1,13 +1,8 @@
 struct DD_Aug_AgilityEnhancement_Queue
 {
-	int mov_keys_held;
-	// amount of ticks passed since a key was pressed last time,
-	// used to engage dashses.
-	// 0 - forward, 1 - backward, 2 - left, 3 - right, 4 - up
-	int mov_keys_timer[5];
-
 	vector3 dashvel[5];
 	double deacc;
+
 	int vwheight_timer;
 	double vwheight_prev;
 	double vwheight_delta;
@@ -20,6 +15,12 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	ui TextureID tex_on;
 
 	DD_Aug_AgilityEnhancement_Queue queue;
+	ui int mov_keys_held;
+	// amount of ticks passed since a key was pressed last time,
+	// used to engage dashses.
+	// 0 - forward, 1 - backward, 2 - left, 3 - right, 4 - up
+	ui int mov_keys_timer[5];
+
 	int dash_cd;
 	const vwheight_time = 20;
 	const vwheight_time_coff = 0.30;
@@ -67,11 +68,11 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 
 
-	protected clearscope double getDeaccFactor()
+	clearscope double getDeaccFactor()
 	{
 		return 0.2 + 0.35 * (getRealLevel() - 1);
 	}
-	protected clearscope double getDashVel()
+	clearscope double getDashVel()
 	{
 		return 15 + 7.5 * (getRealLevel() - 1);
 	}
@@ -84,21 +85,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 
 	override void toggle()
 	{
-		if(use_doubletap_scheme){
-			queue.mov_keys_timer[0] = dash_tap_time+1;
-			queue.mov_keys_timer[1] = dash_tap_time+1;
-			queue.mov_keys_timer[2] = dash_tap_time+1;
-			queue.mov_keys_timer[3] = dash_tap_time+1;
-			queue.mov_keys_timer[4] = dash_tap_time+1;
-		}
-		else{
-			queue.mov_keys_timer[0] = 0;
-			queue.mov_keys_timer[1] = 0;
-			queue.mov_keys_timer[2] = 0;
-			queue.mov_keys_timer[3] = 0;
-			queue.mov_keys_timer[4] = 0;
-		}
-
 		super.toggle();
 
 		if(owner && owner.player){
@@ -130,7 +116,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		if(!enabled)
 			return;
 
-
 		if(abs(queue.deacc) > 0)
 		{
 			if(abs(owner.vel.x) > queue.deacc){
@@ -155,8 +140,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			--dash_cd;
 		for(uint i = 0; i < 5; ++i)
 		{
-			if(use_doubletap_scheme && queue.mov_keys_timer[i] <= dash_tap_time)
-				++queue.mov_keys_timer[i];
 			if(dash_cd == 0 && queue.dashvel[i].length() > 0){
 
 				if(DD_ModChecker.isLoaded_HDest()){
@@ -202,6 +185,15 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 
 
+	override void UITick()
+	{
+		for(uint i = 0; i < 5; ++i)
+		{
+			if(use_doubletap_scheme && mov_keys_timer[i] <= dash_tap_time)
+				++mov_keys_timer[i];
+		}
+	}
+
 	override bool inputProcess(InputEvent e)
 	{
 		if(!enabled)
@@ -213,67 +205,67 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveleft")
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 			{
-				++queue.mov_keys_held;
-				queue.deacc = 0.0;
+				++mov_keys_held;
+				EventHandler.sendNetworkEvent("dd_grip", 0);
 			}
 
 			if(use_doubletap_scheme)
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward"))
 				{
-					if(queue.mov_keys_timer[0] <= dash_tap_time)
-						queue.dashvel[0].x = getDashVel();
-					queue.mov_keys_timer[0] = 0;
+					if(mov_keys_timer[0] <= dash_tap_time)
+						EventHandler.sendNetworkEvent("dd_dash", 0);
+					mov_keys_timer[0] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back"))
 				{
-					if(queue.mov_keys_timer[1] <= dash_tap_time)
-						queue.dashvel[1].x = -getDashVel();
-					queue.mov_keys_timer[1] = 0;
+					if(mov_keys_timer[1] <= dash_tap_time)
+						EventHandler.sendNetworkEvent("dd_dash", 1);
+					mov_keys_timer[1] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft"))
 				{
-					if(queue.mov_keys_timer[2] <= dash_tap_time)
-						queue.dashvel[2].y = getDashVel();
-					queue.mov_keys_timer[2] = 0;
+					if(mov_keys_timer[2] <= dash_tap_time)
+						EventHandler.sendNetworkEvent("dd_dash", 2);
+					mov_keys_timer[2] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 				{
-					if(queue.mov_keys_timer[3] <= dash_tap_time)
-						queue.dashvel[3].y = -getDashVel();
-					queue.mov_keys_timer[3] = 0;
+					if(mov_keys_timer[3] <= dash_tap_time)
+						EventHandler.sendNetworkEvent("dd_dash", 3);
+					mov_keys_timer[3] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump"))
 				{
-					if(queue.mov_keys_timer[4] <= dash_tap_time)
-						queue.dashvel[4].z = getDashVel() * 0.7;
-					queue.mov_keys_timer[4] = 0;
+					if(mov_keys_timer[4] <= dash_tap_time)
+						EventHandler.sendNetworkEvent("dd_dash", 4);
+					mov_keys_timer[4] = 0;
 				}
 			}
 			else
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward"))
-					queue.mov_keys_timer[0] = 1;
+					mov_keys_timer[0] = 1;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back"))
-					queue.mov_keys_timer[1] = 1;
+					mov_keys_timer[1] = 1;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft"))
-					queue.mov_keys_timer[2] = 1;
+					mov_keys_timer[2] = 1;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright"))
-					queue.mov_keys_timer[3] = 1;
+					mov_keys_timer[3] = 1;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump"))
-					queue.mov_keys_timer[4] = 1;
+					mov_keys_timer[4] = 1;
 
 				else if(KeyBindUtils.checkBind(e.keyScan, "dd_dash")){
-					if(queue.mov_keys_timer[0])
-						queue.dashvel[0].x = getDashVel();
-					if(queue.mov_keys_timer[1])
-						queue.dashvel[1].x = -getDashVel();
-					if(queue.mov_keys_timer[2])
-						queue.dashvel[2].y = getDashVel();
-					if(queue.mov_keys_timer[3])
-						queue.dashvel[3].y = -getDashVel();
-					if(queue.mov_keys_timer[4])
-						queue.dashvel[4].z = getDashVel();
+					if(mov_keys_timer[0])
+						EventHandler.sendNetworkEvent("dd_dash", 0);
+					if(mov_keys_timer[1])
+						EventHandler.sendNetworkEvent("dd_dash", 1);
+					if(mov_keys_timer[2])
+						EventHandler.sendNetworkEvent("dd_dash", 2);
+					if(mov_keys_timer[3])
+						EventHandler.sendNetworkEvent("dd_dash", 3);
+					if(mov_keys_timer[4])
+						EventHandler.sendNetworkEvent("dd_dash", 4);
 				}
 			}
 		}
@@ -284,22 +276,22 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveleft")
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 			{
-				--queue.mov_keys_held;
-				if(queue.mov_keys_held == 0)
-					queue.deacc = getDeaccFactor();
+				--mov_keys_held;
+				if(mov_keys_held == 0)
+					EventHandler.sendNetworkEvent("dd_grip", 1);
 			}
 			if(!use_doubletap_scheme)
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward"))
-					queue.mov_keys_timer[0] = 0;
+					mov_keys_timer[0] = 0;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back"))
-					queue.mov_keys_timer[1] = 0;
+					mov_keys_timer[1] = 0;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft"))
-					queue.mov_keys_timer[2] = 0;
+					mov_keys_timer[2] = 0;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright"))
-					queue.mov_keys_timer[3] = 0;
+					mov_keys_timer[3] = 0;
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump"))
-					queue.mov_keys_timer[4] = 0;
+					mov_keys_timer[4] = 0;
 			}
 		}
 		return false;

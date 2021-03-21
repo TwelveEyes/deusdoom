@@ -14,7 +14,7 @@ class UI_DDSmallButton_Install : UI_DDSmallButton
 			if(sidepanel.aug_install_sel_slot == -1 || sidepanel.aug_install_sel == -1)
 				return;
 
-			DD_Augmentation aug_obj;
+			/*DD_Augmentation aug_obj;
 			if(sidepanel.aug_install_sel == 1)
 				aug_obj = aughld.augs_toinstall1[sidepanel.aug_install_sel_slot];
 			else if(sidepanel.aug_install_sel == 2)
@@ -23,7 +23,10 @@ class UI_DDSmallButton_Install : UI_DDSmallButton
 			if(!aug_obj || !aughld.canInstallAug(aug_obj))
 				return;
 
-			aughld.queueInstallAug(aug_obj);
+			aughld.queueInstallAug(aug_obj);*/
+
+			EventHandler.sendNetworkEvent("dd_install_aug", sidepanel.aug_install_sel_slot, sidepanel.aug_install_sel);
+
 			sidepanel.aug_install_sel_slot = 0;
 			sidepanel.aug_install_sel = 0;
 		}
@@ -40,6 +43,8 @@ class UI_DDSmallButton_Install : UI_DDSmallButton
 		}
 
 		PlayerInfo plr = players[consoleplayer];
+		if(!plr.mo)
+			return;
 		DD_AugsHolder aughld = DD_AugsHolder(plr.mo.FindInventory("DD_AugsHolder"));
 		if(sidepanel.aug_install_sel == 1){
 			if(!aughld.canInstallAug(aughld.augs_toinstall1[sidepanel.aug_install_sel_slot])){

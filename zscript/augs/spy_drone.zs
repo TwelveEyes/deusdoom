@@ -264,25 +264,25 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			if(e.type == InputEvent.Type_KeyDown)
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward")){
-					drone_actor.queueAccelerationX(1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 0, 1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back")){
-					drone_actor.queueAccelerationX(-1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 0, -1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft")){
-					drone_actor.queueAccelerationY(1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 1, 1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright")){
-					drone_actor.queueAccelerationY(-1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 1, -1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump")){
-					drone_actor.queueAccelerationZ(1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 2, 1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+crouch")){
-					drone_actor.queueAccelerationZ(-1.0);
+					EventHandler.sendNetworkEvent("dd_drone", 2, -1);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+use")){
-					drone_actor.queueUse();
+					EventHandler.sendNetworkEvent("dd_drone", 4);
 				}
 				else
 					return false;
@@ -291,22 +291,22 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			else if(e.type == InputEvent.Type_KeyUp)
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward")){
-					drone_actor.queueAccelerationX(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 0, 0);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back")){
-					drone_actor.queueAccelerationX(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 0, 0);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft")){
-					drone_actor.queueAccelerationY(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 1, 0);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright")){
-					drone_actor.queueAccelerationY(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 1, 0);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump")){
-					drone_actor.queueAccelerationZ(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 2, 0);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+crouch")){
-					drone_actor.queueAccelerationZ(0.0);
+					EventHandler.sendNetworkEvent("dd_drone", 2, 0);
 				}
 				else
 					return false;
@@ -315,6 +315,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			else if(e.type == InputEvent.Type_Mouse)
 			{
 				drone_actor.queueTurnAngle(-e.MouseX / 90.0);
+				EventHandler.sendNetworkEvent("dd_drone", 3, (int)(-e.mouseX / 90.0 * 10000));
 				return true;
 			}
 		}
@@ -474,11 +475,11 @@ class DD_SpyDrone : Actor
 			Stop;
 	}
 
-	ui void queueAccelerationX(double ax){ act_queue.acc.x = ax * getAccMult(); }
-	ui void queueAccelerationY(double ay){ act_queue.acc.y = ay * getAccMult(); }
-	ui void queueAccelerationZ(double az){ act_queue.acc.z = az * getAccMult(); }
+	clearscope void queueAccelerationX(double ax){ act_queue.acc.x = ax * getAccMult(); }
+	clearscope void queueAccelerationY(double ay){ act_queue.acc.y = ay * getAccMult(); }
+	clearscope void queueAccelerationZ(double az){ act_queue.acc.z = az * getAccMult(); }
 
-	ui void queueTurnAngle(double ang) { act_queue.ang = ang; }
+	clearscope void queueTurnAngle(double ang) { act_queue.ang = ang; }
 
-	ui void queueUse() { act_queue.use = true; }
+	clearscope void queueUse() { act_queue.use = true; }
 }

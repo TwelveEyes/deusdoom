@@ -213,7 +213,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 		if(proj_min_dist < 999999)
 		{
 			if(ui_beep_timer >= (proj_min_dist / getRange() * 4.0) * 2){
-				SoundUtils.uiStartSound("ui/aug/agressive_defense_system_beep");
+				SoundUtils.uiStartSound("ui/aug/agressive_defense_system_beep", owner);
 				ui_beep_timer = 0;
 			}
 			else

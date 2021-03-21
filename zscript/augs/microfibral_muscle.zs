@@ -352,7 +352,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				if(!enabled)
 					return false;
 
-				queue.objwep = true;
+				EventHandler.sendNetworkEvent("dd_use_muscle");
+				//queue.objwep = true;
 				return true;
 			}
 		}

@@ -58,7 +58,7 @@ class DD_AugmentationUpgradeCanister : Inventory
 	//	false - no canisters left or augmentation is at maximum level
 	//		or there is no augmentation in this slot or canister instance is NULL.
 	//	true - successfull queueing;
-	static ui bool queueConsume(PlayerPawn plr, DD_AugmentationUpgradeCanister cnst_instance, int aug_slot)
+	static clearscope bool queueConsume(PlayerPawn plr, DD_AugmentationUpgradeCanister cnst_instance, int aug_slot)
 	{
 		DD_AugsHolder aughld = DD_AugsHolder(plr.findInventory("DD_AugsHolder"));
 
