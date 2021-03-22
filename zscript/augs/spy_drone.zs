@@ -137,6 +137,11 @@ class DD_Aug_SpyDrone : DD_Augmentation
 				mark_objs.delete(i);
 			}
 		}
+
+		// Checking if drone is still alive
+		if(enabled
+		&& (!drone_actor || drone_actor.health <= 0))
+			toggle();
 	}
 
 	override void drawOverlay(RenderEvent e, DD_EventHandler hndl)
@@ -314,7 +319,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			}
 			else if(e.type == InputEvent.Type_Mouse)
 			{
-				drone_actor.queueTurnAngle(-e.MouseX / 90.0);
+				//drone_actor.queueTurnAngle(-e.MouseX / 90.0);
 				EventHandler.sendNetworkEvent("dd_drone", 3, (int)(-e.mouseX / 90.0 * 10000));
 				return true;
 			}
@@ -401,6 +406,11 @@ class DD_SpyDrone : Actor
 		Spawn:
 			DSDR A 1{
 				// Changing velocity according to acceleration/deceleration
+				if(!parent_aug){
+					A_Die();
+					return;
+				}
+
 				A_ChangeVelocity(act_queue.acc.x, act_queue.acc.y, act_queue.acc.z,
 							CVF_RELATIVE);
 				vector3 maxvel = getMaxVel();

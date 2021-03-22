@@ -266,13 +266,16 @@ class DD_EventHandler : StaticEventHandler
 				if(aughld.augs[i] && aughld.augs[i] is "DD_Aug_SpyDrone")
 				{
 					spyaug = DD_Aug_SpyDrone(aughld.augs[i]);
-					switch(e.args[0])
+					if(spyaug.drone_actor && spyaug.drone_actor.health > 0)
 					{
-						case 0: spyaug.drone_actor.queueAccelerationX(e.args[1]); break;
-						case 1: spyaug.drone_actor.queueAccelerationY(e.args[1]); break;
-						case 2: spyaug.drone_actor.queueAccelerationZ(e.args[1]); break;
-						case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000);
-						case 4: spyaug.drone_actor.queueUse();
+						switch(e.args[0])
+						{
+							case 0: spyaug.drone_actor.queueAccelerationX(e.args[1]); break;
+							case 1: spyaug.drone_actor.queueAccelerationY(e.args[1]); break;
+							case 2: spyaug.drone_actor.queueAccelerationZ(e.args[1]); break;
+							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000);
+							case 4: spyaug.drone_actor.queueUse();
+						}
 					}
 				}
 			}
