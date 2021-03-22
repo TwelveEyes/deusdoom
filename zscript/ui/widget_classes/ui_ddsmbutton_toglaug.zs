@@ -13,7 +13,7 @@ class UI_DDSmallButton_ToggleAug : UI_DDSmallButton
 
 			if(sidepanel.aug_sel != -1 && aughld.augs[sidepanel.aug_sel])
 			{
-				aughld.queueToggleAug(sidepanel.aug_sel);
+				EventHandler.sendNetworkEvent("dd_togg_aug", sidepanel.aug_sel);
 			}
 		}
 	}
