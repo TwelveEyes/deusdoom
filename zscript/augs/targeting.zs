@@ -69,7 +69,11 @@ class DD_Aug_Targeting : DD_Augmentation
 	}
 	clearscope string getActorDisplayName(Actor ac)
 	{
-		string dname = ac.getTag("");
+		string dname;
+		if(ac is "PlayerPawn")
+			dname = ac.player.getUserName();
+		else
+			dname = ac.getTag("");
 		if(ac.bFriendly)
 			dname = dname .. " (friendly)";
 		return dname;

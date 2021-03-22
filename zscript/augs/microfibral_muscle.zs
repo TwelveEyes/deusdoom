@@ -98,7 +98,11 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 
 	protected ui string getActorDisplayName(Actor ac)
 	{
-		string dname = ac.getTag("");
+		string dname;
+		if(ac is "PlayerPawn")
+			dname = ac.player.getUserName();
+		else
+			dname = ac.getTag("");
 		if(ac.health < 0)
 			if(ac.bIsMonster)
 				dname = dname .. " (corpse)";
