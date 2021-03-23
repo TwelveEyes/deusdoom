@@ -89,6 +89,12 @@ class DD_Augmentation : Inventory
 		{
 			if(owner.countInv("DD_BioelectricEnergy") == 0){
 				enabled = false;
+				return;
+			}
+			if(owner.health <= 0){
+				CVar deadcv = CVar.getCVar("dd_toggle_augs_dead");
+				if(!deadcv || !deadcv.getBool())
+				{ enabled = false; return; }
 			}
 	
 			DD_AugsHolder aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
@@ -134,8 +140,14 @@ class DD_Augmentation : Inventory
 	virtual void toggle()
 	{
 		enabled = !enabled;
-		if(enabled)
+		if(enabled){
+			if(owner.health <= 0){
+				CVar deadcv = CVar.getCVar("dd_toggle_augs_dead");
+				if(!deadcv || !deadcv.getBool())
+				{ enabled = false; return; }
+			}
 			SoundUtils.playStartSound("ui/aug/activate", owner);
+		}
 		else
 			SoundUtils.playStartSound("ui/aug/deactivate", owner);
 	}

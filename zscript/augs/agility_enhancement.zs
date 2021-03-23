@@ -102,6 +102,12 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		super.tick();
 		if(!owner || !(owner is "PlayerPawn"))
 			return;
+
+		if(queue.hdest_telehack_timer > 0)
+			--queue.hdest_telehack_timer;
+		else
+			owner.bTeleport = false;
+
 		if(queue.vwheight_timer > 0){
 			--queue.vwheight_timer;
 

@@ -12,6 +12,8 @@ server float dd_ptmult_aug = 1.0;
 server bool dd_transfer_augcanisters = true;
 server bool dd_transfer_upgradecanisters = false;
 
+server bool dd_toggle_augs_dead = false;
+
 
 user bool dd_hud_debug = false;
 

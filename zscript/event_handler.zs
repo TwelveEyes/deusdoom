@@ -270,9 +270,9 @@ class DD_EventHandler : StaticEventHandler
 					{
 						switch(e.args[0])
 						{
-							case 0: spyaug.drone_actor.queueAccelerationX(e.args[1]); break;
-							case 1: spyaug.drone_actor.queueAccelerationY(e.args[1]); break;
-							case 2: spyaug.drone_actor.queueAccelerationZ(e.args[1]); break;
+							case 0: spyaug.drone_actor.queueAccelerationX(double(e.args[1]) / 10000); break;
+							case 1: spyaug.drone_actor.queueAccelerationY(double(e.args[1]) / 10000); break;
+							case 2: spyaug.drone_actor.queueAccelerationZ(double(e.args[1]) / 10000); break;
 							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000);
 							case 4: spyaug.drone_actor.queueUse();
 						}

@@ -110,7 +110,10 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 	{
 		super.tick();
 
-		PlayerInfo pl = players[consoleplayer];
+		PlayerInfo pl = owner.player;
+		if(!pl)
+			return;
+
 		if(enabled){
 			if(getRealLevel() >= 2){
 				Shader.setEnabled(pl, "DD_NightVision", true);

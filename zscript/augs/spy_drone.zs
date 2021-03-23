@@ -269,22 +269,22 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			if(e.type == InputEvent.Type_KeyDown)
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward")){
-					EventHandler.sendNetworkEvent("dd_drone", 0, 1);
+					EventHandler.sendNetworkEvent("dd_drone", 0, 1 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back")){
-					EventHandler.sendNetworkEvent("dd_drone", 0, -1);
+					EventHandler.sendNetworkEvent("dd_drone", 0, -1 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft")){
-					EventHandler.sendNetworkEvent("dd_drone", 1, 1);
+					EventHandler.sendNetworkEvent("dd_drone", 1, 1 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright")){
-					EventHandler.sendNetworkEvent("dd_drone", 1, -1);
+					EventHandler.sendNetworkEvent("dd_drone", 1, -1 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump")){
-					EventHandler.sendNetworkEvent("dd_drone", 2, 1);
+					EventHandler.sendNetworkEvent("dd_drone", 2, 0.8 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+crouch")){
-					EventHandler.sendNetworkEvent("dd_drone", 2, -1);
+					EventHandler.sendNetworkEvent("dd_drone", 2, -0.8 * 10000);
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+use")){
 					EventHandler.sendNetworkEvent("dd_drone", 4);
@@ -319,7 +319,6 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			}
 			else if(e.type == InputEvent.Type_Mouse)
 			{
-				//drone_actor.queueTurnAngle(-e.MouseX / 90.0);
 				EventHandler.sendNetworkEvent("dd_drone", 3, (int)(-e.mouseX / 90.0 * 10000));
 				return true;
 			}
@@ -397,7 +396,7 @@ class DD_SpyDrone : Actor
 				* (0.1 + 0.05 * (parent_aug.getRealLevel() - 1)); }
 	vector3 getMaxVel() { return (1.0, 1.0, 0.4)
 				* (6.0 + 4.0 * (parent_aug.getRealLevel() - 1)); }
-	double getTurnMult() { return 1.5 + 0.22 * (parent_aug.getRealLevel() - 1); }
+	double getTurnMult() { return 1.75 + 0.5 * (parent_aug.getRealLevel() - 1); }
 
 	int getMarkTime() { return 35 * 25 + 20 * (parent_aug.getRealLevel() - 1);  }
 

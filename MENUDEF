@@ -131,6 +131,11 @@ OptionMenu "DD_Options"
 		StaticText "tweak these settings.", Green
 		Option "Transfer augmentation canisters", "dd_transfer_augcanisters", "OnOff"
 		Option "Transfer augmentation upgrade canisters", "dd_transfer_upgradecanisters", "OnOff"
+		StaticText ""
+		StaticText "Miscellaneous", Purple
+		StaticText "Various gameplay options that do not fit any particular category.", Green
+		StaticText "Be careful: they might break your game (and might be too funny).", Green
+		Option "Enable toggling augmentations while being dead", "dd_toggle_augs_dead", "OnOff"
 	}
 
 	OptionMenu "DD_Credits"
