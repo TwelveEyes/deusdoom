@@ -202,8 +202,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 
 	override bool inputProcess(InputEvent e)
 	{
-		if(!enabled)
-			return false;
 		if(e.type == InputEvent.Type_KeyDown)
 		{
 			if(KeyBindUtils.checkBind(e.keyScan, "+forward")
