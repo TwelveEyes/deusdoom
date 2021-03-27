@@ -305,6 +305,10 @@ class DD_InputEventHandler : EventHandler
 
 	override bool inputProcess(InputEvent e)
 	{
+		//if(e.type == UIEvent.Type_KeyDown)
+		//	console.printf("%d", e.keyScan);
+		//return true;
+
 		DD_AugsHolder aughld;
 		if(players[consoleplayer].mo)
 			aughld = DD_AugsHolder(players[consoleplayer].mo.findInventory("DD_AugsHolder"));
