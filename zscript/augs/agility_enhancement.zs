@@ -217,31 +217,31 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			{
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward"))
 				{
-					if(mov_keys_timer[0] <= dash_tap_time)
+					if(mov_keys_timer[0] <= dash_tap_time && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 0);
 					mov_keys_timer[0] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back"))
 				{
-					if(mov_keys_timer[1] <= dash_tap_time)
+					if(mov_keys_timer[1] <= dash_tap_time && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 1);
 					mov_keys_timer[1] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft"))
 				{
-					if(mov_keys_timer[2] <= dash_tap_time)
+					if(mov_keys_timer[2] <= dash_tap_time && enabled) 
 						EventHandler.sendNetworkEvent("dd_dash", 2);
 					mov_keys_timer[2] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 				{
-					if(mov_keys_timer[3] <= dash_tap_time)
+					if(mov_keys_timer[3] <= dash_tap_time && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 3);
 					mov_keys_timer[3] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump"))
 				{
-					if(mov_keys_timer[4] <= dash_tap_time)
+					if(mov_keys_timer[4] <= dash_tap_time && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 4);
 					mov_keys_timer[4] = 0;
 				}
@@ -260,15 +260,15 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 					mov_keys_timer[4] = 1;
 
 				else if(KeyBindUtils.checkBind(e.keyScan, "dd_dash")){
-					if(mov_keys_timer[0])
+					if(mov_keys_timer[0] && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 0);
-					if(mov_keys_timer[1])
+					if(mov_keys_timer[1] && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 1);
-					if(mov_keys_timer[2])
+					if(mov_keys_timer[2] && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 2);
-					if(mov_keys_timer[3])
+					if(mov_keys_timer[3] && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 3);
-					if(mov_keys_timer[4])
+					if(mov_keys_timer[4] && enabled)
 						EventHandler.sendNetworkEvent("dd_dash", 4);
 				}
 			}
@@ -281,7 +281,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 			{
 				--mov_keys_held;
-				if(mov_keys_held == 0)
+				if(mov_keys_held == 0 && enabled)
 					EventHandler.sendNetworkEvent("dd_grip", 1);
 			}
 			if(!use_doubletap_scheme)
