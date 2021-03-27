@@ -261,15 +261,15 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 
 				else if(KeyBindUtils.checkBind(e.keyScan, "dd_dash")){
 					if(mov_keys_timer[0] && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 0);
-					if(mov_keys_timer[1] && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 1);
-					if(mov_keys_timer[2] && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 2);
-					if(mov_keys_timer[3] && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 3);
-					if(mov_keys_timer[4] && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 4);
+						EventHandler.sendNetworkEvent("dd_vdash", 0);
+					else if(mov_keys_timer[1] && enabled)
+						EventHandler.sendNetworkEvent("dd_vdash", 1);
+					else if(mov_keys_timer[2] && enabled)
+						EventHandler.sendNetworkEvent("dd_vdash", 2);
+					else if(mov_keys_timer[3] && enabled)
+						EventHandler.sendNetworkEvent("dd_vdash", 3);
+					else if(mov_keys_timer[4] && enabled)
+						EventHandler.sendNetworkEvent("dd_vdash", 4);
 				}
 			}
 		}

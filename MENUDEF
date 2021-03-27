@@ -150,6 +150,7 @@ OptionMenu "DD_Options"
 		StaticText "KarolineDianne - suggesting ideas", White
 		StaticText "ZikShadow - extensive playtesting", White
 		StaticText "Sledge - suggesting ideas", White
+		StaticText "IKA - finding a bug", White
 		StaticText "Ryuhi - suggesting ideas", White
 		StaticText "silentw - playtesting", White
 		StaticText "Doomguy914 - finding a typo", White

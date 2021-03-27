@@ -224,7 +224,7 @@ class DD_EventHandler : StaticEventHandler
 				}
 			}
 		}
-		else if(e.name == "dd_dash")
+		else if(e.name == "dd_vdash")
 		{
 			DD_Aug_AgilityEnhancement agaug;
 			for(uint i = 0; i < DD_AugsHolder.augs_slots; ++i)
