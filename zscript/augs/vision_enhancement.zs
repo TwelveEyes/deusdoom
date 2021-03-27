@@ -78,6 +78,10 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 
 	protected clearscope bool shouldReveal(Actor ac)
 	{
+		int res = RecognitionUtils.displayedSonar(ac);
+		if(res == -1) return false;
+		else if(res == 1) return true;
+
 		if(ac.health <= 0)
 			return false;
 		return true;

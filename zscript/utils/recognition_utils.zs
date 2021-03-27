@@ -47,6 +47,9 @@ class RecognitionUtils
 	array<double > drainsEnergy_Source_amt;
 	array<double > drainsEnergy_Inflictor_amt;
 
+	array<class<Actor> > displayedSonar_wl;
+	array<class<Actor> > displayedSonar_bl;
+
 	// Description:
 	// Should be called from an event handler's event onRegister().
 	// Loads special lumps with information about black- and whitelisted
@@ -214,6 +217,8 @@ class RecognitionUtils
 								drainsEnergy_Source_bl.push(actor_cls);
 							else if(attr == "drainsEnergy_Inflictor")
 								drainsEnergy_Inflictor_bl.push(actor_cls);
+							else if(attr == "displayedSonar")
+								displayedSonar_bl.push(actor_cls);
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -268,6 +273,8 @@ class RecognitionUtils
 								drainsEnergy_Inflictor_wl.push(actor_cls);
 								drainsEnergy_Inflictor_amt.push(1.0);
 							}
+							else if(attr == "displayedSonar")
+								displayedSonar_wl.push(actor_cls);
 							else
 								console.printf("[DeusDoom]ERROR: no attribute \"%s\" exists",
 										attr);
@@ -604,6 +611,22 @@ class RecognitionUtils
 		}
 
 		return 0.0;
+	}
+
+	// Description:
+	// Function for Vision Enhancement to prevent/force certain actors from/to being displayed by
+	// sonar imaging upgrade.
+	// Return values:
+	// -1 - do not display
+	//  1 - force displaying
+	//  0 - keep standard behaviour
+	static int displayedSonar(Actor obj)
+	{
+		if(findActorClass(obj, getInstance().displayedSonar_bl))
+			return -1;
+		if(findActorClass(obj, getInstance().displayedSonar_wl))
+			return 1;
+		return 0;
 	}
 }
 
