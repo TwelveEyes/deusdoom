@@ -72,7 +72,7 @@ class DD_SoundHandler : StaticEventHandler
 			let snd_utils = DD_EventHandler(StaticEventHandler.Find("DD_EventHandler")).snd_utils;
 			string snd_name = e.name.mid("dd_ui_sound:".length());
 			snd_utils.queue.ui_snd.push(snd_name);
-			snd_utils.queue.ui_snd_plr.push(players[e.args[1]].mo);
+			snd_utils.queue.ui_snd_plr.push(players[e.args[0]].mo);
 		}
 	}
 }
