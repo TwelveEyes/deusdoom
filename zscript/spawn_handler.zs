@@ -194,7 +194,7 @@ class DD_SpawnHandler : StaticEventHandler
 	// Tracking progression
 	override void WorldThingDied(WorldEvent e)
 	{
-		if(!e.thing.bISMONSTER)
+		if(!e.thing.bISMONSTER || e.thing is "PlayerPawn")
 			return;
 
 		for(uint i = 0; i < MAXPLAYERS; ++i)
