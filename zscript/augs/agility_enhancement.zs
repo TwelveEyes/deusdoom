@@ -218,31 +218,31 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 				if(KeyBindUtils.checkBind(e.keyScan, "+forward"))
 				{
 					if(mov_keys_timer[0] <= dash_tap_time && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 0);
+						EventHandler.sendNetworkEvent("dd_vdash", 0);
 					mov_keys_timer[0] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+back"))
 				{
 					if(mov_keys_timer[1] <= dash_tap_time && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 1);
+						EventHandler.sendNetworkEvent("dd_vdash", 1);
 					mov_keys_timer[1] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveleft"))
 				{
 					if(mov_keys_timer[2] <= dash_tap_time && enabled) 
-						EventHandler.sendNetworkEvent("dd_dash", 2);
+						EventHandler.sendNetworkEvent("dd_vdash", 2);
 					mov_keys_timer[2] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+moveright"))
 				{
 					if(mov_keys_timer[3] <= dash_tap_time && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 3);
+						EventHandler.sendNetworkEvent("dd_vdash", 3);
 					mov_keys_timer[3] = 0;
 				}
 				else if(KeyBindUtils.checkBind(e.keyScan, "+jump"))
 				{
 					if(mov_keys_timer[4] <= dash_tap_time && enabled)
-						EventHandler.sendNetworkEvent("dd_dash", 4);
+						EventHandler.sendNetworkEvent("dd_vdash", 4);
 					mov_keys_timer[4] = 0;
 				}
 			}
