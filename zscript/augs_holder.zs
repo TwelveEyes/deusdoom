@@ -58,6 +58,9 @@ class DD_AugsHolder : Inventory
 		+Inventory.UNDROPPABLE;
 		+Inventory.UNCLEARABLE;
 		+Inventory.UNTOSSABLE;
+
+		+DONTGIB; // at some maps there can be a door at around (0, 0, 0) coordinates where augs holder spawns so it crashes it, removing all augmentations.
+			  // same goes for augmentation inventory items.
 	}
 
 	override void BeginPlay()

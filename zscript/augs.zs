@@ -76,6 +76,8 @@ class DD_Augmentation : Inventory
 	{
 		Inventory.Amount 1;
 		Inventory.MaxAmount 1;
+
+		+DONTGIB; // see augs_holder.zs
 	}
 
 
