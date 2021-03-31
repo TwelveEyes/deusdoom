@@ -16,6 +16,10 @@ class DD_Aug_SpyDrone : DD_Augmentation
 	array<Actor> mark_objs;
 	array<int> mark_timers;
 
+	// Mouse sensitivity CVARs cache
+	double msens_x;
+	double msens_yaw;
+
 	override TextureID get_ui_texture(bool state)
 	{
 		return state ? tex_on : tex_off;
@@ -100,6 +104,10 @@ class DD_Aug_SpyDrone : DD_Augmentation
 				toggle();
 				return;
 			}
+
+			msens_x = CVar.getCVar("m_sensitivity_x").getFloat();
+			msens_yaw = CVar.getCVar("m_yaw").getFloat();
+
 			if(drone_actor)
 				drone_actor.die(null, null);
 			if(owner.countInv("DD_BioelectricEnergy") <= 1)
@@ -319,7 +327,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			}
 			else if(e.type == InputEvent.Type_Mouse)
 			{
-				EventHandler.sendNetworkEvent("dd_drone", 3, (int)(-e.mouseX / 90.0 * 10000));
+				EventHandler.sendNetworkEvent("dd_drone", 3, (int)(-e.mouseX / 90.0 * msens_x * msens_yaw * 10000));
 				return true;
 			}
 		}
@@ -396,7 +404,6 @@ class DD_SpyDrone : Actor
 				* (0.1 + 0.05 * (parent_aug.getRealLevel() - 1)); }
 	vector3 getMaxVel() { return (1.0, 1.0, 0.4)
 				* (6.0 + 4.0 * (parent_aug.getRealLevel() - 1)); }
-	double getTurnMult() { return 1.75 + 0.5 * (parent_aug.getRealLevel() - 1); }
 
 	int getMarkTime() { return 35 * 25 + 20 * (parent_aug.getRealLevel() - 1);  }
 
@@ -434,7 +441,7 @@ class DD_SpyDrone : Actor
 				else
 					A_ChangeVelocity(vel.x, vel.y, 0, CVF_REPLACE);
 
-				A_SetAngle(angle + act_queue.ang * getTurnMult());
+				A_SetAngle(angle + act_queue.ang);
 				act_queue.ang = 0;
 
 				// Trying to use a line if queued
