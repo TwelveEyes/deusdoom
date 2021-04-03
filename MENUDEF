@@ -152,6 +152,7 @@ OptionMenu "DD_Options"
 		StaticText "ZikShadow - extensive playtesting", White
 		StaticText "Sledge - suggesting ideas", White
 		StaticText "D2Icarus - finding a very interesting bug", White
+		StaticText "Mohl - finding bugs", White
 		StaticText "IKA - finding a bug", White
 		StaticText "Ryuhi - suggesting ideas", White
 		StaticText "silentw - playtesting", White
