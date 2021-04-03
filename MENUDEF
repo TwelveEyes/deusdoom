@@ -147,9 +147,11 @@ OptionMenu "DD_Options"
 		StaticText ""
 		StaticText "SPECIAL THANKS TO:", Purple
 		StaticText "Yholl - extensive playtesting, finding bugs, suggesting ideas", White
+		StaticText "KeksDose - for making a wondeful libeye code library", White
 		StaticText "KarolineDianne - suggesting ideas", White
 		StaticText "ZikShadow - extensive playtesting", White
 		StaticText "Sledge - suggesting ideas", White
+		StaticText "D2Icarus - finding a very interesting bug", White
 		StaticText "IKA - finding a bug", White
 		StaticText "Ryuhi - suggesting ideas", White
 		StaticText "silentw - playtesting", White

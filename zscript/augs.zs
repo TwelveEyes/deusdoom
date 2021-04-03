@@ -90,7 +90,7 @@ class DD_Augmentation : Inventory
 		if(enabled)
 		{
 			if(owner.countInv("DD_BioelectricEnergy") == 0){
-				enabled = false;
+				toggle();
 				return;
 			}
 			if(owner.health <= 0){

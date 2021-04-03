@@ -6,6 +6,11 @@ class DD_ProgressionTracker : Inventory
 
 	const item_maxvel = 3.0;
 
+	default
+	{
+		+DONTGIB;
+	}
+
 
 	override void travelled()
 	{
