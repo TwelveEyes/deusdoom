@@ -66,7 +66,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 		if(RecognitionUtils.damageIsBallistic(inflictor, source, damageType, flags, protfact_ml))
 		{
 			newDamage = damage * (1 - getProtectionFactor() * protfact_ml);
-			DD_AugsHolder aughld = DD_AugsHolder(players[consoleplayer].mo.findInventory("DD_AugsHolder"));
+			DD_AugsHolder aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
 			aughld.absorbtion_msg = String.Format("%.0f%% ABSORB", getProtectionFactor()*100*protfact_ml);
 			aughld.absorbtion_msg_timer = 35 * 2;
 		}
