@@ -7,7 +7,7 @@ struct DD_Aug_AgilityEnhancement_Queue
 	double vwheight_prev;
 	double vwheight_delta;
 
-	int hdest_telehack_timer; // timer for keeping bTeleport flag of owner true
+	int falldmg_immune_timer;
 }
 class DD_Aug_AgilityEnhancement : DD_Augmentation
 {
@@ -24,6 +24,8 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	int dash_cd;
 	const vwheight_time = 20;
 	const vwheight_time_coff = 0.30;
+
+	const falldmg_immune_time = 20;
 
 	bool use_doubletap_scheme; // keeps the value of dd_dash_on_doubletap CVAR between toggles
 	int dash_tap_time; // also keeps a value of dd_dash_doubletap_timer CVAR
@@ -103,11 +105,6 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		if(!owner || !(owner is "PlayerPawn"))
 			return;
 
-		if(queue.hdest_telehack_timer > 0)
-			--queue.hdest_telehack_timer;
-		else
-			owner.bTeleport = false;
-
 		if(queue.vwheight_timer > 0){
 			--queue.vwheight_timer;
 
@@ -147,13 +144,8 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		for(uint i = 0; i < 5; ++i)
 		{
 			if(dash_cd == 0 && queue.dashvel[i].length() > 0){
-
-				if(DD_ModChecker.isLoaded_HDest()){
-					// very ugly hack based on HDest calculation of velocity that player has in order to inflict falling damage.
-					// basically, if a player has bTeleport flag, impact damage is not dealt at all.
-					owner.bTeleport = true;
-					queue.hdest_telehack_timer = getDashVel() * 2.5;
-				}
+				if(DD_ModChecker.isLoaded_HDest())
+					queue.falldmg_immune_timer = falldmg_immune_time;
 
 				owner.A_ChangeVelocity(queue.dashvel[i].x, queue.dashvel[i].y, queue.dashvel[i].z, CVF_RELATIVE);
 				dash_cd = getDashCD();
@@ -172,7 +164,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	{
 		// Hdest compat for preventing player from taking "falling" damage when dashing
 		if(damageType == "falling"){
-			if(damage <= getImpactThreshold())
+			if(damage <= getImpactThreshold() || queue.falldmg_immune_timer > 0)
 				newDamage = 0;
 			else
 				newDamage = damage * (1 - getImpactNegationFactor());
