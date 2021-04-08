@@ -131,8 +131,8 @@ class DD_SpawnHandler : StaticEventHandler
 	// -----------------------------------
 
 	// Multipliers for various events
-	const pointsml_killed_hp = 0.15;
-	const pointsml_killed_hp_boss = 0.05;
+	const pointsml_killed_hp = 0.2;
+	const pointsml_killed_hp_boss = 0.1;
 
 	// Constants for rewarding exiting a level
 	const pointsamt_exit_lvl = 350;
@@ -141,11 +141,11 @@ class DD_SpawnHandler : StaticEventHandler
 
 	// Set amount of points needed to gain an item
 	double points_global_mult;
-	const points_for_cell = 425;
+	const points_for_cell = 400;
 	double points_for_cell_mult;
-	const points_for_upgrade = 2500;
+	const points_for_upgrade = 2100;
 	double points_for_upgrade_mult;
-	const points_for_aug = 5000;
+	const points_for_aug = 4550;
 	double points_for_aug_mult;
 	const points_for_aug_first_ml = 0.05;
 
