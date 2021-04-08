@@ -36,8 +36,11 @@ class DD_AugmentationUpgradeCanister : Inventory
 
 		while(queue.toupgrade.size() > 0)
 		{
-			owner.TakeInventory("DD_AugmentationUpgradeCanister", 1);
-			aughld.augs[queue.toupgrade[0]].level++;
+			if(aughld.augs[queue.toupgrade[0]].level < 4)
+			{
+				owner.TakeInventory("DD_AugmentationUpgradeCanister", 1);
+				aughld.augs[queue.toupgrade[0]].level++;
+			}
 			queue.toupgrade.Delete(0);
 		}
 	}
