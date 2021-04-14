@@ -71,9 +71,9 @@ class DD_AugmentationUpgradeCanister : Inventory
 			return false;
 		if(aughld.augs[aug_slot].level >= aughld.augs[aug_slot].max_level)
 			return false;
-		if(plr.countInv("DD_AugmentationUpgradeCanister") < cnst_instance.queue.toupgrade.size())
-			return false;
 		if(!cnst_instance)
+			return false;
+		if(plr.countInv("DD_AugmentationUpgradeCanister") < cnst_instance.queue.toupgrade.size())
 			return false;
 
 		cnst_instance.queue.toupgrade.push(aug_slot);
