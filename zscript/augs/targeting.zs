@@ -112,7 +112,8 @@ class DD_Aug_Targeting : DD_Augmentation
 		look_tracer.source = owner;
 
 		vector3 dir = (AngleToVector(owner.angle, cos(owner.pitch)), -sin(owner.pitch));
-		look_tracer.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, dir, 999999.0, 0);
+		
+		look_tracer.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, dir, PLAYERMISSILERANGE, 0);
 
 		target_obj = look_tracer.hit_obj;
 		string ss = "look";
@@ -263,7 +264,12 @@ class DD_Targeting_Tracer : LineTracer
 			hit_obj = results.hitActor;
 			return TRACE_Stop;
 		}
-		if(results.hitType == TRACE_HitWall || results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling){
+		if(results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling){
+			return TRACE_Stop;
+		}
+		if(results.hitType == TRACE_HitWall){
+			if(results.tier == TIER_Middle && results.hitLine.flags & Line.ML_TWOSIDED > 0)
+				return TRACE_Skip;
 			return TRACE_Stop;
 		}
 		return TRACE_Skip;

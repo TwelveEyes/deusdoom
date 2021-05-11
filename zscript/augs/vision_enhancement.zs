@@ -244,6 +244,8 @@ class DD_VisionEnhancement_SightTracer : LineTracer
 	{
 		if(results.hitType == TRACE_HitActor && results.hitActor == ignore)
 			return TRACE_Skip;
+		if(results.hitType == TRACE_HitWall && results.tier == TIER_Middle && results.hitLine.flags & Line.ML_TWOSIDED > 0)
+			return TRACE_Skip;
 		if(results.hitType == TRACE_HitWall || results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling
 		   || results.hitActor == seek){
 			if(results.hitType != TRACE_HitActor)
