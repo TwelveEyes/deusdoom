@@ -235,7 +235,7 @@ class DD_AugsHolder : Inventory
 		}
 
 		// # HD Compat #
-		if(DD_ModChecker.isLoaded_HDest() && passive && inflictor){
+		if(DD_ModChecker.isLoaded_HDest() && passive && inflictor && damage > 0){
 			string infname = inflictor.getClassName();
 			if(infname.left(3) == "HDB") // should probably fix this later on
 			{
