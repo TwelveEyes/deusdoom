@@ -36,3 +36,6 @@ user float dd_targeting_info_offy = 0.0;
 
 user float dd_spy_drone_cam_offx = 0.0;
 user float dd_spy_drone_cam_offy = 0.0;
+
+
+server string dd_ach_finished = "";

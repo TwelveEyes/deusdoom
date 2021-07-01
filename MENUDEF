@@ -10,6 +10,7 @@ OptionMenu "DD_Options"
 	StaticText	"DeusDoom options", Purple
 	Submenu		"Controls",		"DD_Controls"
 	Submenu		"Settings",		"DD_Settings"
+	Submenu		"Achivements",		"DD_Achievements"
 	Submenu		"Credits",		"DD_Credits"
 }
 
@@ -136,6 +137,11 @@ OptionMenu "DD_Options"
 		StaticText "Various gameplay options that do not fit any particular category.", Green
 		StaticText "Be careful: they might break your game (and might be too funny).", Green
 		Option "Enable toggling augmentations while being dead", "dd_toggle_augs_dead", "OnOff"
+	}
+
+	OptionMenu "DD_Achievements"
+	{
+		Class "DD_AchievementMenu"
 	}
 
 	OptionMenu "DD_Credits"

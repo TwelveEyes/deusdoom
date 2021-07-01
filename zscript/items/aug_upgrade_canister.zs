@@ -38,8 +38,10 @@ class DD_AugmentationUpgradeCanister : Inventory
 		{
 			if(aughld.augs[queue.toupgrade[0]].level < 4)
 			{
-				owner.TakeInventory("DD_AugmentationUpgradeCanister", 1);
 				aughld.augs[queue.toupgrade[0]].level++;
+				let mngr = DD_AchievementManager.getInstance();
+				mngr.augUpgraded(PlayerPawn(owner), aughld.augs[queue.toupgrade[0]]);
+				owner.TakeInventory("DD_AugmentationUpgradeCanister", 1);
 			}
 			queue.toupgrade.Delete(0);
 		}

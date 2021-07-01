@@ -18,3 +18,12 @@ ui/menu/press				MENUPRES
 
 
 play/aug/loop				AUGLOOP
+
+
+achievement/generic			sounds/achievement/generic.mp3
+
+achievement/vision_is_augmented		sounds/achievement/vision_is_augmented.mp3
+achievement/the_dragon_tooth_right	sounds/achievement/the_dragon_tooth_right.ogg
+achievement/prepared_to_perform_duties	sounds/achievement/prepared_to_perform_duties.mp3
+achievement/prepared_for_a_fight	sounds/achievement/prepared_for_a_fight.ogg
+achievement/at_your_service		sounds/achievement/at_your_service.ogg

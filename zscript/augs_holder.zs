@@ -130,7 +130,10 @@ class DD_AugsHolder : Inventory
 		// Installation queue
 		while(ui_queue.aug_install_queue.size() > 0)
 		{
-			installAug(ui_queue.aug_install_queue[0]);
+			if(installAug(ui_queue.aug_install_queue[0])){
+				let mngr = DD_AchievementManager.getInstance();
+				mngr.augInstalled(PlayerPawn(owner), self, ui_queue.aug_install_queue[0]);
+			}
 			ui_queue.aug_install_queue.delete(0);
 		}
 		// Dropping queue
@@ -223,15 +226,27 @@ class DD_AugsHolder : Inventory
 		// Invoking damage events
 		if(passive){
 			for(uint i = 0; i < augs.size(); ++i)
-				if(augs[i])
+				if(augs[i]){
+					int prevdmg = newDamage;
 					augs[i].ownerDamageTaken(damage, damageType, newDamage,
 									inflictor, source, flags);
+					if(newDamage < prevdmg){
+						let mngr = DD_AchievementManager(StaticEventHandler.find("DD_AchievementManager"));
+						mngr.damageAbsorbed(PlayerPawn(owner), prevdmg - newDamage, augs[i]);
+					}
+				}
 		}
 		else{
 			for(uint i = 0; i < augs.size(); ++i)
-				if(augs[i])
+				if(augs[i]){
+					int prevdmg = newDamage;
 					augs[i].ownerDamageDealt(damage, damageType, newDamage,
 									inflictor, source, flags);
+					if(newDamage > prevdmg){
+						let mngr = DD_AchievementManager(StaticEventHandler.find("DD_AchievementManager"));
+						mngr.damageBoosted(PlayerPawn(owner), newDamage - prevdmg, augs[i]);
+					}
+				}
 		}
 
 		// # HD Compat #

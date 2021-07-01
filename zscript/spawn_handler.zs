@@ -30,6 +30,7 @@ class DD_ProgressionTracker : Inventory
 	void givePoints(int amount)
 	{
 		points_augs += amount;
+		console.printf("%d", points_augs);
 		if(owner is "PlayerPawn" && owner.countInv("DD_AugsHolder") > 0)
 		{
 			DD_AugsHolder aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
@@ -164,12 +165,17 @@ class DD_SpawnHandler : StaticEventHandler
 
 	const item_maxvel = 5.0;
 
-	override void onRegister()
+	protected void updateCVars()
 	{
 		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
 		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
 		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
 		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
+	}
+
+	override void onRegister()
+	{
+		updateCVars();
 		setOrder(1001);
 	}
 
@@ -227,19 +233,19 @@ class DD_SpawnHandler : StaticEventHandler
 		}
 	}
 
+
+	override void NewGame()
+	{
+		transfer_items.clear();
+	}
+
 	override void WorldLoaded(WorldEvent e)
 	{
-		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
-		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
-		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
-		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
+		updateCVars();
 	}
 	override void WorldUnloaded(WorldEvent e)
 	{
-		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
-		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
-		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
-		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
+		updateCVars();
 
 		if(e.isSaveGame)
 			return;

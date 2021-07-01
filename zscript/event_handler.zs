@@ -273,8 +273,8 @@ class DD_EventHandler : StaticEventHandler
 							case 0: spyaug.drone_actor.queueAccelerationX(double(e.args[1]) / 10000); break;
 							case 1: spyaug.drone_actor.queueAccelerationY(double(e.args[1]) / 10000); break;
 							case 2: spyaug.drone_actor.queueAccelerationZ(double(e.args[1]) / 10000); break;
-							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000);
-							case 4: spyaug.drone_actor.queueUse();
+							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000); break;
+							case 4: spyaug.drone_actor.queueUse(); break;
 						}
 					}
 				}

@@ -377,6 +377,9 @@ class DD_SpyDrone : Actor
 	DD_SpyDroneMode mode;
 	DD_SpyDrone_Queue act_queue;
 
+	// Achievement stuff
+	array<Line> triggered_lines;
+
 	// Physical speed properties
 
 	default
@@ -454,10 +457,26 @@ class DD_SpyDrone : Actor
 					if(usetracer.results.hitLine
 					&& usetracer.results.hitLine.special != 243
 					&& usetracer.results.hitLine.special != 244)
-					// Preventing drone from activating exit lines
-						usetracer.results.hitLine
+					{
+						// Preventing drone from activating exit lines
+						if(usetracer.results.hitLine
 							.activate(self.master, usetracer.results.side, 
-							SPAC_PlayerActivate);
+							SPAC_PlayerActivate)
+						&& triggered_lines.size() <= 5)
+						{
+							int was_triggered = 0;
+							for(uint j = 0; j < triggered_lines.size(); ++j)
+								if(triggered_lines[j].v1 == usetracer.results.hitLine.v1
+								&& triggered_lines[j].v2 == usetracer.results.hitLine.v2)
+									{was_triggered = 1; break; }
+							if(!was_triggered || triggered_lines.size() == 0)
+							{
+								triggered_lines.push(usetracer.results.hitLine);
+								if(triggered_lines.size() >= 5)
+									DD_AchievementManager.getInstance().triggerAchievement(PlayerPawn(self.master), "DD_Achievement_AtYourService");
+							}
+						}
+					}
 				}
 
 

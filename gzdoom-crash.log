@@ -1,0 +1,281 @@
+*** Fatal Error ***
+Segmentation fault (signal 11)
+Address: (nil)
+
+System: Linux cyb3rc001 5.8.0-48-generic #54~20.04.1-Ubuntu SMP Sat Mar 20 13:40:25 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+
+GZDoom version g4.5.0 (3037c08840f209f9f6b6d7e6c2c69632472a5d54)
+Command line: /opt/gzdoom/gzdoom -file .
+Wad 0: gzdoom.pk3
+Wad 1: game_support.pk3
+Wad 2: Doom2.wad
+Wad 3: ./
+
+Not in a level.
+
+Executing: gdb --quiet --batch --command=gdb-respfile-9weWDS
+[New LWP 28340]
+[New LWP 28341]
+[New LWP 28342]
+[New LWP 28343]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f2af8ad4dff in __GI___wait4 (pid=28350, stat_loc=0x56080f708e74, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:27
+
+* Loaded Libraries
+From                To                  Syms Read   Shared Object Library
+0x00007f2af9479640  0x00007f2af954d1f2  Yes (*)     /lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+0x00007f2af9436ae0  0x00007f2af94464d5  Yes         /lib/x86_64-linux-gnu/libpthread.so.0
+0x00007f2af9422720  0x00007f2af9425d70  Yes         /lib/x86_64-linux-gnu/librt.so.1
+0x00007f2af9401280  0x00007f2af9411e2b  Yes (*)     /lib/x86_64-linux-gnu/libz.so.1
+0x00007f2af93e9240  0x00007f2af93f5ec6  Yes (*)     /lib/x86_64-linux-gnu/libbz2.so.1.0
+0x00007f2af93e0220  0x00007f2af93e1179  Yes         /lib/x86_64-linux-gnu/libdl.so.2
+0x00007f2af8df22e0  0x00007f2af8ff324e  Yes (*)     /opt/gzdoom/libzmusic.so.1
+0x00007f2af8c3e3c0  0x00007f2af8ce4f28  Yes         /lib/x86_64-linux-gnu/libm.so.6
+0x00007f2af8bf06d0  0x00007f2af8c1a5d2  Yes (*)     /lib/x86_64-linux-gnu/libgomp.so.1
+0x00007f2af8a14630  0x00007f2af8b8921f  Yes         /lib/x86_64-linux-gnu/libc.so.6
+0x00007f2af95d8100  0x00007f2af95fa5e4  Yes (*)     /lib64/ld-linux-x86-64.so.2
+0x00007f2af891a380  0x00007f2af89a7046  Yes (*)     /lib/x86_64-linux-gnu/libasound.so.2
+0x00007f2af88a4f60  0x00007f2af88d2ab1  Yes (*)     /lib/x86_64-linux-gnu/libpulse.so.0
+0x00007f2af87700c0  0x00007f2af87f95b6  Yes (*)     /lib/x86_64-linux-gnu/libX11.so.6
+0x00007f2af87435e0  0x00007f2af874d84e  Yes (*)     /lib/x86_64-linux-gnu/libXext.so.6
+0x00007f2af8732660  0x00007f2af8737288  Yes (*)     /lib/x86_64-linux-gnu/libXcursor.so.1
+0x00007f2af87280f0  0x00007f2af8728a31  Yes (*)     /lib/x86_64-linux-gnu/libXinerama.so.1
+0x00007f2af8711460  0x00007f2af871bd1b  Yes (*)     /lib/x86_64-linux-gnu/libXi.so.6
+0x00007f2af8701360  0x00007f2af87076b9  Yes (*)     /lib/x86_64-linux-gnu/libXrandr.so.2
+0x00007f2af86f8140  0x00007f2af86f8d5d  Yes (*)     /lib/x86_64-linux-gnu/libXss.so.1
+0x00007f2af86f0240  0x00007f2af86f29f9  Yes (*)     /lib/x86_64-linux-gnu/libXxf86vm.so.1
+0x00007f2af86e8080  0x00007f2af86e8219  Yes (*)     /lib/x86_64-linux-gnu/libwayland-egl.so.1
+0x00007f2af86d45c0  0x00007f2af86d9345  Yes (*)     /lib/x86_64-linux-gnu/libwayland-client.so.0
+0x00007f2af86c1460  0x00007f2af86c2ff7  Yes (*)     /lib/x86_64-linux-gnu/libwayland-cursor.so.0
+0x00007f2af867b560  0x00007f2af8696703  Yes (*)     /lib/x86_64-linux-gnu/libxkbcommon.so.0
+0x00007f2af8669480  0x00007f2af866d539  Yes (*)     /lib/x86_64-linux-gnu/libogg.so.0
+0x00007f2af863a480  0x00007f2af8650c4d  Yes (*)     /lib/x86_64-linux-gnu/libvorbis.so.0
+0x00007f2af859b0c0  0x00007f2af859d77e  Yes (*)     /lib/x86_64-linux-gnu/libvorbisenc.so.2
+0x00007f2af854f800  0x00007f2af8577c33  Yes (*)     /lib/x86_64-linux-gnu/libFLAC.so.8
+0x00007f2af84ea600  0x00007f2af85304ff  Yes (*)     /lib/x86_64-linux-gnu/libopus.so.0
+0x00007f2af839d1a0  0x00007f2af8484e32  Yes (*)     /lib/x86_64-linux-gnu/libstdc++.so.6
+0x00007f2af82e25e0  0x00007f2af82f3045  Yes (*)     /lib/x86_64-linux-gnu/libgcc_s.so.1
+0x00007f2af82723c0  0x00007f2af82b6f52  Yes (*)     /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so
+0x00007f2af8212eb0  0x00007f2af823f915  Yes (*)     /lib/x86_64-linux-gnu/libdbus-1.so.3
+0x00007f2af81e2620  0x00007f2af81f5699  Yes (*)     /lib/x86_64-linux-gnu/libxcb.so.1
+0x00007f2af7fc8a60  0x00007f2af7fceab5  Yes (*)     /lib/x86_64-linux-gnu/libXrender.so.1
+0x00007f2af7fc1300  0x00007f2af7fc36ea  Yes (*)     /lib/x86_64-linux-gnu/libXfixes.so.3
+0x00007f2af7fb1230  0x00007f2af7fb6a46  Yes (*)     /lib/x86_64-linux-gnu/libffi.so.7
+0x00007f2af7f0fdf0  0x00007f2af7f81940  Yes (*)     /lib/x86_64-linux-gnu/libsystemd.so.0
+0x00007f2af7ef2b20  0x00007f2af7ef688c  Yes (*)     /lib/x86_64-linux-gnu/libwrap.so.0
+0x00007f2af7e76fa0  0x00007f2af7ec8ed5  Yes (*)     /lib/x86_64-linux-gnu/libsndfile.so.1
+0x00007f2af7c681d0  0x00007f2af7c6a848  Yes (*)     /lib/x86_64-linux-gnu/libasyncns.so.0
+0x00007f2af7c60360  0x00007f2af7c61052  Yes (*)     /lib/x86_64-linux-gnu/libXau.so.6
+0x00007f2af7c591a0  0x00007f2af7c5aa03  Yes (*)     /lib/x86_64-linux-gnu/libXdmcp.so.6
+0x00007f2af7c2a3c0  0x00007f2af7c413a6  Yes (*)     /lib/x86_64-linux-gnu/liblzma.so.5
+0x00007f2af7c01120  0x00007f2af7c1a88b  Yes (*)     /lib/x86_64-linux-gnu/liblz4.so.1
+0x00007f2af7aeb580  0x00007f2af7bb89dc  Yes (*)     /lib/x86_64-linux-gnu/libgcrypt.so.20
+0x00007f2af7ac4d20  0x00007f2af7ad3711  Yes         /lib/x86_64-linux-gnu/libnsl.so.1
+0x00007f2af7aa3720  0x00007f2af7ab211c  Yes         /lib/x86_64-linux-gnu/libresolv.so.2
+0x00007f2af7a83e40  0x00007f2af7a91e69  Yes (*)     /lib/x86_64-linux-gnu/libbsd.so.0
+0x00007f2af7a5bc60  0x00007f2af7a6da92  Yes (*)     /lib/x86_64-linux-gnu/libgpg-error.so.0
+0x00007f2af6adddf0  0x00007f2af6e3ae96  Yes (*)     /lib/x86_64-linux-gnu/libgtk-3.so.0
+0x00007f2af696f2d0  0x00007f2af69e938b  Yes (*)     /lib/x86_64-linux-gnu/libgdk-3.so.0
+0x00007f2af95c8440  0x00007f2af95c9323  Yes (*)     /lib/x86_64-linux-gnu/libgmodule-2.0.so.0
+0x00007f2af692d620  0x00007f2af6933230  Yes (*)     /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0
+0x00007f2af95bb100  0x00007f2af95bc26d  Yes (*)     /lib/x86_64-linux-gnu/libcairo-gobject.so.2
+0x00007f2af6813cc0  0x00007f2af68df487  Yes (*)     /lib/x86_64-linux-gnu/libcairo.so.2
+0x00007f2af67de660  0x00007f2af67f3223  Yes (*)     /lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0
+0x00007f2af67b2d40  0x00007f2af67c0a8f  Yes (*)     /lib/x86_64-linux-gnu/libatk-1.0.so.0
+0x00007f2af677dff0  0x00007f2af6793022  Yes (*)     /lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0
+0x00007f2af6697220  0x00007f2af66fc19e  Yes (*)     /lib/x86_64-linux-gnu/libepoxy.so.0
+0x00007f2af6619100  0x00007f2af661c026  Yes (*)     /lib/x86_64-linux-gnu/libfribidi.so.0
+0x00007f2af646e240  0x00007f2af65792b6  Yes (*)     /lib/x86_64-linux-gnu/libgio-2.0.so.0
+0x00007f2af6417de0  0x00007f2af6420c1f  Yes (*)     /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0
+0x00007f2af63cf8c0  0x00007f2af63f2d14  Yes (*)     /lib/x86_64-linux-gnu/libpango-1.0.so.0
+0x00007f2af636de20  0x00007f2af63a2c7e  Yes (*)     /lib/x86_64-linux-gnu/libgobject-2.0.so.0
+0x00007f2af624cb20  0x00007f2af62ced02  Yes (*)     /lib/x86_64-linux-gnu/libglib-2.0.so.0
+0x00007f2af6130c70  0x00007f2af61f7182  Yes (*)     /lib/x86_64-linux-gnu/libharfbuzz.so.0
+0x00007f2af60e6fc0  0x00007f2af610a28e  Yes (*)     /lib/x86_64-linux-gnu/libfontconfig.so.1
+0x00007f2af602b790  0x00007f2af60aa205  Yes (*)     /lib/x86_64-linux-gnu/libfreetype.so.6
+0x00007f2af6018140  0x00007f2af6018b85  Yes (*)     /lib/x86_64-linux-gnu/libXcomposite.so.1
+0x00007f2af60101a0  0x00007f2af6010b1b  Yes (*)     /lib/x86_64-linux-gnu/libXdamage.so.1
+0x00007f2af5f71300  0x00007f2af5ff4384  Yes (*)     /lib/x86_64-linux-gnu/libpixman-1.so.0
+0x00007f2af5f34510  0x00007f2af5f5829d  Yes (*)     /lib/x86_64-linux-gnu/libpng16.so.16
+0x00007f2af5f280e0  0x00007f2af5f28c37  Yes (*)     /lib/x86_64-linux-gnu/libxcb-shm.so.0
+0x00007f2af5f1c120  0x00007f2af5f20f52  Yes (*)     /lib/x86_64-linux-gnu/libxcb-render.so.0
+0x00007f2af5eefb60  0x00007f2af5f03b5c  Yes (*)     /lib/x86_64-linux-gnu/libatspi.so.0
+0x00007f2af5e8bb80  0x00007f2af5ec7b52  Yes (*)     /lib/x86_64-linux-gnu/libmount.so.1
+0x00007f2af5e56040  0x00007f2af5e6d4fd  Yes (*)     /lib/x86_64-linux-gnu/libselinux.so.1
+0x00007f2af5e41320  0x00007f2af5e44e87  Yes (*)     /lib/x86_64-linux-gnu/libthai.so.0
+0x00007f2af5dc92a0  0x00007f2af5e1986d  Yes (*)     /lib/x86_64-linux-gnu/libpcre.so.3
+0x00007f2af5d9a280  0x00007f2af5dbb182  Yes (*)     /lib/x86_64-linux-gnu/libgraphite2.so.3
+0x00007f2af5d6b230  0x00007f2af5d864b7  Yes (*)     /lib/x86_64-linux-gnu/libexpat.so.1
+0x00007f2af5d59580  0x00007f2af5d5cf71  Yes (*)     /lib/x86_64-linux-gnu/libuuid.so.1
+0x00007f2af5d0a680  0x00007f2af5d3e252  Yes (*)     /lib/x86_64-linux-gnu/libblkid.so.1
+0x00007f2af5c712e0  0x00007f2af5cd4d8e  Yes (*)     /lib/x86_64-linux-gnu/libpcre2-8.so.0
+0x00007f2af5c61220  0x00007f2af5c64730  Yes (*)     /lib/x86_64-linux-gnu/libdatrie.so.1
+0x00007f2af55f5d90  0x00007f2af5611382  Yes (*)     /usr/lib/x86_64-linux-gnu/gio/modules/libgvfsdbus.so
+0x00007f2af55bb280  0x00007f2af55d2b89  Yes (*)     /usr/lib/x86_64-linux-gnu/gvfs/libgvfscommon.so
+0x00007f2af72494e0  0x00007f2af724b584  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-3.0/modules/libcanberra-gtk-module.so
+0x00007f2af72413f0  0x00007f2af72429e6  Yes (*)     /lib/x86_64-linux-gnu/libcanberra-gtk3.so.0
+0x00007f2af452a3e0  0x00007f2af4533a9a  Yes (*)     /lib/x86_64-linux-gnu/libcanberra.so.0
+0x00007f2af7231690  0x00007f2af7235be0  Yes (*)     /lib/x86_64-linux-gnu/libvorbisfile.so.3
+0x00007f2af448b860  0x00007f2af4498375  Yes (*)     /lib/x86_64-linux-gnu/libtdb.so.1
+0x00007f2af45194a0  0x00007f2af451d7b6  Yes (*)     /lib/x86_64-linux-gnu/libltdl.so.7
+0x00007f2af41994d0  0x00007f2af419c64a  Yes (*)     /usr/lib/x86_64-linux-gnu/libcanberra-0.30/libcanberra-pulse.so
+0x00007f2aef722870  0x00007f2aef76f151  Yes (*)     /lib/x86_64-linux-gnu/libopenal.so.1
+0x00007f2af411a590  0x00007f2af4120e67  Yes (*)     /lib/x86_64-linux-gnu/libsndio.so.7.0
+0x00007f2af404be60  0x00007f2af407bc48  Yes (*)     /usr/local/lib/libjack.so.0
+(*): Shared library is missing debugging information.
+
+* Threads
+  Id   Target Id                                       Frame 
+* 1    Thread 0x7f2af941c080 (LWP 28339) "gzdoom"      0x00007f2af8ad4dff in __GI___wait4 (pid=28350, stat_loc=0x56080f708e74, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:27
+  2    Thread 0x7f2af7a56700 (LWP 28340) "gzdoom"      futex_wait_cancelable (private=<optimized out>, expected=0, futex_word=0x56080f845fc0 <renderPool+256>) at ../sysdeps/nptl/futex-internal.h:183
+  3    Thread 0x7f2af55a6700 (LWP 28341) "gmain"       0x00007f2af8b04aff in __GI___poll (fds=0x560811e01ee0, nfds=1, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+  4    Thread 0x7f2af4da5700 (LWP 28342) "gdbus"       0x00007f2af8b04aff in __GI___poll (fds=0x560811e148f0, nfds=2, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+  5    Thread 0x7f2aeffff700 (LWP 28343) "threaded-ml" 0x00007f2af8b04aff in __GI___poll (fds=0x7f2adc007170, nfds=3, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+
+* FPU Status
+  R7: Empty   0x00000000000000000000
+  R6: Empty   0x00000000000000000000
+  R5: Empty   0x00000000000000000000
+  R4: Empty   0x00000000000000000000
+  R3: Empty   0x00000000000000000000
+  R2: Empty   0x00000000000000000000
+  R1: Empty   0x00000000000000000000
+=>R0: Empty   0x00000000000000000000
+
+Status Word:         0x0000                                            
+                       TOP: 0
+Control Word:        0x037f   IM DM ZM OM UM PM
+                       PC: Extended Precision (64-bits)
+                       RC: Round to nearest
+Tag Word:            0xffff
+Instruction Pointer: 0x00:0x00000000
+Operand Pointer:     0x00:0x00000000
+Opcode:              0x0000
+
+* Registers
+rax            0xfffffffffffffe00  -512
+rbx            0x6ebe              28350
+rcx            0x7f2af8ad4dff      139822537461247
+rdx            0x0                 0
+rsi            0x56080f708e74      94592618761844
+rdi            0x6ebe              28350
+rbp            0xb                 0xb
+rsp            0x56080f708e40      0x56080f708e40
+r8             0x0                 0
+r9             0x0                 0
+r10            0x0                 0
+r11            0x293               659
+r12            0x56080f708e74      94592618761844
+r13            0x56080f706340      94592618750784
+r14            0x14                20
+r15            0x1090              4240
+rip            0x7f2af8ad4dff      0x7f2af8ad4dff <__GI___wait4+95>
+eflags         0x293               [ CF AF SF IF ]
+cs             0x33                51
+ss             0x2b                43
+ds             0x0                 0
+es             0x0                 0
+fs             0x0                 0
+gs             0x0                 0
+
+* Backtrace
+
+Thread 5 (Thread 0x7f2aeffff700 (LWP 28343)):
+#0  0x00007f2af8b04aff in __GI___poll (fds=0x7f2adc007170, nfds=3, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+        resultvar = 18446744073709551100
+        sc_cancel_oldtype = 0
+#1  0x00007f2af88cc1d6 in  () at /lib/x86_64-linux-gnu/libpulse.so.0
+#2  0x00007f2af88bd841 in pa_mainloop_poll () at /lib/x86_64-linux-gnu/libpulse.so.0
+#3  0x00007f2af88bdec3 in pa_mainloop_iterate () at /lib/x86_64-linux-gnu/libpulse.so.0
+#4  0x00007f2af88bdf70 in pa_mainloop_run () at /lib/x86_64-linux-gnu/libpulse.so.0
+#5  0x00007f2af88cc11d in  () at /lib/x86_64-linux-gnu/libpulse.so.0
+#6  0x00007f2af82b267c in  () at /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-13.99.so
+#7  0x00007f2af9438609 in start_thread (arg=<optimized out>) at pthread_create.c:477
+        ret = <optimized out>
+        pd = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {139822391883520, 7812262126632344367, 140732582395502, 140732582395503, 140732582395504, 139822391881216, -7908491384784905425, -7908521587789620433}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = 0
+#8  0x00007f2af8b11293 in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+Thread 4 (Thread 0x7f2af4da5700 (LWP 28342)):
+#0  0x00007f2af8b04aff in __GI___poll (fds=0x560811e148f0, nfds=2, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+        resultvar = 18446744073709551100
+        sc_cancel_oldtype = 0
+#1  0x00007f2af628136e in  () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#2  0x00007f2af62816f3 in g_main_loop_run () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#3  0x00007f2af654df8a in  () at /lib/x86_64-linux-gnu/libgio-2.0.so.0
+#4  0x00007f2af62aaad1 in  () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#5  0x00007f2af9438609 in start_thread (arg=<optimized out>) at pthread_create.c:477
+        ret = <optimized out>
+        pd = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {139822473303808, 7812262126632344367, 140732582392558, 140732582392559, 140732582392704, 139822473301504, -7908511471273206993, -7908521587789620433}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = 0
+#6  0x00007f2af8b11293 in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+Thread 3 (Thread 0x7f2af55a6700 (LWP 28341)):
+#0  0x00007f2af8b04aff in __GI___poll (fds=0x560811e01ee0, nfds=1, timeout=-1) at ../sysdeps/unix/sysv/linux/poll.c:29
+        resultvar = 18446744073709551100
+        sc_cancel_oldtype = 0
+#1  0x00007f2af628136e in  () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#2  0x00007f2af62814a3 in g_main_context_iteration () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#3  0x00007f2af62814f1 in  () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#4  0x00007f2af62aaad1 in  () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#5  0x00007f2af9438609 in start_thread (arg=<optimized out>) at pthread_create.c:477
+        ret = <optimized out>
+        pd = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {139822481696512, 7812262126632344367, 140732582392126, 140732582392127, 140732582392272, 139822481694208, -7908512570247963857, -7908521587789620433}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = 0
+#6  0x00007f2af8b11293 in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+Thread 2 (Thread 0x7f2af7a56700 (LWP 28340)):
+#0  futex_wait_cancelable (private=<optimized out>, expected=0, futex_word=0x56080f845fc0 <renderPool+256>) at ../sysdeps/nptl/futex-internal.h:183
+        __ret = -512
+        oldtype = 0
+        err = <optimized out>
+        spin = 0
+        buffer = {__routine = 0x7f2af943f050 <__condvar_cleanup_waiting>, __arg = 0x7f2af7a55c40, __canceltype = 0, __prev = 0x0}
+        cbuffer = {wseq = 0, cond = 0x56080f845f98 <renderPool+216>, mutex = 0x56080f845f70 <renderPool+176>, private = 0}
+        err = <optimized out>
+        g = 0
+        flags = <optimized out>
+        g1_start = <optimized out>
+        signals = <optimized out>
+        result = 0
+        wseq = 0
+        seq = 0
+#1  __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0x56080f845f70 <renderPool+176>, cond=0x56080f845f98 <renderPool+216>) at pthread_cond_wait.c:508
+        spin = 0
+        buffer = {__routine = 0x7f2af943f050 <__condvar_cleanup_waiting>, __arg = 0x7f2af7a55c40, __canceltype = 0, __prev = 0x0}
+        cbuffer = {wseq = 0, cond = 0x56080f845f98 <renderPool+216>, mutex = 0x56080f845f70 <renderPool+176>, private = 0}
+        err = <optimized out>
+        g = 0
+        flags = <optimized out>
+        g1_start = <optimized out>
+        signals = <optimized out>
+        result = 0
+        wseq = 0
+        seq = 0
+#2  __pthread_cond_wait (cond=0x56080f845f98 <renderPool+216>, mutex=0x56080f845f70 <renderPool+176>) at pthread_cond_wait.c:638
+#3  0x000056080f21f3bc in std::condition_variable::wait(std::unique_lock<std::mutex>&) ()
+#4  0x000056080eb70c2b in ctpl::thread_pool::set_thread(int)::{lambda()#1}::operator()() const ()
+#5  0x000056080f28d520 in  ()
+#6  0x00007f2af9438609 in start_thread (arg=<optimized out>) at pthread_create.c:477
+        ret = <optimized out>
+        pd = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {139822520166144, 7812262126632344367, 140732582401918, 140732582401919, 140732582401920, 139822520163840, -7908509744159483089, -7908521587789620433}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = 0
+#7  0x00007f2af8b11293 in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+Thread 1 (Thread 0x7f2af941c080 (LWP 28339)):
+#0  0x00007f2af8ad4dff in __GI___wait4 (pid=28350, stat_loc=0x56080f708e74, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:27
+        resultvar = 18446744073709551104
+        sc_cancel_oldtype = 0
+#1  0x000056080e9dddfc in  ()
+#2  0x00007f2af94443c0 in <signal handler called> () at /lib/x86_64-linux-gnu/libpthread.so.0
+#3  0x000056080ef7b7d6 in DObject::Destroy() ()
+#4  0x000056080ef84946 in DeinitMenus() ()
+#5  0x000056080ec0846f in D_Cleanup() ()
+#6  0x000056080ec0bb41 in GameMain() ()
+#7  0x000056080e9bf162 in main ()
+[Inferior 1 (process 28339) detached]

@@ -3,11 +3,11 @@
 enum UI_DrawFlags
 {
 	UI_Draw_FlipX = 1,
-	UI_Draw_FlipY = 2
+	UI_Draw_FlipY = 2,
+	UI_Draw_Grayscale = 4
 }
 class UI_Draw
 {
-
 	// Name: UI_Draw::texture
 	// Description:
 	// Draw a texture on screen within 320x200 resolution.
@@ -48,13 +48,13 @@ class UI_Draw
 		h = h / 200 * Screen.getHeight();
 		Screen.DrawTexture(id, false,
 					x, y,
-					//DTA_320X200, true,
 					DTA_LEFTOFFSETF, 0.0,
 					DTA_TOPOFFSETF, 0.0,
 					DTA_DESTWIDTHF, w,
 					DTA_DESTHEIGHTF, h,
 					DTA_FLIPX, flags & UI_Draw_FlipX,
-					DTA_FLIPY, flags & UI_Draw_FlipY);
+					DTA_FLIPY, flags & UI_Draw_FlipY,
+					DTA_DESATURATE, flags & UI_Draw_Grayscale ? 255 : 0);
 
 		return ret_val;
 	}
@@ -149,6 +149,32 @@ class UI_Draw
 					DTA_VIRTUALHEIGHTF, font_h * 200 / h,
 					DTA_KEEPRATIO, true
 					);
+	}
+
+	// Name: UI_Draw::str_wrap
+	// Description:
+	// Draws a string on screen within 320x200 resolution with wrapping.
+	// Arguments:
+	//	see UI_Draw::str() method for details
+	//	wrap_w - width to wrap around
+	static ui void str_wrap(Font font, string text, int clr, double x, double y, double w, double h,
+				double wrap_w)
+	{
+		int ty = y;
+		for(int c = 0; c < text.length();)
+		{
+			int wrap_ln;
+			for(wrap_ln = 1;
+				strWidth(font, text.mid(c, wrap_ln), w, h) <= wrap_w
+				&& c + wrap_ln < text.length();
+				++wrap_ln)
+				;
+			if(strWidth(font, text.mid(c, wrap_ln), w, h) > wrap_w)
+				wrap_ln--;
+			str(font, text.mid(c, wrap_ln), clr, x, ty, w, h);
+			ty += strHeight(font, text.mid(c, wrap_ln), w, h);
+			c += wrap_ln;
+		}
 	}
 
 
