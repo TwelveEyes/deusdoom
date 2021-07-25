@@ -61,11 +61,10 @@ class DD_Aug_GravitationalField : DD_Augmentation
 			return;
 
 		Actor obj;
-		ThinkerIterator it = ThinkerIterator.create();
-		while(obj = Actor(it.next()))
+		BlockThingsIterator it = BlockThingsIterator.Create(owner, getRange());
+		while(it.next())
 		{
-			if(obj.bMissile)
-				continue;
+			obj = it.thing;
 			if(owner.distance2D(obj) > getRange())
 				continue;
 			if(obj.vel.length() > getMaxVel())

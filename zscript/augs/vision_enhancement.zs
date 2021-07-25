@@ -152,9 +152,10 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 			proj_scr.beginProjection();
 
 			Actor obj;
-			ThinkerIterator it = ThinkerIterator.create();
-			while(obj = Actor(it.next()))
+			BlockThingsIterator it = BlockThingsIterator.Create(owner, getSonarRange());
+			while(it.next())
 			{
+				obj = it.thing;
 				if(!shouldReveal(obj))
 					continue;
 				if(owner.distance3D(obj) > getSonarRange())
