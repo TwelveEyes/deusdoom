@@ -114,6 +114,8 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 				continue;
 			if(owner.Distance3D(proj) > getRange() * 8.0)
 				continue;
+			if(proj.target == owner)	//don't detonate your own missiles lol
+				continue;
 			
 			if(RecognitionUtils.projCanBeDestroyed(proj, cd_ml)) {
 				if(owner.Distance3D(proj) > getRange()) {
