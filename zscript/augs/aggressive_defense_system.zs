@@ -103,30 +103,28 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 		if(destr_cd > 0)
 			--destr_cd;
 		Actor proj;
-		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT); //dunno if defining statnum as default helps performance, but can't hurt to add
+		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 		double cd_ml;
 		proj_dispx.clear();
 		proj_dispy.clear();
 		proj_dispz.clear();
 		while(proj = Actor(it.next()))
 		{
-			if(!proj.bMissile)		//unfortunately can't use BlockThingsIterator as missiles are +NOBLOCKMAP, so ignore anything not a missile in the list
+			if(!RecognitionUtils.projCanBeDestroyed(proj, cd_ml))
 				continue;
 			if(owner.Distance3D(proj) > getRange() * 8.0)
 				continue;
-			if(proj.target == owner)	//don't detonate your own missiles lol
+			if(proj.target == owner)
 				continue;
 			
-			if(RecognitionUtils.projCanBeDestroyed(proj, cd_ml)) {
-				if(owner.Distance3D(proj) > getRange()) {
-					proj_dispx.push(proj.pos.x);
-					proj_dispy.push(proj.pos.y);
-					proj_dispz.push(proj.pos.z);
-				}
-				else if (destr_cd == 0) {
-					proj.die(proj, proj);
-					destr_cd = getBaseCD() * cd_ml;
-				}
+			if(owner.Distance3D(proj) > getRange()) {
+				proj_dispx.push(proj.pos.x);
+				proj_dispy.push(proj.pos.y);
+				proj_dispz.push(proj.pos.z);
+			}
+			else if (destr_cd == 0) {
+				proj.die(proj, proj);
+				destr_cd = getBaseCD() * cd_ml;
 			}
 		}
 	}
