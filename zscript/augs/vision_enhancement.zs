@@ -160,6 +160,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 					continue;
 				if(owner.distance3D(obj) > getSonarRange())
 					continue;
+				if(obj == owner)
+					continue;
 
 				// First we check if actor is in LOS and shouldn't be rendered
 				let sight_tr = new("DD_VisionEnhancement_SightTracer");
