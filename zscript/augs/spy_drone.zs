@@ -463,7 +463,7 @@ class DD_SpyDrone : Actor
 
 				// Looking for objects in LOS to mark
 				Actor obj;
-				BlockThingsIterator it = BlockThingsIterator.Create(self, 640.0); //arbitrarily set radius as 640; t. davis liked this number
+				BlockThingsIterator it = BlockThingsIterator.Create(self, 8192.0);
 
 				Actor prev_targ = self.target;
 				while(it.next())

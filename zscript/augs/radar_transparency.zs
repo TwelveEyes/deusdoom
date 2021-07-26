@@ -89,7 +89,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		}
 
 		Actor mnst;
-		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT); //dunno if defining statnum as default helps performance, but can't hurt to add
+		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 		while(mnst = Actor(it.next()))
 		{
 			if(!mnst.bIsMonster)
@@ -114,7 +114,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 
 		if(!enabled){
 			Actor mnst;
-			ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT); //dunno if defining statnum as default helps performance, but can't hurt to add
+			ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 			while(mnst = Actor(it.next()))
 			{
 				if(!mnst.bIsMonster)
