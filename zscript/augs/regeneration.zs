@@ -32,7 +32,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "TECH TWO: Burns are healed.\n\n"
 				    "TECH THREE: Old wounds are healed.\n\n"
 				    "TECH FOUR: Aggravated damage is healed.\n\n"
-					"Energy Rate: 125-80 Units/Minute";
+				    "Energy Rate: 125-80 Units/Minute";
 		else
 			disp_desc = "Programmable polymerase automatically directs\n"
 				    "construction of proteins in injured cells, restoring an\n"
@@ -41,7 +41,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "TECH TWO: Healing occurs at a slightly faster rate.\n\n"
 				    "TECH THREE: Healing occurs at a moderately faster rate.\n\n"
 				    "TECH FOUR: Healing occurs at a significantly faster rate.\n\n"
-					"Energy Rate: 150-210 Units/Minute";
+				    "Energy Rate: 150-210 Units/Minute";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;
