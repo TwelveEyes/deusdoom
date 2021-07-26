@@ -463,15 +463,16 @@ class DD_SpyDrone : Actor
 
 				// Looking for objects in LOS to mark
 				Actor obj;
-				ThinkerIterator it = ThinkerIterator.Create("Actor", STAT_DEFAULT);
+				BlockThingsIterator it = BlockThingsIterator.Create(self, 4096.0);
 
 				Actor prev_targ = self.target;
-				while(obj = Actor(it.next()))
+				while(it.next())
 				{
+					obj = it.thing;
 					if(obj == self)
 						continue;
 					self.target = obj;
-					if(self.checkIfTargetInLOS(90.0, 0, 4096.0))
+					if(self.checkIfTargetInLOS(90.0))
 					{
 						uint oi = parent_aug.mark_objs.find(obj);
 						if(oi == parent_aug.mark_objs.size())
