@@ -89,16 +89,36 @@ class DD_Aug_Cloak : DD_Augmentation
 
 		Actor mnst;
 		ThinkerIterator it = ThinkerIterator.create();
-		while(mnst = Actor(it.next()))
-		{
-			if(!mnst.bIsMonster)
-				continue;
-			if(!RecognitionUtils.isFooledByCloak(mnst))
-				continue;
 
-			if(mnst.target && mnst.target == owner){
-				mnst.target = null;
-				mnst.seeSound = "";
+		if(DD_ModChecker.getInstance().isLoaded_HDest()
+			&& DD_PatchChecker.getInstance().isLoaded_HDest())
+		{
+			while(mnst = Actor(it.next()))
+			{
+				if(!mnst.bIsMonster)
+					continue;
+				if(!RecognitionUtils.isFooledByCloak(mnst))
+					continue;
+	
+				Class<Actor> tgclr_cls = ClassFinder.findActorClass("DD_HDTargetClearer");
+				Actor tgclr = Spawn(tgclr_cls);
+				tgclr.target = mnst;
+				tgclr.master = owner;
+			}
+		}
+		else
+		{
+			while(mnst = Actor(it.next()))
+			{
+				if(!mnst.bIsMonster)
+					continue;
+				if(!RecognitionUtils.isFooledByCloak(mnst))
+					continue;
+
+				if(mnst.target && mnst.target == owner){
+					mnst.target = null;
+					mnst.seeSound = "";
+				}
 			}
 		}
 	}
@@ -123,6 +143,14 @@ class DD_Aug_Cloak : DD_Augmentation
 
 				if(mnst.seeSound == "")
 					mnst.seeSound = getDefaultByType(mnst.getClass()).seeSound;
+
+				if(DD_ModChecker.getInstance().isLoaded_HDest()
+					&& DD_PatchChecker.getInstance().isLoaded_HDest())
+				{
+					Class<Actor> tgrst_cls = ClassFinder.findActorClass("DD_HDTargetRestorer");
+					Actor tgrst = Spawn(tgrst_cls);
+					tgrst.target = mnst;
+				}
 			}
 		}
 	}
