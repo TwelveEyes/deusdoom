@@ -89,7 +89,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		}
 
 		Actor mnst;
-		ThinkerIterator it = ThinkerIterator.create();
+		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 		if(DD_ModChecker.getInstance().isLoaded_HDest()
 			&& DD_PatchChecker.getInstance().isLoaded_HDest())
 		{
@@ -133,7 +133,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 
 		if(!enabled){
 			Actor mnst;
-			ThinkerIterator it = ThinkerIterator.create();
+			ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 			while(mnst = Actor(it.next()))
 			{
 				if(!mnst.bIsMonster)

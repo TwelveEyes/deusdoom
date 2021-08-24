@@ -88,7 +88,7 @@ class DD_Aug_Cloak : DD_Augmentation
 		owner.A_SetRenderStyle(1.0, Style_Fuzzy);
 
 		Actor mnst;
-		ThinkerIterator it = ThinkerIterator.create();
+		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 
 		if(DD_ModChecker.getInstance().isLoaded_HDest()
 			&& DD_PatchChecker.getInstance().isLoaded_HDest())
@@ -135,7 +135,7 @@ class DD_Aug_Cloak : DD_Augmentation
 			owner.A_SetRenderStyle(1.0, Style_Normal);
 
 			Actor mnst;
-			ThinkerIterator it = ThinkerIterator.create();
+			ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);
 			while(mnst = Actor(it.next()))
 			{
 				if(!mnst.bIsMonster)

@@ -149,9 +149,10 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				{
 					Actor thrown_obj = queue.soldify_objs[i];
 					Actor tobj;
-					ThinkerIterator it = ThinkerIterator.create();
-					while(tobj = Actor(it.next()))
+					BlockThingsIterator it = BlockThingsIterator.Create(thrown_obj);
+					while(it.next())
 					{
+						tobj = it.thing;
 						if(tobj.bIsMonster
 						&& tobj.health > 0
 						&& tobj.radius + thrown_obj.radius >= thrown_obj.distance2D(tobj)
