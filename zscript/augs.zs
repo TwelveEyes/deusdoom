@@ -43,19 +43,23 @@ class DD_Augmentation : Inventory
 	String disp_name; // name to display
 	String disp_desc; // description to display,
 			  // lines are separated by '\n'
+	String disp_legend_desc; // legendary description that is appended when the aug is upgraded to legendary state
 
-	uint level;
+	uint _level;
 	clearscope uint getRealLevel()
 	{
 		if(!owner)
-			return level;
+			return _level;
 		let aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
 		if(!aughld)
-			return level;
+			return _level;
 
-		return level + aughld.level_boost;
+		return _level + aughld.level_boost;
 	}
 	uint max_level;
+	bool legendary; // if augmentation is legendary upgraded
+	bool can_be_legendary;
+
 	bool enabled;
 
 	DD_AugSlots slots[3];	// possible slot numbers
@@ -130,7 +134,7 @@ class DD_Augmentation : Inventory
 	virtual void install()
 	{
 		id = -1;
-		level = 1;
+		_level = 1;
 		max_level = 4;
 
 		slots_cnt = 0;

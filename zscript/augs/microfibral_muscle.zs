@@ -27,6 +27,14 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	ui DDLe_Viewport vwport;
 
 	DD_Aug_MicrofibralMuscle_Queue queue;
+
+	static const int doorspecials[]={
+		//from https://github.com/coelckers/gzdoom/blob/master/src/p_lnspec.cpp#L3432
+		10,11,12,13,14,
+		105,106,194,195,198,
+		202,
+		249,252,262,263,265,266,268,274
+	};
 	
 
 	override TextureID get_ui_texture(bool state)
@@ -47,16 +55,24 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 			    "heavy objects.\n\n"
 			    "TECH ONE: Strength is increased slightly, agent can\n"
 			    "pick up some objects.\n\n"
-			    "TECH TWO: Strength is increased moderately, agent can\n"
-			    "pick up heavier objects like barrels and corpses.\n\n"
+			    "TECH TWO: Strength is increased moderately, agent\n"
+			    "can pick up heavier objects like barrels and corpses.\n\n"
 			    "TECH THREE: Strength is increased significantly.\n\n"
-			    "TECH FOUR: An agent is inhumanly strong.\n\n"
-			    "Energy Rate: 20 Units/Minute";
+			    "TECH FOUR: Agent is inhumanly strong.\n\n"
+			    "Energy Rate: 20 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: Agent is so strong that they\n"
+				   "can pry open many door-like structures with their\n"
+				   "bare hands. Also, objects are now thrown so violently\n"
+				   "that they do not only stagger enemies hit, but also\n"
+				   "damage them.";
 
 		slots_cnt = 1;
 		slots[0] = Arms;
 
 		initProjection();
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -136,6 +152,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	// -------------
 
 	Actor target_obj;
+	Sector target_sector;
 
 	override void tick()
 	{
@@ -167,6 +184,10 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 							if(pstun.dur_timer < getStunDurMin())
 								pstun.dur_timer = getStunDurMin();
 							tobj.addInventory(pstun);
+
+							if(legendary)
+								tobj.damageMobj(owner, owner, max(50, min(tobj.GetSpawnHealth() / 10, 200)), "None");
+
 							queue.soldify_stunned[i] = true;
 						}
 					}
@@ -199,6 +220,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		cam_tracer.trace(owner.pos + (0, 0, PlayerPawn(owner).viewHeight), owner.curSector, dir, 128.0, 0);
 
 		target_obj = cam_tracer.hit_obj;
+		target_sector = cam_tracer.results.hitSector;
 
 		if(queue.objwep)
 		{
@@ -207,26 +229,73 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				return;
 			if(owner.countInv("DD_MicrofibralMuscle_ObjectWeapon") > 0)
 				return;
-			if(!target_obj)
-				return;
 
-			int res = cantPickupObj(target_obj);
-			if(res == 2)
-				console.printf("It's too heavy to lift");
-			if(res)
-				return;
+			if(target_obj)
+			{
+				int res = cantPickupObj(target_obj);
+				if(res == 2)
+					console.printf("It's too heavy to lift");
+				if(res)
+					return;
 
-			owner.giveInventory("DD_MicrofibralMuscle_ObjectWeapon", 1);
-			DD_MicrofibralMuscle_ObjectWeapon objwep = DD_MicrofibralMuscle_ObjectWeapon(owner.findInventory("DD_MicrofibralMuscle_ObjectWeapon"));
-			objwep.held_obj = target_obj;
-			objwep.parent_aug = self;
-			// making target object dissapear from the world
-			target_obj.warp(owner);
-			target_obj.changeTID(0);
-			target_obj.changeStatNum(STAT_TRAVELLING);
-			target_obj.A_ChangeLinkFlags(1, 1);
-			owner.player.pendingWeapon = Weapon(objwep);
-			owner.player.bringUpWeapon();
+				owner.giveInventory("DD_MicrofibralMuscle_ObjectWeapon", 1);
+				DD_MicrofibralMuscle_ObjectWeapon objwep = DD_MicrofibralMuscle_ObjectWeapon(owner.findInventory("DD_MicrofibralMuscle_ObjectWeapon"));
+				objwep.held_obj = target_obj;
+				objwep.parent_aug = self;
+				// making target object disappear from the world
+				target_obj.warp(owner);
+				target_obj.changeTID(0);
+				target_obj.changeStatNum(STAT_TRAVELLING);
+				target_obj.A_ChangeLinkFlags(1, 1);
+				owner.player.pendingWeapon = Weapon(objwep);
+				owner.player.bringUpWeapon();
+			}
+			else if(target_sector)
+			{
+				for(uint i = 0; i < target_sector.lines.size(); ++i)
+				{
+					Line l = target_sector.lines[i];
+
+					//if(l.special != 0)
+					//	console.printf("%d", l.special);
+
+					bool shouldpry = false;
+					for(uint i = 0; i < doorspecials.size(); ++i)
+						if(l.special == doorspecials[i])
+						{ shouldpry = true; break; }
+					if(shouldpry)
+					{
+						Sector door_sector = l.backsector;
+						door_sector.flags |= Sector.SECF_SILENTMOVE;
+
+						// based on https://codeberg.org/mc776/hideousdestructor/src/branch/main/zscript/doorbuster.zs
+						int doorflat = cam_tracer.results.hitType == TRACE_HitCeiling	? 0
+							 : cam_tracer.results.hitType == TRACE_HitFloor		? 2
+							 : 1;
+						if(doorflat == 2){ // hit the floor of a door - raising the ceiling
+							if(door_sector.floordata)
+								door_sector.floordata.destroy();
+
+							double hdelta = door_sector.ceilingplane.zatpoint(door_sector.centerspot) - door_sector.findLowestFloorSurrounding();
+
+							level.createFloor(door_sector, Floor.floorRaiseByValue, null, 65536., hdelta);
+							door_sector.floordata.tick();
+						}
+						else{ // hit the ceiling of the door - lowering the floor
+							if(door_sector.ceilingdata)
+								door_sector.ceilingdata.destroy();
+
+							double hdelta = door_sector.findLowestCeilingSurrounding() - door_sector.floorplane.zatpoint(door_sector.centerspot);
+
+							level.createCeiling(door_sector, Ceiling.ceilRaiseByValue, null, 65536., 0., hdelta);
+							door_sector.ceilingdata.tick();
+						}
+
+						l.special = 0;
+						Spawn("DD_MicrofibralMuscle_TearExplosion", owner.pos + (0, 0, PlayerPawn(owner).viewHeight) + dir*16);
+					}
+				}
+			}
 		}
 	}
 
@@ -245,8 +314,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 							* abs(objwep.held_obj.scale.x);
 					double texh = UI_Draw.texHeight(sprtex, -1, -1)
 							* radcoff
-							* abs(objwep.held_obj.scale.y)
-;
+							* abs(objwep.held_obj.scale.y);
 					UI_Draw.texture(sprtex,
 								160 - texw/2, 180 - texh/2,
 								texw, texh,
@@ -358,8 +426,6 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 					return false;
 
 				EventHandler.sendNetworkEvent("dd_use_muscle");
-				//queue.objwep = true;
-				return true;
 			}
 		}
 		return false;
@@ -388,9 +454,9 @@ class DD_MicrofibralMuscle_Tracer : LineTracer
 				return TRACE_Skip;
 			}
 		}
-		else if(results.hitType == TRACE_HitWall
-		|| results.hitType == TRACE_HitFloor
-		|| results.hitType == TRACE_HitCeiling){
+		else if(results.hitType == TRACE_HitWall && results.tier == TIER_Middle && results.hitLine.flags & Line.ML_TWOSIDED > 0)
+			return TRACE_Skip;
+		else if(results.hitType == TRACE_HitWall || results.hitType == TRACE_HitFloor || results.hitType == TRACE_HitCeiling){
 			return TRACE_Stop;
 		}
 
@@ -471,6 +537,8 @@ class DD_MicrofibralMuscle_ObjectWeapon : Weapon
 		else
 			owner_look /= held_obj.mass;
 		held_obj.A_ChangeVelocity(owner_look.x, owner_look.y, owner_look.z);
+
+		held_obj = null;
 	}
 }
 
@@ -500,5 +568,23 @@ class DD_MicrofibralMuscle_StunPowerup : Powerup
 			detachFromOwner();
 			destroy();
 		}
+	}
+}
+
+
+class DD_MicrofibralMuscle_TearExplosion : Actor
+{
+	default
+	{
+		Scale 1.2;
+		+NOBLOCKMAP;
+	}
+
+	states
+	{
+		Spawn:
+			MISL B 6 Bright NoDelay A_StartSound("weapons/rocklx");
+			MISL CD 6 Bright;
+			Stop;
 	}
 }

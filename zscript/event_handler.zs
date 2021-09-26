@@ -21,6 +21,10 @@ class DD_EventHandler : StaticEventHandler
 	// Font for augs holder
 	ui Font aug_ui_font;
 
+	array<Sector> dissipating_sectors; // for envinronmental resistance
+	array<int> dissipating_damage;
+	array<int> dissipating_timers;
+
 	override void onRegister()
 	{
 		setOrder(999);
@@ -45,7 +49,6 @@ class DD_EventHandler : StaticEventHandler
 			plr.addInventory(aughld);
 		else
 			aughld.destroy();
-
 
 			//aughld.installAug(DD_Aug_PowerRecirculator(Inventory.Spawn("DD_Aug_PowerRecirculator")));
 			//aughld.installAug(DD_Aug_EnvironmentalResistance(Inventory.Spawn("DD_Aug_EnvironmentalResistance")));
@@ -72,6 +75,34 @@ class DD_EventHandler : StaticEventHandler
 
 		self.isUIProcessor = queue.qstate;
 		self.requireMouse = queue.qstate;
+
+		for(uint i = 0; i < levitating_plrs.size(); ++i)
+		{
+			if(levitating_plrs[i].vel.z == 0)
+			{
+				if(levitating_plrs_timer[i] > 0)
+					levitating_plrs_timer[i]--;
+				else{
+					levitating_plrs.delete(i);
+					levitating_plrs_timer.delete(i);
+					--i; continue;
+				}
+			}
+
+			if(-levitating_plrs[i].vel.z > DD_Aug_AgilityEnhancement.levitation_velz_cap)
+				levitating_plrs[i].A_ChangeVelocity(levitating_plrs[i].vel.x, levitating_plrs[i].vel.y,
+						min(-DD_Aug_AgilityEnhancement.levitation_velz_cap, levitating_plrs[i].vel.z + DD_Aug_AgilityEnhancement.levitation_velz_deacc),
+						CVF_REPLACE);
+		}
+	}
+
+	override void WorldThingDamaged(WorldEvent e)
+	{
+		if(e.inflictor && e.inflictor.countInv("DD_ProjDamageMod"))
+		{
+			let moditem = DD_ProjDamageMod(e.inflictor.findInventory("DD_ProjDamageMod"));
+			e.thing.DamageMobj(e.inflictor, e.inflictor, (moditem.mult - 1), e.damageType, e.damageFlags, e.damageAngle);
+		}
 	}
 
 
@@ -139,6 +170,10 @@ class DD_EventHandler : StaticEventHandler
 			wndmgr.uiTick();
 	}
 
+
+	array<PlayerPawn> levitating_plrs; // list of players currently levitating
+	array<int> levitating_plrs_timer; // timer of velocity equal to zero in order to remove players from levitating list
+
 	override void networkProcess(ConsoleEvent e)
 	{
 		PlayerInfo plr = players[e.Player];
@@ -187,7 +222,11 @@ class DD_EventHandler : StaticEventHandler
 			// (same slots as dd_togg_aug)
 
 			let upgrcan = DD_AugmentationUpgradeCanister(plr.mo.findInventory("DD_AugmentationUpgradeCanister"));
-			DD_AugmentationUpgradeCanister.queueConsume(plr.mo, upgrcan, e.args[0]);
+			let upgrcan_lgnd = DD_AugmentationUpgradeCanisterLegendary(plr.mo.findInventory("DD_AugmentationUpgradeCanisterLegendary"));
+			if(DD_AugmentationUpgradeCanister.canConsume(plr.mo, upgrcan, e.args[0]))
+				DD_AugmentationUpgradeCanister.queueConsume(plr.mo, upgrcan, e.args[0]);
+			else if(DD_AugmentationUpgradeCanisterLegendary.canConsume(plr.mo, upgrcan_lgnd, e.args[0]))
+				DD_AugmentationUpgradeCanisterLegendary.queueConsume(plr.mo, upgrcan_lgnd, e.args[0]);
 		}
 		else if(e.name == "dd_drop_aug")
 		{
@@ -238,7 +277,7 @@ class DD_EventHandler : StaticEventHandler
 						case 1: agaug.queue.dashvel[1].x = -agaug.getDashVel(); break;
 						case 2: agaug.queue.dashvel[2].y = agaug.getDashVel(); break;
 						case 3: agaug.queue.dashvel[3].y = -agaug.getDashVel(); break;
-						case 4: agaug.queue.dashvel[4].x = agaug.getDashVel() * 0.7; break;
+						case 4: agaug.queue.dashvel[4].z = agaug.getDashVel() * 0.45; break;
 					}
 					break;
 				}
@@ -273,10 +312,24 @@ class DD_EventHandler : StaticEventHandler
 							case 0: spyaug.drone_actor.queueAccelerationX(double(e.args[1]) / 10000); break;
 							case 1: spyaug.drone_actor.queueAccelerationY(double(e.args[1]) / 10000); break;
 							case 2: spyaug.drone_actor.queueAccelerationZ(double(e.args[1]) / 10000); break;
-							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000);
+							case 3: spyaug.drone_actor.queueTurnAngle((double)(e.args[1]) / 10000); break;
 							case 4: spyaug.drone_actor.queueUse();
 						}
 					}
+				}
+			}
+		}
+		else if(e.name == "dd_levitate")
+		{
+			if(e.args[0]){
+				levitating_plrs.push(plr.mo);
+				levitating_plrs_timer.push(10);
+			}
+			else{
+				uint ind = levitating_plrs.find(plr.mo);
+				if(ind != levitating_plrs.size()){
+					levitating_plrs.delete(ind);
+					levitating_plrs_timer.delete(ind);
 				}
 			}
 		}

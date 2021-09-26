@@ -41,10 +41,17 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "TECH THREE: Healing occurs at a moderately faster rate.\n\n"
 				    "TECH FOUR: Healing occurs at a significantly faster rate.\n\n";
 
+		disp_legend_desc = "LEGENDARY UPGRADE: Prevents an instance of\n"
+				   "fatal damage directed at agent, granting a short\n"
+				   "burst of almost instant regeneration.\n"
+				   "This ability has a long cooldown.\n\n";
+
 		slots_cnt = 3;
 		slots[0] = Torso1;
 		slots[1] = Torso2;
 		slots[2] = Torso3;
+
+		can_be_legendary = true;
 
 		regen_timer = getHealthRegenInterval();
 	}
@@ -58,6 +65,12 @@ class DD_Aug_Regeneration : DD_Augmentation
 	// ------------------
 	// Internal functions
 	// ------------------
+
+	const fatal_regen_burst = 45; // burst of HP regeneration when recieving fatal damage
+	const fatal_regen_time = 35 * 210; // time it takes to replenish the fatal damage negating ability
+	int fatal_regen_timer;
+	const fatal_tint_time = 35 * 15;
+	int fatal_tint_timer;
 
 	int regen_timer;
 	protected int getHealthRegenRate() { return 2 + 1 * (getRealLevel() - 1); }
@@ -95,9 +108,20 @@ class DD_Aug_Regeneration : DD_Augmentation
 
 	override void tick()
 	{
+		if(fatal_tint_timer > 0){
+			--fatal_tint_timer;
+			double tint_str = 0.33 + ((double(fatal_tint_timer) / fatal_tint_time)  * 0.66);
+			Shader.setEnabled(owner.player, "DD_FatalRegen", true);
+			Shader.setUniform1f(owner.player, "DD_FatalRegen", "strength", tint_str);
+		}
+		else
+			Shader.setEnabled(owner.player, "DD_FatalRegen", false);
+
 		super.tick();
 		if(!enabled)
 			return;
+		if(fatal_regen_timer > 0)
+			--fatal_regen_timer;
 
 		if(DD_ModChecker.isLoaded_HDest() && DD_PatchChecker.isLoaded_HDest())
 		{
@@ -171,6 +195,23 @@ class DD_Aug_Regeneration : DD_Augmentation
 					toggle();
 				regen_timer = getHealthRegenInterval();
 			}
+		}
+	}
+
+	override void ownerDamageTaken(int damage, Name damageType, out int newDamage,
+					Actor inflictor, Actor source, int flags)
+	{
+		if(!enabled)
+			return;
+
+		if(legendary && damage >= owner.health && fatal_regen_timer == 0)
+		{ // save the user
+			owner.giveInventory("Health", fatal_regen_burst);
+			owner.A_StartSound("play/aug/fatalsave1");
+			owner.A_StartSound("play/aug/fatalsave2");
+
+			fatal_tint_timer = fatal_tint_time;
+			fatal_regen_timer = fatal_regen_time;
 		}
 	}
 }

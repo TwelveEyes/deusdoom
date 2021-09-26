@@ -2,6 +2,7 @@ class DD_ProgressionTracker : Inventory
 {
 	int points_cells;
 	int points_upgrades;
+	int points_upgrades_lgnd;
 	int points_augs;
 
 	const item_maxvel = 3.0;
@@ -45,6 +46,7 @@ class DD_ProgressionTracker : Inventory
 			if(plr_hasaugs){
 				points_cells += amount;
 				points_upgrades += amount;
+				points_upgrades_lgnd += amount;
 			}
 		}
 	}
@@ -69,6 +71,9 @@ class DD_ProgressionTracker : Inventory
 		double pts_upgrade = DD_SpawnHandler.points_for_upgrade
 				* hndl.points_global_mult
 				* hndl.points_for_upgrade_mult;
+		double pts_upgrade_lgnd = DD_SpawnHandler.points_for_upgrade_lgnd
+				* hndl.points_global_mult
+				* hndl.points_for_upgrade_lgnd_mult;
 		double pts_aug = DD_SpawnHandler.points_for_aug
 				* hndl.points_global_mult
 				* hndl.points_for_aug_mult;
@@ -84,6 +89,12 @@ class DD_ProgressionTracker : Inventory
 			int amnt = points_upgrades / pts_upgrade;
 			spawnItemActor(ac, "DD_AugmentationUpgradeCanister", amnt);
 			points_upgrades -= amnt * pts_upgrade;
+		}
+		if(points_upgrades_lgnd >= pts_upgrade_lgnd)
+		{
+			int amnt = points_upgrades_lgnd / pts_upgrade_lgnd;
+			spawnItemActor(ac, "DD_AugmentationUpgradeCanisterLegendary", amnt);
+			points_upgrades_lgnd -= amnt * pts_upgrade_lgnd;
 		}
 
 		bool plr_hasaugs = false;
@@ -145,6 +156,8 @@ class DD_SpawnHandler : StaticEventHandler
 	double points_for_cell_mult;
 	const points_for_upgrade = 2100;
 	double points_for_upgrade_mult;
+	const points_for_upgrade_lgnd = 12250;
+	double points_for_upgrade_lgnd_mult;
 	const points_for_aug = 4550;
 	double points_for_aug_mult;
 	const points_for_aug_first_ml = 0.05;
@@ -232,6 +245,7 @@ class DD_SpawnHandler : StaticEventHandler
 		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
 		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
 		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
+		points_for_upgrade_lgnd_mult = CVar.getCVar("dd_ptmult_upgrade_lgnd").getFloat();
 		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
 	}
 	override void WorldUnloaded(WorldEvent e)
@@ -239,6 +253,7 @@ class DD_SpawnHandler : StaticEventHandler
 		points_global_mult = CVar.getCVar("dd_ptmult_global").getFloat();
 		points_for_cell_mult = CVar.getCVar("dd_ptmult_cell").getFloat();
 		points_for_upgrade_mult = CVar.getCVar("dd_ptmult_upgrade").getFloat();
+		points_for_upgrade_lgnd_mult = CVar.getCVar("dd_ptmult_upgrade_lgnd").getFloat();
 		points_for_aug_mult = CVar.getCVar("dd_ptmult_aug").getFloat();
 
 		if(e.isSaveGame)
@@ -252,6 +267,7 @@ class DD_SpawnHandler : StaticEventHandler
 		// Carrying all unpickuped augmentation canisters to the next level
 		bool transfer_augcans = CVar.getCVar("dd_transfer_augcanisters").getFloat();
 		bool transfer_upgrcans = CVar.getCVar("dd_transfer_upgradecanisters").getFloat();
+		bool transfer_upgrcans_lgnd = CVar.getCVar("dd_transfer_upgradecanisters_lgnd").getFloat();
 
 		Actor obj;
 		ThinkerIterator it = ThinkerIterator.create();
@@ -265,6 +281,12 @@ class DD_SpawnHandler : StaticEventHandler
 			}
 			else if(transfer_upgrcans
 			&& obj is "DD_AugmentationUpgradeCanister")
+			{
+				obj.changeStatNum(Thinker.STAT_TRAVELLING);
+				transfer_items.push(Inventory(obj));
+			}
+			else if(transfer_upgrcans_lgnd
+			&& obj is "DD_AugmentationUpgradeCanisterLegendary")
 			{
 				obj.changeStatNum(Thinker.STAT_TRAVELLING);
 				transfer_items.push(Inventory(obj));

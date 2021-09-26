@@ -23,14 +23,21 @@ class DD_Aug_EnvironmentalResistance : DD_Augmentation
 			    "TECH TWO: Hazard resistance is increased moderately.\n\n"
 			    "TECH THREE: Hazard resistance is increased\n"
 			    "significantly.\n\n"
-			    "TECH FOUR: An agent is invulnerable to damage from any.\n"
-			    "environmental hazards.\n\n"
-			    "Energy Rate: 40 Units/Minute";
+			    "TECH FOUR: An agent is invulnerable to damage from\n"
+			    "any environmental hazards.\n\n"
+			    "Energy Rate: 40 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: Energy emitted by hazard\n"
+				      "surfaces is converted to bioelectric energy. This\n"
+				      "makes such surfaces quickly give away their energy,\n"
+				      "eliminating the hazard entirely.";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;
 		slots[1] = Torso2;
 		slots[2] = Torso3;
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -54,6 +61,44 @@ class DD_Aug_EnvironmentalResistance : DD_Augmentation
 	// -------------
 	// Engine events
 	// -------------
+
+	const dissipation_time = 35 * 60; // time to completely get rid of damaging property of a sector
+	const energy_for_dissipation = 40;
+	double energy_gain_queue;
+
+	override void tick()
+	{
+		super.tick();
+		if(!enabled)
+			return;
+
+		if(legendary && owner.floorsector.damageamount > 0)
+		{
+			DD_EventHandler deh = DD_EventHandler(StaticEventHandler.find("DD_EventHandler"));
+			uint i = deh.dissipating_sectors.find(owner.floorsector);
+			if(i == deh.dissipating_sectors.size()) {
+				deh.dissipating_sectors.push(owner.floorsector);
+				deh.dissipating_damage.push(owner.floorsector.damageamount);
+				deh.dissipating_timers.push(dissipation_time);
+			}
+			else {
+				--deh.dissipating_timers[i];
+				deh.dissipating_sectors[i].damageamount = ceil(deh.dissipating_damage[i] * (double(deh.dissipating_timers[i]) / dissipation_time));
+				energy_gain_queue += double(energy_for_dissipation) / dissipation_time;
+				if(energy_gain_queue >= 1.0){
+					energy_gain_queue -= 1.0;
+					owner.giveInventory("DD_BioelectricEnergy", 1);
+				}
+
+				if(deh.dissipating_timers[i] <= 0){
+					console.printf("Cleared hazardous surface at (%f; %f)", deh.dissipating_sectors[i].centerspot.x, deh.dissipating_sectors[i].centerspot.y); 
+					deh.dissipating_sectors.delete(i);
+					deh.dissipating_damage.delete(i);
+					deh.dissipating_timers.delete(i);
+				}
+			}
+		}
+	}
 
 	override void ownerDamageTaken(int damage, Name damageType, out int newDamage,
 					Actor inflictor, Actor source, int flags)

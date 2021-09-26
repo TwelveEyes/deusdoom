@@ -10,6 +10,7 @@ class UI_Augs_Sidepanel : UI_Window
 	// Widgets
 	UI_DDLabel label_aug_name;
 	UI_DDMultiLineLabel label_aug_desc;
+	UI_DDScrollBar aug_scrollbar;
 
 	UI_DDSmallButton_UseCell butn_usecell;
 	UI_DDSmallButton_Install butn_install;
@@ -20,6 +21,7 @@ class UI_Augs_Sidepanel : UI_Window
 
 	UI_DDItemFrame itframe_cells;
 	UI_DDItemFrame itframe_canupgrades;
+	UI_DDItemFrame itframe_canupgrades_lgnd;
 
 	// Misc
 	ui int aug_sel;			// Currently selected augmentation, changed by UI_Augs widgets
@@ -32,6 +34,9 @@ class UI_Augs_Sidepanel : UI_Window
 		addWidget(label_aug_name);
 		label_aug_desc = UI_DDMultiLineLabel(New("UI_DDMultiLineLabel"));
 		addWidget(label_aug_desc);
+		aug_scrollbar = UI_DDScrollBar(New("UI_DDScrollBar"));
+		aug_scrollbar.mlabel = label_aug_desc;
+		addWidget(aug_scrollbar);
 
 		butn_usecell = UI_DDSmallButton_UseCell(New("UI_DDSmallButton_UseCell"));
 		butn_usecell.sidepanel = self;
@@ -52,9 +57,10 @@ class UI_Augs_Sidepanel : UI_Window
 
 		itframe_cells = UI_DDItemFrame(New("UI_DDItemFrame"));
 		addWidget(itframe_cells);
-
 		itframe_canupgrades = UI_DDItemFrame(New("UI_DDItemFrame"));
 		addWidget(itframe_canupgrades);
+		itframe_canupgrades_lgnd = UI_DDItemFrame(New("UI_DDItemFrame"));
+		addWidget(itframe_canupgrades_lgnd);
 
 		aug_sel = -1;
 		aug_install_sel_slot = -1;
@@ -84,9 +90,15 @@ class UI_Augs_Sidepanel : UI_Window
 		label_aug_desc.text_color = 11;
 		label_aug_desc.x = x + 5;
 		label_aug_desc.y = y + 14;
+		label_aug_desc.h = 95;
 		label_aug_desc.text_w = -0.45;
 		label_aug_desc.text_h = -0.45;
 		label_aug_desc.line_gap = 1;
+
+		aug_scrollbar.x = x + 109.5;
+		aug_scrollbar.y = y + 13;
+		aug_scrollbar.w = 6;
+		aug_scrollbar.h = 98;
 
 		butn_usecell.x = x + 22;
 		butn_usecell.y = y + 171;
@@ -128,7 +140,7 @@ class UI_Augs_Sidepanel : UI_Window
 		bioelenergy_bar.text_font = aug_font;
 
 		itframe_cells.x = x + 122;
-		itframe_cells.y = y + 115;
+		itframe_cells.y = y + 85;
 		itframe_cells.tex_w = -0.6;
 		itframe_cells.tex_h = -0.6;
 		itframe_cells.frame_w = -0.5;
@@ -142,7 +154,7 @@ class UI_Augs_Sidepanel : UI_Window
 		itframe_cells.item_tex = TexMan.checkForTexture("BCELA0", TexMan.Type_Any);
 
 		itframe_canupgrades.x = x + 122;
-		itframe_canupgrades.y = y + 145;
+		itframe_canupgrades.y = y + 115;
 		itframe_canupgrades.tex_w = -0.6;
 		itframe_canupgrades.tex_h = -0.6;
 		itframe_canupgrades.frame_w = -0.5;
@@ -154,6 +166,20 @@ class UI_Augs_Sidepanel : UI_Window
 		itframe_canupgrades.disp_name1 = "Upgrade";
 		itframe_canupgrades.disp_name2 = "canister";
 		itframe_canupgrades.item_tex = TexMan.checkForTexture("AUCNA0", TexMan.Type_Any);
+
+		itframe_canupgrades_lgnd.x = x + 122;
+		itframe_canupgrades_lgnd.y = y + 145;
+		itframe_canupgrades_lgnd.tex_w = -0.6;
+		itframe_canupgrades_lgnd.tex_h = -0.6;
+		itframe_canupgrades_lgnd.frame_w = -0.5;
+		itframe_canupgrades_lgnd.frame_h = -0.5;
+		itframe_canupgrades_lgnd.str_w = -0.5;
+		itframe_canupgrades_lgnd.str_h = -0.5;
+		itframe_canupgrades_lgnd.item_cls = "DD_AugmentationUpgradeCanisterLegendary";
+		itframe_canupgrades_lgnd.disp_font = aug_font;
+		itframe_canupgrades_lgnd.disp_name1 = "Legendary";
+		itframe_canupgrades_lgnd.disp_name2 = "upgrade can.";
+		itframe_canupgrades_lgnd.item_tex = TexMan.checkForTexture("AULCA0", TexMan.Type_Any);
 	}
 
 	override void drawOverlay(RenderEvent e)

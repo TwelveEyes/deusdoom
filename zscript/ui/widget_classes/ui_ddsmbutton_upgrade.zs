@@ -11,9 +11,6 @@ class UI_DDSmallButton_Upgrade : UI_DDSmallButton
 			PlayerInfo plr = players[consoleplayer];
 			
 			EventHandler.sendNetworkEvent("dd_upgrade_aug", parent_wnd.selected_aug_slot);
-			/*DD_AugmentationUpgradeCanister.queueConsume(plr.mo,
-				DD_AugmentationUpgradeCanister(plr.mo.findInventory("DD_AugmentationUpgradeCanister")),
-				parent_wnd.selected_aug_slot);			*/
 		}
 
 		
@@ -21,7 +18,6 @@ class UI_DDSmallButton_Upgrade : UI_DDSmallButton
 
 	override void uiTick()
 	{
-		return;
 		PlayerInfo plr = players[consoleplayer];
 
 		if(DD_AugmentationUpgradeCanister.canConsume(plr.mo,
@@ -29,6 +25,14 @@ class UI_DDSmallButton_Upgrade : UI_DDSmallButton
 				parent_wnd.selected_aug_slot)){
 			disabled = false;
 			text_color = 11;
+			text = "Upgrade";
+		}
+		else if(DD_AugmentationUpgradeCanisterLegendary.canConsume(plr.mo,
+				DD_AugmentationUpgradeCanisterLegendary(plr.mo.findInventory("DD_AugmentationUpgradeCanisterLegendary")),
+				parent_wnd.selected_aug_slot)){
+			disabled = false;
+			text_color = 11;
+			text = "Perfect";
 		}
 		else{
 			disabled = true;

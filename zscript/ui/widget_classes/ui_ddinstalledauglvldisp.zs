@@ -9,10 +9,12 @@ class UI_DDInstalledAugLevelDisplay : UI_Widget
 
 	// Textures
 	ui TextureID checklet;
+	ui TextureID checklet_lgnd;
 
 	override void UIinit()
 	{
 		checklet = TexMan.CheckForTexture("AUGUI11");
+		checklet_lgnd = TexMan.CheckForTexture("AUGUI40");
 	}
 
 	override void drawOverlay(RenderEvent e)
@@ -26,10 +28,14 @@ class UI_DDInstalledAugLevelDisplay : UI_Widget
 		double chk_gap = 0.44;
 		if(au)
 		{
-			for(uint lvl = 1; lvl <= au.level; ++lvl)
+			TextureID ch;
+			if(au.legendary) ch = checklet_lgnd;
+			else		 ch = checklet;
+
+			for(uint lvl = 1; lvl <= au._level; ++lvl)
 			{
-				UI_Draw.texture(checklet, sx, sy, tex_w, tex_h);
-				sx += UI_Draw.texWidth(checklet, tex_w, tex_h) + chk_gap;
+				UI_Draw.texture(ch, sx, sy, tex_w, tex_h);
+				sx += UI_Draw.texWidth(ch, tex_w, tex_h) + chk_gap;
 			}
 		}
 	}

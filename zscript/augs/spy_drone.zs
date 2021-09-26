@@ -66,10 +66,17 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			    "reveals objects for a long time.\n\n"
 			    "TECH FOUR: The drone is incredibly fast and reveals\n"
 			    "objects for a very long time.\n\n"
-			    "Energy Rate: 100 Units/Minute";
+			    "Energy Rate: 100 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: can teleport items within\n"
+				   "certain distance to agent piloting it. It is\n"
+				   "actiavated the same way as an agent would trigger\n"
+				   "a switch or a door.\n";
 
 		slots_cnt = 1;
 		slots[0] = Cranial;
+
+		can_be_legendary = true;
 
 		initProjection();
 	}
@@ -343,7 +350,12 @@ class DD_Aug_SpyDrone_SightTracer : LineTracer
 		if(results.hitActor == ignore[0]
 		|| results.hitActor == ignore[1])
 			return TRACE_Skip;
-		if(results.hitLine || results.hitActor)
+		if(results.hitType == TRACE_HitWall){
+			if(results.tier == TIER_Middle && results.hitLine.flags & LINE.ML_TWOSIDED > 0)
+				return TRACE_Skip;
+			return TRACE_Stop;
+		}
+		if(results.hitActor)
 			return TRACE_Stop;
 		return TRACE_Skip;
 	}
@@ -364,9 +376,13 @@ class DD_SpyDrone_Tracer : LineTracer
 {
 	override ETraceStatus traceCallback()
 	{
-		if(results.hitLine){
+		if(results.hitType == TRACE_HitWall){
+			if(results.tier == TIER_Middle && results.hitLine.flags & LINE.ML_TWOSIDED > 0)
+				return TRACE_Skip;
 			return TRACE_Stop;
 		}
+		if(results.hitActor && results.hitActor is "Inventory")
+			return TRACE_Stop;
 		return TRACE_Skip;
 	}
 }
@@ -444,13 +460,14 @@ class DD_SpyDrone : Actor
 				A_SetAngle(angle + act_queue.ang);
 				act_queue.ang = 0;
 
-				// Trying to use a line if queued
+				// Trying to use a line or pick up an item if queued
 				if(act_queue.use)
 				{
 					act_queue.use = false;
 					let usetracer = new("DD_SpyDrone_Tracer");
 					vector3 dir = (AngleToVector(angle, cos(pitch)), -sin(pitch));
 					usetracer.trace(pos, curSector, dir, 64.0, 0);
+
 					if(usetracer.results.hitLine
 					&& usetracer.results.hitLine.special != 243
 					&& usetracer.results.hitLine.special != 244)
@@ -458,6 +475,28 @@ class DD_SpyDrone : Actor
 						usetracer.results.hitLine
 							.activate(self.master, usetracer.results.side, 
 							SPAC_PlayerActivate);
+					if(usetracer.results.hitActor is "Inventory"
+						&& parent_aug && parent_aug.legendary)
+					{
+						if(usetracer.results.hitActor is "Inventory"){
+							Inventory inv = Inventory(usetracer.results.hitActor);
+
+							if(inv.canPickup(master)){
+								int prev_amt = master.countInv(inv.getClass());
+								bool given = master.giveInventory(inv.getClass(), inv.amount);
+								if(!given){
+									master.setInventory(inv.getClassName(), prev_amt);
+								}
+								else{
+									Inventory togive = inv.CreateCopy(master);
+									togive.doPickupSpecial(master);
+									spawnTeleportFog(inv.pos, true, false);
+									if(togive == inv)
+										inv.destroy();
+								}
+							}
+						}
+					}
 				}
 
 
@@ -472,6 +511,8 @@ class DD_SpyDrone : Actor
 					if(obj == self)
 						continue;
 					self.target = obj;
+
+					// Marking objects
 					if(self.checkIfTargetInLOS(90.0))
 					{
 						uint oi = parent_aug.mark_objs.find(obj);

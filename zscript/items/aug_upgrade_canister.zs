@@ -36,10 +36,10 @@ class DD_AugmentationUpgradeCanister : Inventory
 
 		while(queue.toupgrade.size() > 0)
 		{
-			if(aughld.augs[queue.toupgrade[0]].level < 4)
+			if(aughld.augs[queue.toupgrade[0]]._level < aughld.augs[queue.toupgrade[0]].max_level)
 			{
 				owner.TakeInventory("DD_AugmentationUpgradeCanister", 1);
-				aughld.augs[queue.toupgrade[0]].level++;
+				aughld.augs[queue.toupgrade[0]]._level++;
 			}
 			queue.toupgrade.Delete(0);
 		}
@@ -69,7 +69,7 @@ class DD_AugmentationUpgradeCanister : Inventory
 			return false;
 		if(!aughld.augs[aug_slot])
 			return false;
-		if(aughld.augs[aug_slot].level >= aughld.augs[aug_slot].max_level)
+		if(aughld.augs[aug_slot]._level >= aughld.augs[aug_slot].max_level)
 			return false;
 		if(!cnst_instance)
 			return false;
@@ -83,14 +83,14 @@ class DD_AugmentationUpgradeCanister : Inventory
 
 	// Description:
 	//	Tells whether an augmentation canister can be consumed or not (for UI)
-	static ui bool canConsume(PlayerPawn plr, DD_AugmentationUpgradeCanister cnst_instance, int aug_slot)
+	static clearscope bool canConsume(PlayerPawn plr, DD_AugmentationUpgradeCanister cnst_instance, int aug_slot)
 	{
 		DD_AugsHolder aughld = DD_AugsHolder(plr.findInventory("DD_AugsHolder"));
 
 		return cnst_instance
 		    && aug_slot > -1
 		    && aughld.augs[aug_slot]
-		    && aughld.augs[aug_slot].level < aughld.augs[aug_slot].max_level
+		    && aughld.augs[aug_slot]._level < aughld.augs[aug_slot].max_level
 		    && plr.countInv("DD_AugmentationUpgradeCanister") >= cnst_instance.queue.toupgrade.size()
 		    && plr.countInv("DD_AugmentationUpgradeCanister") > 0;
 	}

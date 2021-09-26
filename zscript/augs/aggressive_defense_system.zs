@@ -56,12 +56,20 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 			    "increased moderately and it recharges even faster.\n\n"
 			    "TECH FOUR: Projectiles are detonated very afar and\n"
 			    "very often.\n\n"
-			    "Energy Rate: 60 Units/Minute";
+			    "Energy Rate: 60 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: If the nanites forming\n"
+				   "see an opportunity to hack or change the\n"
+				   "inner structure of a projectile directed\n"
+				   "towards agent, they execute it using a modified\n"
+				   "version of the same aerosol.\n";
 
 		slots_cnt = 1;
 		slots[0] = Cranial;
 
 		initProjection();
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -95,6 +103,11 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 	array<double> proj_dispy;
 	array<double> proj_dispz;
 
+	const reflect_prinst_cd = 2; // cooldown of projectile redirection in projectile detection instances
+	int reflect_prinst; // current projectile detection instance
+	const reflect_mul = 2; // multiplicator of velocity of reflected projectiles
+
+
 	void detonateProjInRange()
 	{
 		if(!owner)
@@ -122,9 +135,34 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 				proj_dispy.push(proj.pos.y);
 				proj_dispz.push(proj.pos.z);
 			}
-			else if (destr_cd == 0) {
-				proj.die(proj, proj);
-				destr_cd = getBaseCD() * cd_ml;
+			else {
+				if(legendary && reflect_prinst == reflect_prinst_cd) {
+					reflect_prinst = 0;
+
+					if(proj.bSEEKERMISSILE)
+						proj.A_ChangeVelocity(-proj.vel.x,
+								     -proj.vel.y,
+								     -proj.vel.z, CVF_REPLACE);
+					else
+						proj.A_ChangeVelocity(-proj.vel.x * reflect_mul,
+								     -proj.vel.y * reflect_mul,
+								     -proj.vel.z * reflect_mul, CVF_REPLACE);
+
+					proj.tracer = proj.target;
+					proj.target = owner;
+
+					proj.giveInventory("DD_ProjDamageMod", 1);
+					let dmod = DD_ProjDamageMod(proj.findInventory("DD_ProjDamageMod"));
+					dmod.mult = 2.0;
+				}
+				else{
+					if(legendary)
+						reflect_prinst++;
+					if (destr_cd == 0) {
+						proj.die(proj, proj);
+						destr_cd = getBaseCD() * cd_ml;
+					}
+				}
 			}
 		}
 	}
@@ -220,4 +258,11 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 				++ui_beep_timer;
 		}
 	}
+}
+
+
+class DD_ProjDamageMod : Inventory
+{
+	double mult;
+	// multiplication is done through DD_EventHandler, sadly
 }

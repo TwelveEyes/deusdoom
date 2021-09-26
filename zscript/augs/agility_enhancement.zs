@@ -57,10 +57,16 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			    "agent can perform stunningly long dashes.\n\n"
 			    "TECH FOUR: Agent decelerates almost instantly and\n"
 			    "can cross entire rooms in one leap.\n\n"
-			    "Energy Rate: 55 Units/Minute";
+			    "Energy Rate: 55 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: Agent leaps so quick\n"
+				   "it seems they are teleporting.\n"
+				   "They also can slow down their fall.\n";
 
 		slots_cnt = 1;
 		slots[0] = Legs;
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -70,13 +76,17 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 
 
+	const levitation_velz_cap = 1.0;
+	const levitation_velz_deacc = 15.0;
+
 	clearscope double getDeaccFactor()
 	{
 		return 0.2 + 0.35 * (getRealLevel() - 1);
 	}
 	clearscope double getDashVel()
 	{
-		return 15 + 7.5 * (getRealLevel() - 1);
+		if(legendary)	return 196;
+		else		return 15 + 7.5 * (getRealLevel() - 1);
 	}
 	protected clearscope int getDashCD()
 	{
@@ -84,6 +94,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 	protected double getImpactNegationFactor() { return 0.15 + getRealLevel() * 0.1; }
 	protected double getImpactThreshold() { return 50 + getRealLevel() * 25; }
+
 
 	override void toggle()
 	{
@@ -144,15 +155,33 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		for(uint i = 0; i < 5; ++i)
 		{
 			if(dash_cd == 0 && queue.dashvel[i].length() > 0){
-				if(DD_ModChecker.isLoaded_HDest())
-					queue.falldmg_immune_timer = falldmg_immune_time;
+				if(!legendary)
+				{
+					if(DD_ModChecker.isLoaded_HDest())
+						queue.falldmg_immune_timer = falldmg_immune_time;
 
-				owner.A_ChangeVelocity(queue.dashvel[i].x, queue.dashvel[i].y, queue.dashvel[i].z, CVF_RELATIVE);
-				dash_cd = getDashCD();
-				if(queue.dashvel[i].z == 0 && queue.vwheight_timer == 0){
-					queue.vwheight_prev = owner.player.viewHeight;
-					queue.vwheight_timer = vwheight_time;
-					queue.vwheight_delta = owner.player.viewHeight * 0.8;
+					owner.A_ChangeVelocity(queue.dashvel[i].x, queue.dashvel[i].y, queue.dashvel[i].z, CVF_RELATIVE);
+					dash_cd = getDashCD();
+					if(queue.dashvel[i].z == 0 && queue.vwheight_timer == 0){
+						queue.vwheight_prev = owner.player.viewHeight;
+						queue.vwheight_timer = vwheight_time;
+						queue.vwheight_delta = owner.player.viewHeight * 0.8;
+					}
+				}
+				else
+				{
+					dash_cd = getDashCD();
+
+					double warpstep = 4;
+					double dist = warpstep / ceil(queue.dashvel[i].length());
+					for(uint _try = 0; _try < ceil(queue.dashvel[i].length()); _try += warpstep)
+					{
+						if(!owner.warp(owner, queue.dashvel[i].x * dist,
+								 -queue.dashvel[i].y * dist,
+								  queue.dashvel[i].z * dist,
+								0, WARPF_USECALLERANGLE))
+							break;
+					}
 				}
 			}
 			queue.dashvel[i] = (0, 0, 0);
@@ -196,6 +225,12 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	{
 		if(e.type == InputEvent.Type_KeyDown)
 		{
+			if(legendary && KeyBindUtils.checkBind(e.keyScan, "+jump"))
+			{ // levitating in air
+				EventHandler.sendNetworkEvent("dd_levitate", 1);
+			}
+	
+
 			if(KeyBindUtils.checkBind(e.keyScan, "+forward")
 			|| KeyBindUtils.checkBind(e.keyScan, "+back")
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveleft")
@@ -267,6 +302,11 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		}
 		if(e.type == InputEvent.Type_KeyUp)
 		{
+			if(legendary && KeyBindUtils.checkBind(e.keyScan, "+jump"))
+			{ // stopping levitating in air
+				EventHandler.sendNetworkEvent("dd_levitate", 0);
+			}
+
 			if(KeyBindUtils.checkBind(e.keyScan, "+forward")
 			|| KeyBindUtils.checkBind(e.keyScan, "+back")
 			|| KeyBindUtils.checkBind(e.keyScan, "+moveleft")

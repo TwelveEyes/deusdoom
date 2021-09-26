@@ -27,10 +27,17 @@ class DD_Aug_CombatStrength : DD_Augmentation
 			     "TECH THREE: The effectiveness of melee weapons is\n"
 			     "increased significantly.\n\n"
 			     "TECH FOUR: Melee weapons are almost instantly lethal.\n\n"
-			     "Energy Rate: 50 Units/Minute";
+			     "Energy Rate: 50 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: after agent does not execute\n"
+				   "successful melee attacks for a while, next\n"
+				   "attack will be greatly empowered, either it is\n"
+				   "a single hit or a rapid combination of attacks.\n";
 
 		slots_cnt = 1;
 		slots[0] = Arms;
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -45,9 +52,23 @@ class DD_Aug_CombatStrength : DD_Augmentation
 
 	protected double getDamageFactor() { return 1 + 0.75 * getRealLevel(); }
 
+	const lgbonus_cd = 35 * 15;
+	int lgbonus_cd_timer;
+	const lgbonus_time = 20;
+	int lgbonus_timer;
+	protected double getLegendaryDamageBonus() { return 4.5; }
+
 	// ------
 	// Events
 	// ------
+
+	override void tick()
+	{
+		super.tick();
+
+		if(lgbonus_cd_timer > 0) --lgbonus_cd_timer;
+		if(lgbonus_timer > 0) --lgbonus_timer;
+	}
 
 	override void ownerDamageDealt(int damage, Name damageType, out int newDamage,
 					Actor inflictor, Actor source, int flags)
@@ -61,6 +82,14 @@ class DD_Aug_CombatStrength : DD_Augmentation
 		if(RecognitionUtils.isHandToHandDamage(PlayerPawn(owner), inflictor, source, damageType, flags))
 		{
 			newDamage = damage * getDamageFactor();
+			if(legendary){
+				if(lgbonus_cd_timer == 0)
+					lgbonus_timer = lgbonus_time;
+				if(lgbonus_timer > 0){
+					newDamage = newDamage * getLegendaryDamageBonus();
+				}
+				lgbonus_cd_timer = lgbonus_cd;
+			}
 		}
 	}
 }

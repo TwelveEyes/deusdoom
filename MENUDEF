@@ -121,6 +121,8 @@ OptionMenu "DD_Options"
 		Slider "Bioelectric cell rarity", "dd_ptmult_cell", 0.05, 10.0, 0.05, 2
 		StaticText "CVAR: dd_ptmult_upgrade", Red
 		Slider "Augmentation upgrade canister rarity", "dd_ptmult_upgrade", 0.05, 10.0, 0.05, 2
+		StaticText "CVAR: dd_ptmult_upgrade_lgnd", Red
+		Slider "Augmentation legendary upgrade canister rarity", "dd_ptmult_upgrade_lgnd", 0.05, 10.0, 0.05, 2
 		StaticText "CVAR: dd_ptmult_aug", Red
 		Slider "Augmentation canister rarity", "dd_ptmult_aug", 0.05, 10.0, 0.05, 2
 		StaticText ""
@@ -131,6 +133,7 @@ OptionMenu "DD_Options"
 		StaticText "tweak these settings.", Green
 		Option "Transfer augmentation canisters", "dd_transfer_augcanisters", "OnOff"
 		Option "Transfer augmentation upgrade canisters", "dd_transfer_upgradecanisters", "OnOff"
+		Option "Transfer augmentation legendary upgrade canisters", "dd_transfer_upgradecanisters_lgnd", "OnOff"
 		StaticText ""
 		StaticText "Miscellaneous", Purple
 		StaticText "Various gameplay options that do not fit any particular category.", Green
@@ -151,6 +154,7 @@ OptionMenu "DD_Options"
 		StaticText "KarolineDianne - suggesting ideas", White
 		StaticText "ZikShadow - extensive playtesting", White
 		StaticText "Sledge - suggesting ideas", White
+		StaticText "Corruption Cards [by CutmanMike] - graphical assets", White
 		StaticText "D2Icarus - finding a very interesting bug", White
 		StaticText "Mohl - finding bugs", White
 		StaticText "IKA - finding a bug", White

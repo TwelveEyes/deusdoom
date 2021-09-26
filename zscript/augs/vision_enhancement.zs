@@ -57,7 +57,15 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 			    "TECH TWO: Night vision.\n\n"
 			    "TECH THREE: Close range sonar imaging.\n\n"
 			    "TECH FOUR: Long range sonar imaging.\n\n"
-			    "Energy Rate: 60 Units/Minute\n";
+			    "Energy Rate: 60 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: Augmentation aquires\n"
+				   "capability to scan sonar imaging signatures\n"
+				   "to get a complete picture of objects through\n"
+				   "walls using an enormous database of agent's\n"
+				   "vision recordings. It also improves upon\n"
+				   "chemical structure of metarhodopsin XII,\n"
+				   "getting rid of night vision green tint.";
 
 
 		tex_off = TexMan.CheckForTexture("VISENCH0");
@@ -67,6 +75,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 		slots[0] = Eyes;
 
 		initProjection();
+
+		can_be_legendary = true;
 	}
 
 
@@ -120,7 +130,8 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 
 		if(enabled){
 			if(getRealLevel() >= 2){
-				Shader.setEnabled(pl, "DD_NightVision", true);
+				if(!legendary)
+					Shader.setEnabled(pl, "DD_NightVision", true);
 				owner.giveInventory("DD_VisionEnhancement_Amp", 1);
 			}
 		}
@@ -206,12 +217,20 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 				if(obj.scale.x < 0)
 					flip = !flip;
 
-				UI_Draw.textureStencil(spritetex,
+				if(legendary)
+					UI_Draw.texture(spritetex,
+						sonar_pos.x - texw/2,
+						sonar_pos.y - texh,
+						texw, texh,
+						(flip ? 0 : UI_Draw_FlipX)
+						| (obj.scale.y < 0 ? UI_Draw_FlipY : 0));
+				else
+					UI_Draw.textureStencil(spritetex,
 						sonar_pos.x - texw/2,
 						sonar_pos.y - texh,
 						texw, texh,
 						color(255, 255, 255),
-						(flip ? UI_Draw_FlipX : 0)
+						(flip ? 0 : UI_Draw_FlipX)
 						| (obj.scale.y < 0 ? UI_Draw_FlipY : 0));
 			}
 		}

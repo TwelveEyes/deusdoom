@@ -5,6 +5,7 @@
 	#include "zscript/ui/widget_classes/ui_ddsmbutton_upgrade.zs"
 #include "zscript/ui/widget_classes/ui_ddlabel.zs"
 #include "zscript/ui/widget_classes/ui_ddmultilinelabel.zs"
+#include "zscript/ui/widget_classes/ui_ddscrollbar.zs"
 
 #include "zscript/ui/widget_classes/ui_ddcanisteraugbutn.zs"
 #include "zscript/ui/widget_classes/ui_ddinstalledaugbutn.zs"

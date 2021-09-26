@@ -33,3 +33,13 @@ Model DD_AugmentationUpgradeCanister
 
 	FrameIndex AUCN A 0 0
 }
+Model DD_AugmentationUpgradeCanisterLegendary
+{
+	Path "models/"
+	Model 0 "AugmentationUpgradeCannister_d.3d"
+	Skin 0 "AugmentationUpgradeCannisterLegendary.png"
+
+	Scale 0.11 0.11 0.11
+
+	FrameIndex AULC A 0 0
+}

@@ -34,21 +34,29 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		disp_desc = "Radar-absorbent resin augments epithelial proteins;\n"
 			    "microprojection units distort agent's visual signature.\n"
 			    "Provides highly effective concealment from electronic\n"
-			    "detection methods used by cybernetic enemies. Attacking\n"
-			    "by any means breaks this effect by a brief moment.\n\n"
+			    "detection methods used by cybernetic enemies.\n"
+			    "Attacking by any means breaks this effect by a brief\n"
+			    "moment.\n\n"
 			    "TECH ONE: Power drain is normal, agent is discovered\n"
 			    "for a significant period of time.\n\n"
-			    "TECH TWO: Power drain is reduced slightly, agent becomes\n"
-			    "undetectable faster after attacking.\n\n"
+			    "TECH TWO: Power drain is reduced slightly, agent\n"
+			    "becomes undetectable faster after attacking.\n\n"
 			    "TECH THREE: Power drain is reduced moderately, agent\n"
 			    "becomes undetectable significantly faster.\n\n"
 			    "TECH FOUR: Power drain is reduced significantly. agent\n"
 			    "is detected for a very brief moment.\n\n"
-			    "Energy Rate: 400-250 Units/Minute";
+			    "Energy Rate: 400-250 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: Augmentation can interfere\n"
+				   "with heat and visual signatures using EMP, creating\n"
+				   "an illusion of agent present somewhere else, causing\n"
+				   "enemies to turn against each other.";
 
 		slots_cnt = 2;
 		slots[0] = Subdermal1;
 		slots[1] = Subdermal2;
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -67,6 +75,11 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 	}
 	int blinktimer; // timer that start when player starts an attack,
 			// revealing him for a short time.
+
+	const trick_range = 512;
+	const trick_cd_min = 35 * 8;
+	const trick_cd_max = 35 * 18;
+	int tricktimer;
 
 	override void tick()
 	{
@@ -95,7 +108,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		{
 			while(mnst = Actor(it.next()))
 			{
-				if(!mnst.bIsMonster)
+				if(!mnst.bIsMonster || mnst.health <= 0)
 					continue;
 				if(!RecognitionUtils.isFooledByRadarTransparency(mnst))
 					continue;
@@ -110,7 +123,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		{
 			while(mnst = Actor(it.next()))
 			{
-				if(!mnst.bIsMonster)
+				if(!mnst.bIsMonster || mnst.health <= 0)
 					continue;
 				if(!RecognitionUtils.isFooledByRadarTransparency(mnst))
 					continue;
@@ -121,6 +134,30 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 				}
 			}
 		}
+
+		// Creating illusions
+		BlockThingsIterator itb = BlockThingsIterator.Create(owner, trick_range);
+		Actor prevmnst = null;
+		while(itb.next())
+		{
+			Actor mnst = itb.thing;
+
+			if(!mnst.bIsMonster || mnst.health <= 0)
+				continue;
+			if(!RecognitionUtils.isFooledByRadarTransparency(mnst))
+				continue;
+
+			if(legendary && tricktimer == 0 && !random(0, 4)) // random() to just not always pick the same monster
+			{
+				if(prevmnst){
+					mnst.target = prevmnst;
+
+					tricktimer = random(trick_cd_min, trick_cd_max);
+				}
+				prevmnst = mnst;
+			}
+		}
+
 	}
 
 	override void toggle()

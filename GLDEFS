@@ -9,6 +9,14 @@ HardwareShader postprocess screen
 	Shader "shaders/nightvis.fp" 330
 }
 
+HardwareShader postprocess scene
+{
+	Name "DD_FatalRegen"
+	Shader "shaders/fatalregen.fp" 330
+
+	Uniform float strength
+}
+
 
 Pointlight DD_VisionEnhancementLight
 {
