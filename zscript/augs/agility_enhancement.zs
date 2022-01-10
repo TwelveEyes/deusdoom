@@ -85,14 +85,14 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 	clearscope double getDashVel()
 	{
-		if(legendary)	return 196;
-		else		return 15 + 7.5 * (getRealLevel() - 1);
+		if(legendary)	return 350;
+		else		return 26 + 13 * (getRealLevel() - 1);
 	}
 	protected clearscope int getDashCD()
 	{
-		return 45 - 8 * (getRealLevel() - 1);
+		return 60 - 8 * (getRealLevel() - 1) - (legendary ? 14 : 0);
 	}
-	protected double getImpactNegationFactor() { return 0.15 + getRealLevel() * 0.1; }
+	protected double getImpactNegationFactor() { return 0.25 + getRealLevel() * 0.15; }
 	protected double getImpactThreshold() { return 50 + getRealLevel() * 25; }
 
 
@@ -116,6 +116,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		if(!owner || !(owner is "PlayerPawn"))
 			return;
 
+		// View height change handling
 		if(queue.vwheight_timer > 0){
 			--queue.vwheight_timer;
 
@@ -129,6 +130,14 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		}
 		if(!enabled)
 			return;
+
+		// preventing HDest incap from happening
+		if(DD_ModChecker.isLoaded_HDest() && DD_PatchChecker.isLoaded_HDest() && queue.falldmg_immune_timer > 0){
+			Class<Actor> lv_cls = ClassFinder.findActorClass("DD_HDLastVelCorrector");
+			Actor lastvelcor = spawn(lv_cls);
+			lastvelcor.target = owner;
+			lastvelcor.postBeginPlay();
+		}
 
 		if(abs(queue.deacc) > 0)
 		{
@@ -172,7 +181,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 				{
 					dash_cd = getDashCD();
 
-					double warpstep = 4;
+					double warpstep = 8;
 					double dist = warpstep / ceil(queue.dashvel[i].length());
 					for(uint _try = 0; _try < ceil(queue.dashvel[i].length()); _try += warpstep)
 					{
@@ -192,22 +201,15 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 					Actor inflictor, Actor source, int flags)
 	{
 		// Hdest compat for preventing player from taking "falling" damage when dashing
-		if(damageType == "falling"){
+		if(enabled && damageType == "falling"){
 			if(damage <= getImpactThreshold() || queue.falldmg_immune_timer > 0)
 				newDamage = 0;
 			else
 				newDamage = damage * (1 - getImpactNegationFactor());
 
-			if(DD_ModChecker.isLoaded_HDest() && DD_PatchChecker.isLoaded_HDest())
-			{
-				Class<Actor> st_cls = ClassFinder.findActorClass("DD_HDStunTaker");
-				Actor stuntaker;
-				if(st_cls)
-					stuntaker = Actor.spawn(st_cls);
-
-				stuntaker.target = owner;
-				stuntaker.args[0] = (damage - newDamage) * 30 * 2; // maximum amount of stun from `damage*random(20,30)` and `tostun+=damage`
-			}
+			Class<Actor> st_cls = ClassFinder.findActorClass("DD_HDStunTaker");
+			Actor stuntaker = spawn(st_cls);
+			stuntaker.target = owner;
 		}
 	}
 

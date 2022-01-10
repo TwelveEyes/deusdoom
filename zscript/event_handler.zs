@@ -58,7 +58,7 @@ class DD_EventHandler : StaticEventHandler
 			//aughld.installAug(DD_Aug_GravitationalField(Inventory.Spawn("DD_Aug_GravitationalField")));
 			//aughld.installAug(DD_Aug_CombatStrength(Inventory.Spawn("DD_Aug_CombatStrength")));
 			//aughld.installAug(DD_Aug_SpeedEnhancement(Inventory.Spawn("DD_Aug_SpeedEnhancement")));
-			//aughld.installAug(DD_Aug_AgilityEnhancement(Inventory.Spawn("DD_Aug_AgilityEnhancement")));
+			aughld.installAug(DD_Aug_AgilityEnhancement(Inventory.Spawn("DD_Aug_AgilityEnhancement")));
 			//aughld.installAug(DD_Aug_EnergyShield(Inventory.Spawn("DD_Aug_EnergyShield")));
 			//aughld.installAug(DD_Aug_MicrofibralMuscle(Inventory.Spawn("DD_Aug_MicrofibralMuscle")));
 			//aughld.installAug(DD_Aug_Regeneration(Inventory.Spawn("DD_Aug_Regeneration")));
@@ -184,8 +184,15 @@ class DD_EventHandler : StaticEventHandler
 		if(e.name == "dd_togg_aug")
 		{
 			// Toggle augmentation (inverse it's current state)
-			// Arguments: < augmentation slot >
+			// Arguments: < augmentation slot / -1 to toggle everything on / -2 to toggle everything off>
 			// (see DD_AugSlots enum)
+
+			if(e.args[0] == -1){
+				aughld.queueEnableAllAugs(); return;
+			}
+			else if(e.args[0] == -2){
+				aughld.queueDisableAllAugs(); return;
+			}
 
 			if(e.args[0] < 0 || e.args[0] >= aughld.augs_slots){
 				if(consoleplayer == e.player)
@@ -277,7 +284,7 @@ class DD_EventHandler : StaticEventHandler
 						case 1: agaug.queue.dashvel[1].x = -agaug.getDashVel(); break;
 						case 2: agaug.queue.dashvel[2].y = agaug.getDashVel(); break;
 						case 3: agaug.queue.dashvel[3].y = -agaug.getDashVel(); break;
-						case 4: agaug.queue.dashvel[4].z = agaug.getDashVel() * 0.45; break;
+						case 4: agaug.queue.dashvel[4].z = agaug.getDashVel() * 0.25; break;
 					}
 					break;
 				}

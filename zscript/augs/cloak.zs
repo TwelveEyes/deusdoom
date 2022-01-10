@@ -114,6 +114,8 @@ class DD_Aug_Cloak : DD_Augmentation
 		if(DD_ModChecker.getInstance().isLoaded_HDest()
 			&& DD_PatchChecker.getInstance().isLoaded_HDest())
 		{
+			Class<Actor> tgclr_cls = ClassFinder.findActorClass("DD_HDTargetClearer");
+			Actor tgclr = Spawn(tgclr_cls);
 			while(mnst = Actor(it.next()))
 			{
 				if(!mnst.bIsMonster || mnst.health <= 0)
@@ -121,10 +123,9 @@ class DD_Aug_Cloak : DD_Augmentation
 				if(!RecognitionUtils.isFooledByCloak(mnst))
 					continue;
 	
-				Class<Actor> tgclr_cls = ClassFinder.findActorClass("DD_HDTargetClearer");
-				Actor tgclr = Spawn(tgclr_cls);
 				tgclr.target = mnst;
 				tgclr.master = owner;
+				tgclr.PostBeginPlay();
 			}
 		}
 		else
