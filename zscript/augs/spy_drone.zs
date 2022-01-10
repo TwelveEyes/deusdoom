@@ -16,6 +16,12 @@ class DD_Aug_SpyDrone : DD_Augmentation
 	array<Actor> mark_objs;
 	array<int> mark_timers;
 
+	ui TextureID marker_normal;
+	ui TextureID marker_boss;
+	ui TextureID marker_item;
+
+	int mark_limit;
+
 	// Mouse sensitivity CVARs cache
 	double msens_x;
 	double msens_yaw;
@@ -57,14 +63,16 @@ class DD_Aug_SpyDrone : DD_Augmentation
 		disp_desc = "Advanced nanofactories can assemble a spy drone on\n"
 			    "demand which can then be remotely controlled by the\n"
 			    "agent until released, at which point a new drone\n"
-			    "will be assembled.\n\n"
-			    "TECH ONE: The drone is slow and reveals objects for\n"
+			    "will be assembled. The drone reveals various objects\n"
+			    "for a certain period of time with marks that can\n"
+			    "be seen through walls.\n\n"
+			    "TECH ONE: The drone is slow and marks objects for\n"
 			    "short period of time.\n\n"
-			    "TECH TWO: The drone is faster and reveals objects for\n"
+			    "TECH TWO: The drone is faster and marks objects for\n"
 			    "longer.\n\n"
 			    "TECH THREE: The drone is significantly faster and\n"
-			    "reveals objects for a long time.\n\n"
-			    "TECH FOUR: The drone is incredibly fast and reveals\n"
+			    "marks objects for a long time.\n\n"
+			    "TECH FOUR: The drone is incredibly fast and marks\n"
 			    "objects for a very long time.\n\n"
 			    "Energy Rate: 100 Units/Minute\n\n";
 
@@ -89,6 +97,10 @@ class DD_Aug_SpyDrone : DD_Augmentation
 		camfd_bd = TexMan.checkForTexture("AUGUI36");
 
 		drone_camtex = TexMan.checkForTexture("DDRONCAM", TexMan.Type_Any);
+
+		marker_normal = TexMan.checkForTexture("AUGUI42", TexMan.Type_Any);
+		marker_boss = TexMan.checkForTexture("AUGUI43", TexMan.Type_Any);
+		marker_item = TexMan.checkForTexture("AUGUI44", TexMan.Type_Any);
 	}
 
 	// ------------------
@@ -111,6 +123,8 @@ class DD_Aug_SpyDrone : DD_Augmentation
 				toggle();
 				return;
 			}
+
+			mark_limit = CVar.getCVar("dd_spy_drone_mark_limit", owner.player).getInt();
 
 			msens_x = CVar.getCVar("m_sensitivity_x").getFloat();
 			msens_yaw = CVar.getCVar("m_yaw").getFloat();
@@ -170,7 +184,8 @@ class DD_Aug_SpyDrone : DD_Augmentation
 		proj_scr.orientForRenderOverlay(e);
 		proj_scr.beginProjection();
 
-		for(uint i = 0; i < mark_objs.size(); ++i)
+		uint marks = 0;
+		for(uint i = 0; i < mark_objs.size() && marks < mark_limit; ++i)
 		{
 			if(!mark_objs[i])
 				continue;
@@ -178,7 +193,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			let sight_tr = new("DD_Aug_SpyDrone_SightTracer");
 				sight_tr.ignore[0] = owner;
 				sight_tr.ignore[1] = drone_actor;
-			vector3 trace_dir = mark_objs[i].pos + (0, 0, mark_objs[i].height/2)
+			vector3 trace_dir = mark_objs[i].pos + (0, 0, mark_objs[i].height)
 					    - (owner.pos + (0, 0, PlayerPawn(owner).viewHeight));
 			if(trace_dir.length() == 0)
 				continue;
@@ -188,7 +203,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 				continue;
 
 			// Preparing projection
-			vector3 proj_pos = mark_objs[i].pos + (0, 0, mark_objs[i].height/2);
+			vector3 proj_pos = mark_objs[i].pos + (0, 0, mark_objs[i].height);
 			proj_scr.projectWorldPos(proj_pos);
 			vector2 proj_norm = proj_scr.projectToNormal();
 			vector2 mark_pos = vwport.sceneToWindow(proj_norm);
@@ -203,8 +218,6 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			// Drawing object sprite
 			bool spriteflip;
 			bool wildcarded;
-			TextureID spritetex;
-			[spritetex, spriteflip, wildcarded] = TextureUtils.getActorRenderSpriteTex(mark_objs[i], owner);
 			if(wildcarded && mark_objs[i].health <= 0)
 				continue;
 
@@ -215,14 +228,18 @@ class DD_Aug_SpyDrone : DD_Augmentation
 			if(objdist != 0)
 				texcoff = 1 / (objdist / 92.0);
 			else
-				texcoff = 1.0;
-			double tex_scale_w = abs(mark_objs[i].scale.x) * texcoff;
-			double tex_scale_h = abs(mark_objs[i].scale.y) * texcoff;
+				texcoff = 1;
 
-			double texw = UI_Draw.texWidth(spritetex, -1, -1) * tex_scale_w;
-			double texh = UI_Draw.texHeight(spritetex, -1, -1) * tex_scale_h;
 			if(mark_objs[i].scale.x < 0)
 				spriteflip = !spriteflip;
+
+			TextureID spritetex;
+			if(mark_objs[i] is "Inventory" || mark_objs[i].bFRIENDLY)
+				spritetex = marker_item;
+			else
+				spritetex = (mark_objs[i].bBOSS ? marker_boss : marker_normal);
+			double texw = UI_Draw.texWidth(spritetex, -1, -1) * texcoff;
+			double texh = UI_Draw.texHeight(spritetex, -1, -1) * texcoff;
 
 			UI_Draw.texture(spritetex,
 					mark_pos.x - texw/2,
@@ -230,6 +247,7 @@ class DD_Aug_SpyDrone : DD_Augmentation
 					texw, texh,
 					(spriteflip ? UI_Draw_FlipX : 0)
 					| (mark_objs[i].scale.y < 0 ? UI_Draw_FlipY : 0));
+			++marks;
 		}
 
 		bool hud_dbg = false;

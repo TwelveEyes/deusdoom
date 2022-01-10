@@ -48,6 +48,8 @@ class DD_AugsHolder : Inventory
 	// For draining/gaining energy on certain attacks
 	double energy_drainq;
 	double energy_gainq;
+	int energy_recirc;
+	const energy_recirc_max = 100;
 
 	default
 	{
@@ -271,7 +273,6 @@ class DD_AugsHolder : Inventory
 	// Augmentation management functions
 	// --------------------------------
 
-	// Description:
 	// Makes an attempt to install an augmentation of a certain type into an augmentation holder.
 	// Return values:
 	//	false - augmentation couldn't be installed.
@@ -326,7 +327,6 @@ class DD_AugsHolder : Inventory
 		return true;
 	}
 
-	// Description:
 	// Indicates whether the augmentation of this type can be installed or not.
 	// Return values:
 	//	false - augmentation can't be installed.
@@ -374,7 +374,6 @@ class DD_AugsHolder : Inventory
 	}
 
 
-	// Description:
 	// Queues installing an augemntation.
 	clearscope void queueInstallAug(DD_Augmentation aug_obj)
 	{
@@ -384,19 +383,51 @@ class DD_AugsHolder : Inventory
 		ui_queue.aug_install_queue.push(aug_obj);
 	}
 
-	// Description:
 	// Queues removing an augmentation from available augmentations (lost forever)
 	clearscope void queueDropAug(int install_index)
 	{
 		ui_queue.aug_drop_queue.push(install_index);
 	}
 
-	// Description:
 	// Queues toggling an augmentation in certain slot.
 	// Trusts validity of the slot.
 	clearscope void queueToggleAug(int slot)
 	{
 		ui_queue.aug_toggle_queue[slot] = true;
+	}
+	clearscope void queueEnableAllAugs()
+	{
+		for(uint i = 0; i < augs_slots; ++i)
+		{
+			if(augs[i] && augs[i].can_be_all_toggled && !augs[i].enabled)
+				ui_queue.aug_toggle_queue[i] = true;
+		}
+	}
+	clearscope void queueDisableAllAugs()
+	{
+		for(uint i = 0; i < augs_slots; ++i)
+		{
+			if(augs[i] && augs[i].can_be_all_toggled && augs[i].enabled)
+				ui_queue.aug_toggle_queue[i] = true;
+		}
+	}
+
+	// Adds spent energy to energy recirculation pool.
+	// The pool always has the same capacity, but efficiency depends
+	// on power recirculation level.
+	play void addRecirculationEnergy(int amt)
+	{
+		energy_recirc += amt;
+		if(energy_recirc > energy_recirc_max)
+			energy_recirc = energy_recirc_max;
+	}
+	// Removes recirculated energy through recirculation pool.
+	play int spendRecirculationEnergy(int amt)
+	{
+		if(amt >= energy_recirc)
+			amt = energy_recirc;
+		energy_recirc -= amt;
+		return amt;
 	}
 
 	// ------------

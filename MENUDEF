@@ -29,6 +29,8 @@ OptionMenu "DD_Options"
 		Control "Activate/deactive augmentation in torso slot 2",	dd_togg_aug_8
 		Control "Activate/deactive augmentation in torso slot 3",	dd_togg_aug_9
 		Control "Activate/deactive light augmentation (unused)",	dd_togg_aug_0
+		Control "Activate all augmentations",				dd_togg_aug_all_on
+		Control "Deactivate all augmentations",				dd_togg_aug_all_off
 		StaticText "Agility enhancement augmentation", Purple
 		Control "Dash in held movement direction",			dd_dash
 		StaticText "Targeting augmentation", Purple
@@ -97,6 +99,8 @@ OptionMenu "DD_Options"
 		StaticText "CVAR: dd_spy_drone_cam_offy", Red
 		Slider "Spy drone camera feed Y offset", "dd_spy_drone_cam_offy", -200.0, 200.0, 0.25, 2
 		StaticText ""
+		StaticText "CVAR: dd_spy_drone_mark_limit", Red
+		Slider "Spy drone mark limit", "dd_spy_drone_mark_limit", 10, 1000, 10, 0
 	}
 	OptionMenu "DD_Settings_Visual"
 	{
@@ -151,8 +155,9 @@ OptionMenu "DD_Options"
 		StaticText "SPECIAL THANKS TO:", Purple
 		StaticText "Yholl - extensive playtesting, finding bugs, suggesting ideas", White
 		StaticText "KeksDose - for making a wondeful libeye code library", White
-		StaticText "KarolineDianne - suggesting ideas", White
 		StaticText "ZikShadow - extensive playtesting", White
+		StaticText "josh771 - graphical assets", White
+		StaticText "KarolineDianne - suggesting ideas", White
 		StaticText "Sledge - suggesting ideas", White
 		StaticText "Corruption Cards [by CutmanMike] - graphical assets", White
 		StaticText "D2Icarus - finding a very interesting bug", White

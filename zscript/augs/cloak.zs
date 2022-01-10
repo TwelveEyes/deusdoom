@@ -83,15 +83,16 @@ class DD_Aug_Cloak : DD_Augmentation
 	{
 		super.tick();
 
-		if(!enabled){
+		if(!enabled || !owner){
 			return;
 		}
 
 		if(legendary && tricktimer > 0)
 			--tricktimer;
 
-		if(owner.curstate == PlayerPawn(owner).MissileState
-		|| owner.curstate == PlayerPawn(owner).MeleeState)
+		if(owner is "PlayerPawn"
+		&& (owner.curstate == PlayerPawn(owner).MissileState
+		 || owner.curstate == PlayerPawn(owner).MeleeState))
 		{
 			owner.A_SetRenderStyle(1.0, Style_Normal);
 			blinktimer = getBlinkTime();
@@ -102,7 +103,10 @@ class DD_Aug_Cloak : DD_Augmentation
 			return;
 		}
 
-		owner.A_SetRenderStyle(1.0, Style_Fuzzy);
+		if(owner is "PlayerPawn")
+			owner.A_SetRenderStyle(1.0, Style_Fuzzy);
+		else
+			owner.A_SetRenderStyle(0.1, Style_Translucent);
 
 		Actor mnst;
 		ThinkerIterator it = ThinkerIterator.create("Actor", STAT_DEFAULT);

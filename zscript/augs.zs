@@ -61,6 +61,7 @@ class DD_Augmentation : Inventory
 	bool can_be_legendary;
 
 	bool enabled;
+	bool can_be_all_toggled;	// is toggled on/off by "enable/disable all augmentations" binds
 
 	DD_AugSlots slots[3];	// possible slot numbers
 	uint slots_cnt;		// count of possible slots
@@ -91,7 +92,7 @@ class DD_Augmentation : Inventory
 
 	override void tick()
 	{
-		if(enabled)
+		if(enabled && owner)
 		{
 			if(owner.countInv("DD_BioelectricEnergy") == 0){
 				toggle();
@@ -108,7 +109,8 @@ class DD_Augmentation : Inventory
 			if(drain_queue > 1.0)
 			{
 				owner.takeInventory("DD_BioelectricEnergy", floor(drain_queue));
-				drain_queue -= ceil(drain_queue);
+				aughld.addRecirculationEnergy(floor(drain_queue));
+				drain_queue -= floor(drain_queue);
 			}
 		}
 	}
@@ -140,6 +142,7 @@ class DD_Augmentation : Inventory
 		slots_cnt = 0;
 
 		enabled = false;
+		can_be_all_toggled = true;
 	}
 
 	// Called to toggle augmentation state.
