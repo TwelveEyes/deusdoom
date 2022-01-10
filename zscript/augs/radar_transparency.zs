@@ -106,17 +106,19 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 		if(DD_ModChecker.getInstance().isLoaded_HDest()
 			&& DD_PatchChecker.getInstance().isLoaded_HDest())
 		{
+			Class<Actor> tgclr_cls = ClassFinder.findActorClass("DD_HDTargetClearer");
+			Actor tgclr = Spawn(tgclr_cls);
+
 			while(mnst = Actor(it.next()))
 			{
 				if(!mnst.bIsMonster || mnst.health <= 0)
 					continue;
 				if(!RecognitionUtils.isFooledByRadarTransparency(mnst))
 					continue;
-	
-				Class<Actor> tgclr_cls = ClassFinder.findActorClass("DD_HDTargetClearer");
-				Actor tgclr = Spawn(tgclr_cls);
+
 				tgclr.target = mnst;
 				tgclr.master = owner;
+				tgclr.PostBeginPlay();
 			}
 		}
 		else
