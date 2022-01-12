@@ -51,8 +51,9 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		id = 19;
 		disp_name = "Microfibral Muscle";
 		disp_desc = "Muscle strength is amplified with ionic polymeric gel\n"
-			    "myofibrils that allow the agent to lift extraordinarily\n"
-			    "heavy objects.\n\n"
+			    "myofibrils that allow the agent to lift and throw\n"
+			    "extraordinarily heavy objects, which can stun\n"
+			    "and hurt monsters on impact.\n\n"
 			    "TECH ONE: Strength is increased slightly, agent can\n"
 			    "pick up some objects.\n\n"
 			    "TECH TWO: Strength is increased moderately, agent\n"
@@ -63,9 +64,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 
 		disp_legend_desc = "LEGENDARY UPGRADE: Agent is so strong that they\n"
 				   "can pry open many door-like structures with their\n"
-				   "bare hands. Also, objects are now thrown so violently\n"
-				   "that they do not only stagger enemies hit, but also\n"
-				   "damage them.";
+				   "bare hands. Also, objects are now thrown much move\n"
+				   "violently, causing much more damage on impact.";
 
 		slots_cnt = 1;
 		slots[0] = Arms;
@@ -132,6 +132,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	protected double getStunDurMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
 	protected int getStunDurMin() { return 15 + 7 * (getRealLevel() - 1); }
 	protected int getStunDurMax() { return 70 + 35 * (getRealLevel() - 1); }
+	protected double getDamageMult() { return 0.4 + 0.3 * (getRealLevel() - 1) + (legendary ? 3.0 : 0); }
+
 	protected int cantPickupObj(Actor ac)
 	{
 		double th_ml = 1.0;
@@ -185,8 +187,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 								pstun.dur_timer = getStunDurMin();
 							tobj.addInventory(pstun);
 
-							if(legendary)
-								tobj.damageMobj(owner, owner, max(50, min(tobj.GetSpawnHealth() / 10, 200)), "None");
+							tobj.damageMobj(owner, owner, max(50, min(tobj.GetSpawnHealth() / 10, 200) * getDamageMult()), "None");
 
 							queue.soldify_stunned[i] = true;
 						}
