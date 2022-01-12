@@ -48,3 +48,9 @@ HDMarine damageIsBallistic_Source;
 
 # Any kind of zombie
 HDMobMan damageIsBallistic_Source;
+
+# Arachnotron
+TechnoSpider !isFooledByCloak isFooledByRadarTransparency;
+
+# Spider Mastermind
+Technorantula !isFooledByCloak isFooledByRadarTransparency;
