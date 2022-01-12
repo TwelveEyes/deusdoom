@@ -296,6 +296,16 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		}
 	}
 
+	override void travelled()
+	{
+		// Reset all the queues to avoid hard crashing when ticking on the next level
+		queue.objwep = false;
+		queue.soldify_timers.clear();
+		queue.soldify_objs.clear();	
+		queue.soldify_wasthruactors.clear();
+		queue.soldify_stunned.clear();
+	}
+
 	override void drawUnderlay(RenderEvent e, DD_EventHandler hndl)
 	{
 		if(owner && owner is "PlayerPawn" && owner.player.readyWeapon)
