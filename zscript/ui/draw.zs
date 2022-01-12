@@ -21,7 +21,7 @@ class UI_Draw
 	//	       <0 - to have their original value multiplied by absolute value of passed value.
 	// Return value:
 	//	double - value of dimension that was fit to aspect ratio, or 0.0 if none.
-	static ui double texture(TextureID id, double x, double y, double w, double h, UI_DrawFlags flags = 0)
+	static ui double texture(TextureID id, double x, double y, double w, double h, UI_DrawFlags flags = 0, double alpha = 1.0)
 	{
 		int tex_w, tex_h;
 		[tex_w, tex_h] = TexMan.GetSize(id);
@@ -54,7 +54,8 @@ class UI_Draw
 					DTA_DESTWIDTHF, w,
 					DTA_DESTHEIGHTF, h,
 					DTA_FLIPX, flags & UI_Draw_FlipX,
-					DTA_FLIPY, flags & UI_Draw_FlipY);
+					DTA_FLIPY, flags & UI_Draw_FlipY,
+					DTA_ALPHA, alpha);
 
 		return ret_val;
 	}

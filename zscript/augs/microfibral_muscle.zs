@@ -53,7 +53,10 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		disp_desc = "Muscle strength is amplified with ionic polymeric gel\n"
 			    "myofibrils that allow the agent to lift and throw\n"
 			    "extraordinarily heavy objects, which can stun\n"
-			    "and hurt monsters on impact.\n\n"
+			    "and hurt monsters on impact.\n"
+			    "It also allows the agent to strangle and pick up alive\n"
+			    "monsters, with each tech level increasing the tier of\n"
+			    "monsters possible to pick up.\n\n"
 			    "TECH ONE: Strength is increased slightly, agent can\n"
 			    "pick up some objects.\n\n"
 			    "TECH TWO: Strength is increased moderately, agent\n"
@@ -65,7 +68,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		disp_legend_desc = "LEGENDARY UPGRADE: Agent is so strong that they\n"
 				   "can pry open many door-like structures with their\n"
 				   "bare hands. Also, objects are now thrown much move\n"
-				   "violently, causing much more damage on impact.";
+				   "violently, causing much more damage on impact, and\n"
+				   "much more dangerous monsters can be picked up.";
 
 		slots_cnt = 1;
 		slots[0] = Arms;
@@ -129,10 +133,13 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 
 	protected int getMaxMassPickup() { return 80 + 310 * (getRealLevel() - 1); }
 	double getThrowForceMult() { return 1.0 + 1.0 * (getRealLevel() - 1); }
+
 	protected double getStunDurMult() { return 1.0 + 0.75 * (getRealLevel() - 1); }
 	protected int getStunDurMin() { return 15 + 7 * (getRealLevel() - 1); }
 	protected int getStunDurMax() { return 70 + 35 * (getRealLevel() - 1); }
-	protected double getDamageMult() { return 0.4 + 0.3 * (getRealLevel() - 1) + (legendary ? 3.0 : 0); }
+
+	protected double getDamageMult() { return 0.4 + 0.3 * (getRealLevel() - 1) + (legendary ? 2.6 : 0); }
+	protected int getAliveMonsterHealthMax() { return 50 + 150 * (getRealLevel() - 1) + (legendary ? 1000 : 0); }
 
 	protected int cantPickupObj(Actor ac)
 	{
@@ -141,7 +148,9 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 		if(bh == -1)
 			return 1;
 
-		if(ac.bIsMonster && ac.health > 0)
+		if(ac.bIsMonster && ac.health > getAliveMonsterHealthMax())
+			return 1;
+		if(ac.bIsMonster && ac.health <= 0 && ac.bBOSS)
 			return 1;
 		if(ac.mass * th_ml > getMaxMassPickup()
 		&& !(ac is "Inventory"))
@@ -327,7 +336,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 								160 - texw/2, 180 - texh/2,
 								texw, texh,
 								(objwep.held_obj.scale.x < 0 ? UI_Draw_FlipX : 0)
-								| (objwep.held_obj.scale.y < 0 ? UI_Draw_FlipY : 0));
+								| (objwep.held_obj.scale.y < 0 ? UI_Draw_FlipY : 0),
+								0.4);
 				}
 			}
 		}
