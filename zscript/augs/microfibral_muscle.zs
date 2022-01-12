@@ -250,14 +250,11 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				owner.player.pendingWeapon = Weapon(objwep);
 				owner.player.bringUpWeapon();
 			}
-			else if(target_sector)
+			else if(target_sector && legendary)
 			{
 				for(uint i = 0; i < target_sector.lines.size(); ++i)
 				{
 					Line l = target_sector.lines[i];
-
-					//if(l.special != 0)
-					//	console.printf("%d", l.special);
 
 					bool shouldpry = false;
 					for(uint i = 0; i < doorspecials.size(); ++i)
