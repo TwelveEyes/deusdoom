@@ -17,8 +17,8 @@ class DD_Aug_EnvironmentalResistance : DD_Augmentation
 		id = 13;
 		disp_name = "Environmental Resistance";
 		disp_desc = "Induced keratin production strengthens all epithelial\n"
-			    "tissues and reduces an agent's vulnerability to radiation,\n"
-			    "toxins and hot surfaces.\n\n"
+			    "tissues and reduces an agent's vulnerability to\n"
+			    "radiation, toxins and hot surfaces.\n\n"
 			    "TECH ONE: Hazard resistance is increased slightly.\n\n"
 			    "TECH TWO: Hazard resistance is increased moderately.\n\n"
 			    "TECH THREE: Hazard resistance is increased\n"

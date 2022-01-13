@@ -47,11 +47,12 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 
 		id = 9;
 		disp_name = "Vision Enhancement";
-		disp_desc = "By bleaching selected rod photoreceptors and saturating\n"
-			    "them with metarhodopsin XII, the \"nightvision\" present\n"
-			    "in most nocturnal animals can be duplicated. Subsequent\n"
-			    "upgrades and modifications add sonar-resonance imaging\n"
-			    "that effectively allows an agent to see through walls.\n\n"
+		disp_desc = "By bleaching selected rod photoreceptors and\n"
+			    "saturating them with metarhodopsin XII, the\n"
+			    "\"nightvision\" present in most nocturnal animals\n"
+			    "can be duplicated. Subsequent upgrades and\n"
+			    "modifications add sonar-resonance imaging that\n"
+			    "effectively allows an agent to see through walls.\n\n"
 			    "TECH ONE: Agent emits certain amount of light,\n"
 			    "illuminating area around them.\n\n"
 			    "TECH TWO: Night vision.\n\n"

@@ -38,8 +38,10 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "agent to full health over time.\n\n"
 				    "TECH ONE: Healing occurs at a normal rate.\n\n"
 				    "TECH TWO: Healing occurs at a slightly faster rate.\n\n"
-				    "TECH THREE: Healing occurs at a moderately faster rate.\n\n"
-				    "TECH FOUR: Healing occurs at a significantly faster rate.\n\n";
+				    "TECH THREE: Healing occurs at a moderately faster\n"
+				    "rate.\n\n"
+				    "TECH FOUR: Healing occurs at a significantly faster\n"
+				    "rate.\n\n";
 
 		disp_legend_desc = "LEGENDARY UPGRADE: Prevents an instance of\n"
 				   "fatal damage directed at agent, granting a short\n"

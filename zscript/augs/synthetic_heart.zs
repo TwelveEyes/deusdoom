@@ -29,9 +29,9 @@ class DD_Aug_SyntheticHeart : DD_Augmentation
 			    "-- Jaime Reyes <END NOTE>\n\n"
 			    "Energy Rate: 120 Units/Minute\n\n";
 
-		disp_legend_desc = "LEGENDARY UPGRADE: boosts all maximum tech augmentations\n"
-				   "to legendary level, boosts all legendary augmentations\n"
-				   "one level past maximum.";
+		disp_legend_desc = "LEGENDARY UPGRADE: boosts all maximum tech\n"
+				   "augmentations to legendary level, boosts all legendary\n"
+				   "augmentations one level past maximum.";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;

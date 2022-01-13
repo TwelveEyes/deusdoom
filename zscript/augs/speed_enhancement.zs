@@ -17,10 +17,11 @@ class DD_Aug_SpeedEnhancement : DD_Augmentation
 		id = 4;
 		disp_name = "Speed Enhancement";
 		disp_desc = "Ionic polymeric gel myofibrils are woven into the leg\n"
-			    "muscles increasing the speed at which an agent can run\n"
-			    "and the height they can jump.\n\n"
+			    "muscles increasing the speed at which an agent can\n"
+			    "run and the height they can jump.\n\n"
 			    "TECH ONE: Speed and jumping are increased slightly.\n\n"
-			    "TECH TWO: Speed and jumping are increased moderately.\n\n"
+			    "TECH TWO: Speed and jumping are increased\n"
+			    "moderately.\n\n"
 			    "TECH THREE: Speed and jumping are increased\n"
 			    "significantly.\n\n"
 			    "TECH FOUR: An agent can run like the wind and leap\n"

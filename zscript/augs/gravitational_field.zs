@@ -16,15 +16,16 @@ class DD_Aug_GravitationalField : DD_Augmentation
 
 		id = 2;
 		disp_name = "Gravitational field";
-		disp_desc = "Nanoscale gravity field generators work in a pattern that\n"
-			    "constantly pushes away everything at little force.\n\n"
+		disp_desc = "Nanoscale gravity field generators work in a pattern\n"
+			    "that constantly pushes away everything at little force.\n\n"
 			    "TECH ONE: Objects are pushed a little.\n\n"
-			    "TECH TWO: Objects are pushed more at further distance.\n\n"
+			    "TECH TWO: Objects are pushed more at further\n"
+			    "distance.\n\n"
 			    "TECH THREE: Objects are pushed away significantly\n"
 			    "faster and further.\n\n"
-			    "TECH FOUR: All but the fastest and furthest objects are\n"
-			    "violently pushed away.\n\n"
-			    "Enrgy Rate: 100 Units/Minute";
+			    "TECH FOUR: All but the fastest and furthest objects\n"
+			    "are violently pushed away.\n\n"
+			    "Energy Rate: 100 Units/Minute";
 
 		slots_cnt = 2;
 		slots[0] = Subdermal1;
