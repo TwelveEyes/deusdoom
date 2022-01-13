@@ -149,7 +149,7 @@ class DD_Aug_RadarTransparency : DD_Augmentation
 			if(!RecognitionUtils.isFooledByRadarTransparency(mnst))
 				continue;
 
-			if(legendary && tricktimer == 0 && !random(0, 4)) // random() to just not always pick the same monster
+			if(isLegendary() && tricktimer == 0 && !random(0, 4)) // random() to just not always pick the same monster
 			{
 				if(prevmnst){
 					mnst.target = prevmnst;

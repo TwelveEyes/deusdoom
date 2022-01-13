@@ -85,12 +85,12 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	}
 	clearscope double getDashVel()
 	{
-		if(legendary)	return 350;
+		if(isLegendary())	return 350;
 		else		return 26 + 13 * (getRealLevel() - 1);
 	}
 	protected clearscope int getDashCD()
 	{
-		return 60 - 8 * (getRealLevel() - 1) - (legendary ? 14 : 0);
+		return 60 - 8 * (getRealLevel() - 1) - (isLegendary() ? 14 : 0);
 	}
 	protected double getImpactNegationFactor() { return 0.25 + getRealLevel() * 0.15; }
 	protected double getImpactThreshold() { return 50 + getRealLevel() * 25; }
@@ -165,7 +165,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		for(uint i = 0; i < 5; ++i)
 		{
 			if(dash_cd == 0 && queue.dashvel[i].length() > 0){
-				if(!legendary)
+				if(!isLegendary())
 				{
 					if(DD_ModChecker.isLoaded_HDest())
 						queue.falldmg_immune_timer = falldmg_immune_time;
@@ -228,7 +228,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 	{
 		if(e.type == InputEvent.Type_KeyDown)
 		{
-			if(legendary && KeyBindUtils.checkBind(e.keyScan, "+jump"))
+			if(isLegendary() && KeyBindUtils.checkBind(e.keyScan, "+jump"))
 			{ // levitating in air
 				EventHandler.sendNetworkEvent("dd_levitate", 1);
 			}
@@ -305,7 +305,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 		}
 		if(e.type == InputEvent.Type_KeyUp)
 		{
-			if(legendary && KeyBindUtils.checkBind(e.keyScan, "+jump"))
+			if(isLegendary() && KeyBindUtils.checkBind(e.keyScan, "+jump"))
 			{ // stopping levitating in air
 				EventHandler.sendNetworkEvent("dd_levitate", 0);
 			}

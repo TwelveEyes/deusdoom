@@ -136,7 +136,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 				proj_dispz.push(proj.pos.z);
 			}
 			else {
-				if(legendary && reflect_prinst == reflect_prinst_cd) {
+				if(isLegendary() && reflect_prinst == reflect_prinst_cd) {
 					reflect_prinst = 0;
 
 					if(proj.bSEEKERMISSILE)
@@ -156,7 +156,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 					dmod.mult = 2.0;
 				}
 				else{
-					if(legendary)
+					if(isLegendary())
 						reflect_prinst++;
 					if (destr_cd == 0) {
 						proj.die(proj, proj);

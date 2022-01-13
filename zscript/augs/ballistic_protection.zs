@@ -53,7 +53,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 
 	protected double getProtectionFactor()
 	{
-		double lgnd_off = legendary ? 0.07 : 0;
+		double lgnd_off = isLegendary() ? 0.07 : 0;
 		if(getRealLevel() <= max_level)
 			return 0.20 + 0.166 * (getRealLevel() - 1) + lgnd_off;
 		else
@@ -76,7 +76,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 		double protfact_ml;
 		if(RecognitionUtils.damageIsBallistic(inflictor, source, damageType, flags, protfact_ml))
 		{
-			if(legendary && ricochet_dminst == ricochet_dminst_cd){
+			if(isLegendary() && ricochet_dminst == ricochet_dminst_cd){
 				ricochet_dminst = 0;
 				newDamage = 0;
 
@@ -94,7 +94,7 @@ class DD_Aug_BallisticProtection : DD_Augmentation
 				}
 			}
 			else {
-				if(legendary)
+				if(isLegendary())
 					ricochet_dminst++;
 				newDamage = damage * (1 - getProtectionFactor() * protfact_ml);
 				DD_AugsHolder aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));

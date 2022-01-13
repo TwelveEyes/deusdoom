@@ -87,7 +87,7 @@ class DD_Aug_Cloak : DD_Augmentation
 			return;
 		}
 
-		if(legendary && tricktimer > 0)
+		if(isLegendary() && tricktimer > 0)
 			--tricktimer;
 
 		if(owner is "PlayerPawn"
@@ -156,7 +156,7 @@ class DD_Aug_Cloak : DD_Augmentation
 			if(!RecognitionUtils.isFooledByCloak(mnst))
 				continue;
 
-			if(legendary && tricktimer == 0 && !random(0, 4)) // random() to just not always pick the same monster
+			if(isLegendary() && tricktimer == 0 && !random(0, 4)) // random() to just not always pick the same monster
 			{
 				if(prevmnst){
 					mnst.target = prevmnst;

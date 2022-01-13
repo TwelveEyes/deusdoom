@@ -27,12 +27,18 @@ class DD_Aug_SyntheticHeart : DD_Augmentation
 			    "this WILL enhance any augmentation past its maximum\n"
 			    "upgrade level, but not as effectively.\n"
 			    "-- Jaime Reyes <END NOTE>\n\n"
-			    "Energy Rate: 120 Units/Minute";
+			    "Energy Rate: 120 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: boosts all maximum tech augmentations\n"
+				   "to legendary level, boosts all legendary augmentations\n"
+				   "one level past maximum.";
 
 		slots_cnt = 3;
 		slots[0] = Torso1;
 		slots[1] = Torso2;
 		slots[2] = Torso3;
+
+		can_be_legendary = true;
 	}
 
 	override void UIInit()
@@ -42,18 +48,22 @@ class DD_Aug_SyntheticHeart : DD_Augmentation
 	}
 
 	int aug_dlevel[DD_AugsHolder.augs_slots];
-	override void toggle()
+	override void tick()
 	{
-		super.toggle();
+		super.tick();
 
 		if(!owner)
 			return;
 		let aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
 		if(!aughld)
 			return;
-		if(enabled)
-			aughld.level_boost = 1;
-		else
+		if(enabled){
+			aughld.level_boost = legendary ? 2 : 1;
+			if(isLegendary()) aughld.legendary_boost = true;
+		}
+		else{
 			aughld.level_boost = 0;
+			aughld.legendary_boost = false;
+		}
 	}
 }

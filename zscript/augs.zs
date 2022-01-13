@@ -54,10 +54,25 @@ class DD_Augmentation : Inventory
 		if(!aughld)
 			return _level;
 
-		return _level + aughld.level_boost;
+		uint ret = _level;
+		if(aughld.level_boost >= 1 && ret < max_level)
+			ret++;
+		if(aughld.level_boost == 2 && legendary)
+			ret++;
+		return ret;
+			
 	}
 	uint max_level;
 	bool legendary; // if augmentation is legendary upgraded
+	clearscope bool isLegendary()
+	{
+		if(!owner)
+			return legendary;
+		let aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));
+		if(!aughld)
+			return legendary;
+		return legendary || (aughld.legendary_boost && _level >= max_level);
+	}
 	bool can_be_legendary;
 
 	bool enabled;

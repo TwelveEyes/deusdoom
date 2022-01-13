@@ -82,7 +82,7 @@ class DD_Aug_CombatStrength : DD_Augmentation
 		if(RecognitionUtils.isHandToHandDamage(PlayerPawn(owner), inflictor, source, damageType, flags))
 		{
 			newDamage = damage * getDamageFactor();
-			if(legendary){
+			if(isLegendary()){
 				if(lgbonus_cd_timer == 0)
 					lgbonus_timer = lgbonus_time;
 				if(lgbonus_timer > 0){

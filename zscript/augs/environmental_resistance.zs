@@ -72,7 +72,7 @@ class DD_Aug_EnvironmentalResistance : DD_Augmentation
 		if(!enabled)
 			return;
 
-		if(legendary && owner.floorsector.damageamount > 0)
+		if(isLegendary() && owner.floorsector.damageamount > 0)
 		{
 			DD_EventHandler deh = DD_EventHandler(StaticEventHandler.find("DD_EventHandler"));
 			uint i = deh.dissipating_sectors.find(owner.floorsector);

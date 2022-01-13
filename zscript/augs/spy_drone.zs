@@ -494,7 +494,7 @@ class DD_SpyDrone : Actor
 							.activate(self.master, usetracer.results.side, 
 							SPAC_PlayerActivate);
 					if(usetracer.results.hitActor is "Inventory"
-						&& parent_aug && parent_aug.legendary)
+						&& parent_aug && parent_aug.isLegendary())
 					{
 						if(usetracer.results.hitActor is "Inventory"){
 							Inventory inv = Inventory(usetracer.results.hitActor);

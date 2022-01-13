@@ -130,7 +130,7 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 
 		if(enabled){
 			if(getRealLevel() >= 2){
-				if(!legendary)
+				if(!isLegendary())
 					Shader.setEnabled(pl, "DD_NightVision", true);
 				owner.giveInventory("DD_VisionEnhancement_Amp", 1);
 			}
@@ -217,7 +217,7 @@ class DD_Aug_VisionEnhancement : DD_Augmentation
 				if(obj.scale.x < 0)
 					flip = !flip;
 
-				if(legendary)
+				if(isLegendary())
 					UI_Draw.texture(spritetex,
 						sonar_pos.x - texw/2,
 						sonar_pos.y - texh,

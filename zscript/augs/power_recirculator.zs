@@ -68,11 +68,6 @@ class DD_Aug_PowerRecirculator : DD_Augmentation
 	// Engine events
 	// -------------
 
-	override void toggle()
-	{
-		super.toggle();
-	}
-
 	override void tick()
 	{
 		super.tick();

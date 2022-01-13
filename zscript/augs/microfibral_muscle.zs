@@ -138,8 +138,8 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 	protected int getStunDurMin() { return 15 + 7 * (getRealLevel() - 1); }
 	protected int getStunDurMax() { return 70 + 35 * (getRealLevel() - 1); }
 
-	protected double getDamageMult() { return 0.4 + 0.3 * (getRealLevel() - 1) + (legendary ? 2.6 : 0); }
-	protected int getAliveMonsterHealthMax() { return 50 + 150 * (getRealLevel() - 1) + (legendary ? 1000 : 0); }
+	protected double getDamageMult() { return 0.4 + 0.3 * (getRealLevel() - 1) + (isLegendary() ? 2.6 : 0); }
+	protected int getAliveMonsterHealthMax() { return 50 + 150 * (getRealLevel() - 1) + (isLegendary() ? 1000 : 0); }
 
 	protected int cantPickupObj(Actor ac)
 	{
@@ -260,7 +260,7 @@ class DD_Aug_MicrofibralMuscle : DD_Augmentation
 				owner.player.pendingWeapon = Weapon(objwep);
 				owner.player.bringUpWeapon();
 			}
-			else if(target_sector && legendary)
+			else if(target_sector && isLegendary())
 			{
 				for(uint i = 0; i < target_sector.lines.size(); ++i)
 				{

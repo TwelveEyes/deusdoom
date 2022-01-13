@@ -138,7 +138,7 @@ class DD_Aug_Targeting : DD_Augmentation
 		{
 			vector2 off = CVar_Utils.getOffset("dd_targeting_info_off");
 
-			// legendary: last targeted enemy
+			// isLegendary(): last targeted enemy
 			UI_Draw.str(hndl.aug_ui_font, "Last targeted: DoomImp",
 							11, 4 + off.x, 17 + off.y, -0.5, -0.5);
 			UI_Draw.str(hndl.aug_ui_font, "Monster", 11,
@@ -182,7 +182,7 @@ class DD_Aug_Targeting : DD_Augmentation
 						ret_w, ret_h);
 		}
 		// legendary: last targeted enemy
-		if(legendary){
+		if(isLegendary()){
 			UI_Draw.str(hndl.aug_ui_font, String.Format("Last targeted enemy: %s",
 							last_target_obj ? last_target_obj.getTag("") : "None"),
 							11, 4 + off.x, 17 + off.y, -0.5, -0.5);
@@ -246,7 +246,7 @@ class DD_Aug_Targeting : DD_Augmentation
 	override void ownerDamageDealt(int damage, Name damageType, out int newDamage,
 					Actor inflictor, Actor source, int flags)
 	{
-		if(!enabled || !legendary)
+		if(!enabled || !isLegendary())
 			return;
 
 		if(source == last_target_obj)

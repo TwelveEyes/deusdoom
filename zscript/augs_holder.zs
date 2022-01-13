@@ -104,7 +104,8 @@ class DD_AugsHolder : Inventory
 
 	// Lil' hacks for Power Recirculator and Synthetic Heart
 	double energy_drain_ml;
-	int level_boost;
+	int level_boost; // 0 - no boost, 1 - boost up to level 4, 2 - boost to level 5 if legendary
+	bool legendary_boost;
 
 	override void tick()
 	{

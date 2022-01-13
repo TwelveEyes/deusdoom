@@ -204,7 +204,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 		if(!enabled)
 			return;
 
-		if(legendary && damage >= owner.health && fatal_regen_timer == 0)
+		if(isLegendary() && damage >= owner.health && fatal_regen_timer == 0)
 		{ // save the user
 			owner.giveInventory("Health", fatal_regen_burst);
 			owner.A_StartSound("play/aug/fatalsave1");

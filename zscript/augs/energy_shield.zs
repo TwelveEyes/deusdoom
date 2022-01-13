@@ -95,7 +95,7 @@ class DD_Aug_EnergyShield : DD_Augmentation
 			return;
 		}
 
-		if(legendary && dmg_resv > dmg_aura_threshold){
+		if(isLegendary() && dmg_resv > dmg_aura_threshold){
 			if(!aura_effect){
 				aura_effect = DD_EnergyShield_AuraEffect(Spawn("DD_EnergyShield_AuraEffect"));
 				aura_effect.parent_aug = self;
@@ -150,7 +150,7 @@ class DD_Aug_EnergyShield : DD_Augmentation
 			aughld.absorbtion_msg = String.Format("%.0f%% ABSORB", getProtectionFactor() * 100 * protfact_ml);
 			aughld.absorbtion_msg_timer = 35 * 2;
 
-			if(legendary){
+			if(isLegendary()){
 				int abs_dmg = damage * getProtectionFactor() * protfact_ml;
 				dmg_resv += abs_dmg * 2;
 			}
