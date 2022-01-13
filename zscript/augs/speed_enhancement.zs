@@ -44,8 +44,17 @@ class DD_Aug_SpeedEnhancement : DD_Augmentation
 
 	override double getSpeedFactor()
 	{
-		if(enabled)
-			return 1.20 + 0.20 * (getRealLevel() - 1);
+		if(enabled){
+			double hdestmult = 1.0;
+			if(DD_ModChecker.isLoaded_HDest() && DD_PatchChecker.isLoaded_HDest()){
+				Class<Actor> cmlc_cls = ClassFinder.findActorClass("DD_HDCanMoveLegsCompensator");
+				Actor cmlc = spawn(cmlc_cls);
+				cmlc.target = owner;
+				hdestmult = cmlc.getDeathHeight();
+				cmlc.destroy();
+			}
+			return 1.20 + 0.20 * (getRealLevel() - 1) * hdestmult;
+		}
 		return 1.0;
 	}
 	protected double getJumpFactor() { return 0.20 + 0.3 * (getRealLevel() - 1);  }

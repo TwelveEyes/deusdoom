@@ -137,6 +137,7 @@ class DD_Aug_AgilityEnhancement : DD_Augmentation
 			Actor lastvelcor = spawn(lv_cls);
 			lastvelcor.target = owner;
 			lastvelcor.postBeginPlay();
+			lastvelcor.destroy();
 		}
 
 		if(abs(queue.deacc) > 0)
