@@ -20,6 +20,7 @@ class DD_EventHandler : StaticEventHandler
 
 	// Font for augs holder
 	ui Font aug_ui_font;
+	ui Font aug_ui_font_bold;
 
 	array<Sector> dissipating_sectors; // for envinronmental resistance
 	array<int> dissipating_damage;
@@ -159,6 +160,7 @@ class DD_EventHandler : StaticEventHandler
 				if(!wndmgr)
 				{
 					aug_ui_font = Font.getFont("DD_UI");
+					aug_ui_font_bold = Font.getFont("DD_UIBold");
 					wndmgr = new("UI_WindowManager");
 					wnd_augs = new("UI_Augs");
 					wnd_augs_sidepanel = new("UI_Augs_Sidepanel");
