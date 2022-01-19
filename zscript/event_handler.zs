@@ -344,6 +344,18 @@ class DD_EventHandler : StaticEventHandler
 				}
 			}
 		}
+		else if(e.name == "dd_gravfield_toggle")
+		{
+			DD_Aug_GravitationalField gravaug;
+			for(uint i = 0; i < DD_AugsHolder.augs_slots; ++i)
+			{
+				if(aughld.augs[i] && aughld.augs[i] is "DD_Aug_GravitationalField" && aughld.augs[i].isLegendary())
+				{
+					gravaug = DD_Aug_GravitationalField(aughld.augs[i]);
+					gravaug.mode = !gravaug.mode;
+				}
+			}
+		}
 	}
 	override void consoleProcess(ConsoleEvent e)
 	{

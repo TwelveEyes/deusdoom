@@ -91,7 +91,7 @@ class DD_Aug_PowerRecirculator : DD_Augmentation
 
 		if(prev_health == -1 && owner)
 			prev_health = owner.health;
-		if(legendary)
+		if(isLegendary())
 		{
 			int health_diff = owner.health - prev_health;
 			DD_AugsHolder aughld = DD_AugsHolder(owner.findInventory("DD_AugsHolder"));

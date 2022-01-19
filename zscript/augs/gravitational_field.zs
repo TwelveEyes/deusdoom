@@ -2,10 +2,13 @@ class DD_Aug_GravitationalField : DD_Augmentation
 {
 	ui TextureID tex_off;
 	ui TextureID tex_on;
+	ui TextureID tex_alt;
 
 	override TextureID get_ui_texture(bool state)
 	{
-		return state ? tex_on : tex_off;
+		return !state ? tex_off
+		      : mode  ? tex_alt
+		      : tex_on;
 	}
 
 	override int get_base_drain_rate(){ return 100; }
@@ -25,28 +28,39 @@ class DD_Aug_GravitationalField : DD_Augmentation
 			    "faster and further.\n\n"
 			    "TECH FOUR: All but the fastest and furthest objects\n"
 			    "are violently pushed away.\n\n"
-			    "Energy Rate: 100 Units/Minute";
+			    "Energy Rate: 100 Units/Minute\n\n";
+
+		disp_legend_desc = "LEGENDARY UPGRADE: gains a second mode\n"
+				      "that reverses gravity generation,\n"
+				      "pulling objects towards the agent\n"
+				      "instead of pushing them. Also improves\n"
+				      "overall performance of the augmentation.";
 
 		slots_cnt = 2;
 		slots[0] = Subdermal1;
 		slots[1] = Subdermal2;
+
+		can_be_legendary = true;
+
+		mode = 0;
 	}
 
 	override void UIInit()
 	{
 		tex_off = TexMan.CheckForTexture("EMPSHLD0");
 		tex_on = TexMan.CheckForTexture("EMPSHLD1");
+		tex_alt = TexMan.CheckForTexture("EMPSHLD2");
 	}
 
 	// ------------------
 	// Internal functions
 	// ------------------
 
-	protected double getMaxVel() { return 10 + 5 * (getRealLevel() - 1); }
-	protected double getPushForce() { return 80 + 120 * (getRealLevel() - 1); }
-	protected double getRange() { return 160 + 32 * (getRealLevel() - 1); }
-	const extra_push_angle = 90.0;
-	const extra_push_mult = 2.0;
+	protected double getMaxVel() { return 10 + 5 * (getRealLevel() - 1) + (isLegendary() ? 15 : 0); }
+	protected double getPushForce() { return 80 + 120 * (getRealLevel() - 1) + (isLegendary() ? 50 : 0); }
+	protected double getRange() { return 160 + 50 * (getRealLevel() - 1) + (isLegendary() ? 70 : 0); }
+
+	int mode;	// 0 - push, 1 - pull
 
 	// -------------
 	// Engine events
@@ -78,9 +92,8 @@ class DD_Aug_GravitationalField : DD_Augmentation
 
 			push_vec /= push_vec_ln;
 			push_vec *= getPushForce();
-			double objang = deltaAngle(owner.angleTo(obj), owner.angle);
-			if(abs(objang) <= extra_push_angle / 2)
-				push_vec *= extra_push_mult;
+			if(isLegendary() && mode)
+				push_vec *= -0.6;
 			push_vec /= obj.mass;
 
 			obj.A_ChangeVelocity(push_vec.x, push_vec.y, push_vec.z);
