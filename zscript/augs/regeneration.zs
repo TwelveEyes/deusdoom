@@ -84,6 +84,8 @@ class DD_Aug_Regeneration : DD_Augmentation
 			return 40 - 7 * (max_level - 1) - 3 * (getRealLevel() - max_level);
 	}
 
+	int regenerated_this_tick; // how much HP was regenerated this tick; used by power recirculator legendary upgrade
+
 	// HDest values and timers
 
 	int regen_timer_hdbasehp;
@@ -110,6 +112,8 @@ class DD_Aug_Regeneration : DD_Augmentation
 
 	override void tick()
 	{
+		regenerated_this_tick = 0;
+
 		if(fatal_tint_timer > 0){
 			--fatal_tint_timer;
 			double tint_str = 0.33 + ((double(fatal_tint_timer) / fatal_tint_time)  * 0.66);
@@ -132,11 +136,11 @@ class DD_Aug_Regeneration : DD_Augmentation
 				--regen_timer_hdbasehp;
 			else{
 				owner.giveInventory("Health", getHealthRegenRate());
+				regenerated_this_tick += getHealthRegenRate();
 				regen_timer_hdbasehp = getHealthRegenInterval();
 			}
 
 			// Regenerating wounds
-
 
 			Actor hg;
 			Class<Actor> hg_cls = ClassFinder.findActorClass("DD_HDHealthGiver");
@@ -195,6 +199,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 			else{
 				if(!owner.giveInventory("Health", getHealthRegenRate()))
 					toggle();
+				regenerated_this_tick += getHealthRegenRate();
 				regen_timer = getHealthRegenInterval();
 			}
 		}
@@ -209,6 +214,7 @@ class DD_Aug_Regeneration : DD_Augmentation
 		if(isLegendary() && damage >= owner.health && fatal_regen_timer == 0)
 		{ // save the user
 			owner.giveInventory("Health", fatal_regen_burst);
+			regenerated_this_tick += fatal_regen_burst;
 			owner.A_StartSound("play/aug/fatalsave1");
 			owner.A_StartSound("play/aug/fatalsave2");
 

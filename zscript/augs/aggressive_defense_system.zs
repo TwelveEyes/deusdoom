@@ -62,7 +62,7 @@ class DD_Aug_AggressiveDefenseSystem : DD_Augmentation
 				   "see an opportunity to hack or change the\n"
 				   "inner structure of a projectile directed\n"
 				   "towards agent, they execute it using a modified\n"
-				   "version of the same aerosol.\n";
+				   "version of the same aerosol.\nu";
 
 		slots_cnt = 1;
 		slots[0] = Cranial;
