@@ -601,7 +601,8 @@ class DD_AugsHolder : Inventory
 			int kb1, kb2;
 			[kb1, kb2] = Bindings.getKeysForCommand(String.format("dd_togg_aug_%d", i));
 			String bindstr = String.format("%s%s%s", KeyBindUtils.keyScanToName(kb1), KeyBindUtils.keyScanToName(kb2) == "" ? "" : "; ", KeyBindUtils.keyScanToName(kb2));
-			UI_Draw.str(hndl.aug_ui_font_bold, bindstr, Font.CR_BLUE, draw_x + 2.2, draw_y + aug_sz_y - 5, -0.25, -0.35);
+			UI_Draw.str(hndl.aug_ui_font_bold, bindstr, Font.CR_BLUE, draw_x + 2.2, draw_y + aug_sz_y - 5,
+					-0.25 * aug_frame_scale, -0.35 * aug_frame_scale);
 			
 			draw_y += aug_sz_y + draw_dy;
 		}
