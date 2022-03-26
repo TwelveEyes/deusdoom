@@ -31,7 +31,8 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "TECH ONE: Fresh and bleeding wounds are healed.\n\n"
 				    "TECH TWO: Burns are healed.\n\n"
 				    "TECH THREE: Old wounds are healed.\n\n"
-				    "TECH FOUR: Aggravated damage is healed.\n\n";
+				    "TECH FOUR: Aggravated damage is healed.\n\n"
+				    "Energy Rate: 125-80 Units/Minute";
 		else
 			disp_desc = "Programmable polymerase automatically directs\n"
 				    "construction of proteins in injured cells, restoring an\n"
@@ -41,7 +42,8 @@ class DD_Aug_Regeneration : DD_Augmentation
 				    "TECH THREE: Healing occurs at a moderately faster\n"
 				    "rate.\n\n"
 				    "TECH FOUR: Healing occurs at a significantly faster\n"
-				    "rate.\n\n";
+				    "rate.\n\n"
+					"Energy Rate: 150-210 Units/Minute";
 
 		disp_legend_desc = "LEGENDARY UPGRADE: Prevents an instance of\n"
 				   "fatal damage directed at agent, granting a short\n"

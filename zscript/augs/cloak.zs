@@ -43,7 +43,7 @@ class DD_Aug_Cloak : DD_Augmentation
 			    "TECH THREE: Power drain is reduced moderately,\n"
 			    "invisibility recovers fast.\n\n"
 			    "TECH FOUR: Power drain is reduced significantly,\n"
-			    "invisibility restores almost instantly.\n\n";
+			    "invisibility restores almost instantly.\n\n"
 			    "Energy Rate: 400-250 Units/Minute\n\n";
 
 		disp_legend_desc = "LEGENDARY UPGRADE: Augmentation recieves\n"
